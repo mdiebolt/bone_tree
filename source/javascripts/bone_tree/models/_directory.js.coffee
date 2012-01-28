@@ -10,5 +10,5 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
     toggleOpen: =>
       currentState = @get 'open'
 
-      @set {open : not currentState}
+      @set {open: not currentState}
 
