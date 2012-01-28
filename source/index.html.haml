@@ -1,0 +1,13 @@
+- content_for :head do
+  %title Bone Tree
+
+  =javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
+  =javascript_include_tag '_underscore'
+  =javascript_include_tag '_backbone'
+  =javascript_include_tag 'bone_tree'
+
+%h1 Bone Tree
+
+:coffeescript
+  window.tree = new BoneTree.Views.Tree
+  $('body').append tree.el
