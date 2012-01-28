@@ -137,3 +137,5 @@ DEPENDENCIES
   coffee-filter
   evergreen (= 1.0.0)
   middleman (~> 2.0.14)
+  rack
+  sprockets
