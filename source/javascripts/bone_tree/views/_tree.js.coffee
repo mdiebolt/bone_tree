@@ -38,14 +38,13 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
         @render()
 
-    addFile: =>
-      if filePath = prompt "File Path"
-        # remove first slash, if it exists, so we don't end up with a blank directory
-        filePath = filePath.replace('/', '') if filePath[0] == '/'
+    addFile: (filePath) =>
+      # remove first slash, if it exists, so we don't end up with a blank directory
+      filePath = filePath.replace('/', '') if filePath[0] == '/'
 
-        [dirs..., fileName] = filePath.split "/"
+      [dirs..., fileName] = filePath.split "/"
 
-        @addToTree(@root, dirs, fileName)
+      @addToTree(@root, dirs, fileName)
 
     addToTree: (currentDirectory, remainingDirectories, fileName) =>
       if remainingDirectories.length
