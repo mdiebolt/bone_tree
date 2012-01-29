@@ -1,0 +1,35 @@
+body {
+  background-image: url("/images/crushed_bone.png");
+  font-family: "EB Garamond", serif;
+  font-variant: small-caps; }
+
+img.background {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  opacity: 0.2; }
+
+.tree {
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+  float: left;
+  margin-right: 1em;
+  min-height: 660px;
+  padding: 1em;
+  width: 200px; }
+
+h1 {
+  margin: 0;
+  text-align: center; }
+
+h3 {
+  margin: 0; }
+
+ul.features {
+  list-style: circle;
+  margin-left: 13em;
+  margin-top: 0.25em; }
+
+pre.code {
+  font-family: monaco, monospace;
+  font-variant: normal;
+  font-size: 12px; }
