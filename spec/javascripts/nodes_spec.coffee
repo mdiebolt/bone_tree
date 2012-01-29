@@ -2,12 +2,14 @@ require 'bone_tree/_namespace.js'
 require 'bone_tree/models/_nodes.js'
 
 beforeEach ->
-  @file = new BoneTree.Models.Node
+  {Models} = BoneTree
+
+  @file = new Models.Node
     type: 'file'
     name: 'config'
     extension: 'json'
 
-  @directory = new BoneTree.Models.Node
+  @directory = new Models.Node
     type: 'directory'
     name: 'src'
 
