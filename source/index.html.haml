@@ -6,48 +6,49 @@
   =javascript_include_tag '_backbone'
   =javascript_include_tag 'bone_tree'
 
-%h1 Bone Tree
-%img.bone_tree(src='images/bonetree.png')
-<a href="http://github.com/mdiebolt/bone_tree"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub"></a>
-
 .bone_tree
 
-%p BoneTree is a browser based filetree written with Backbone.js.
+.right
+  %h1 Bone Tree
+  %img.background(src='images/bonetree.png')
+  <a href="http://github.com/mdiebolt/bone_tree"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub"></a>
 
-%p It supports live updating and reordering of filetree nodes, has a simple, intuitive API, and sports a clean, svelte DOM structure.
+  %p BoneTree is a browser based filetree written with Backbone.js.
 
-%h3 Features
+  %p It supports live updating and reordering of filetree nodes, has a simple, intuitive API, and sports a clean, svelte DOM structure.
 
-%ul.features
-  %li Live update of node names, extension names, file type icons
-  %li Live sorting of nodes when filetree state changes
-  %li Context menu with rename and delete functionality
-  %li Auto create directories that don't exist when files are added to the tree
-  %li Events triggered when a file is opened, renamed, or deleted
+  %h3 Features
 
-%h3 Events API
+  %ul.features
+    %li Live update of node names, extension names, file type icons
+    %li Live sorting of nodes when filetree state changes
+    %li Context menu with rename and delete functionality
+    %li Auto create directories that don't exist when files are added to the tree
+    %li Events triggered when a file is opened, renamed, or deleted
 
-%pre.code
-  :plain
-    # get a new filetree
-    tree = new BoneTree.Views.Tree
+  %h3 Events API
 
-    # add a new file to the directory
-    tree.addFile('source/main.js')
+  %pre.code
+    :plain
+      # get a new filetree
+      tree = new BoneTree.Views.Tree
 
-    # this creates the directory source if it doesn't already exist and puts the file main.js inside of it
+      # add a new file to the directory
+      tree.addFile('source/main.js')
 
-    tree.bind 'rename', (model, newName) =>
-      # this callback is passed the model that changed and the new name of the node
-      console.log model
+      # this creates the directory source if it doesn't already exist and puts the file main.js inside of it
 
-    tree.bind 'remove', (model, collection) =>
-      # this callback is passed the model that was removed and the collection it was removed from
-      console.log model
+      tree.bind 'rename', (model, newName) =>
+        # this callback is passed the model that changed and the new name of the node
+        console.log model
 
-    tree.bind 'openFile', (file) =>
-      # this callback is passed the file that was just clicked on
-      console.log file
+      tree.bind 'remove', (model, collection) =>
+        # this callback is passed the model that was removed and the collection it was removed from
+        console.log model
+
+      tree.bind 'openFile', (file) =>
+        # this callback is passed the file that was just clicked on
+        console.log file
 
 :coffeescript
   window.tree = new BoneTree.Views.Tree
