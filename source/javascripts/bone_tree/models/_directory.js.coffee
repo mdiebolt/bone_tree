@@ -12,3 +12,8 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
 
       @set {open: not currentState}
 
+  Models.Directory.find = (currentDirectory, name) ->
+    currentDirectory.collection.find (dir) ->
+      dir.get('name') == name
+
+

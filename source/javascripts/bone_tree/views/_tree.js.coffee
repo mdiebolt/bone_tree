@@ -50,7 +50,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       if remainingDirectories.length
         nextDirectoryName = remainingDirectories.shift()
 
-        if matchingDirectory = (currentDirectory.collection.find (dir) -> dir.get('name') == nextDirectoryName)
+        if matchingDirectory = Models.Directory.find(currentDirectory, nextDirectoryName)
           @addToTree(matchingDirectory, remainingDirectories, fileName)
         else
           newNode = new Models.Directory {name: nextDirectoryName}
