@@ -8,8 +8,7 @@
   -webkit-user-select: none;
   -o-user-select: none;
   user-select: none;
-  color: black;
-  padding-left: 0.25em; }
+  color: black; }
   .tree html, .tree body, .tree div, .tree span, .tree applet, .tree object, .tree iframe,
   .tree h1, .tree h2, .tree h3, .tree h4, .tree h5, .tree h6, .tree p, .tree blockquote, .tree pre,
   .tree a, .tree abbr, .tree acronym, .tree address, .tree big, .tree cite, .tree code,
