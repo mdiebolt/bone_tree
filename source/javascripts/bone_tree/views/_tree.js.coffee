@@ -31,12 +31,13 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @root = new Models.Node
 
-      @root.collection.bind 'add', @render
+      @root.collection.bind 'add', (model, collection) =>
+        @render()
 
       @root.collection.bind 'remove', (model, collection) =>
-        @settings.get('treeView').trigger 'remove', model
-
         @render()
+
+        @settings.get('treeView').trigger 'remove', model
 
     addFile: (filePath) =>
       # remove first slash, if it exists, so we don't end up with a blank directory
@@ -59,11 +60,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           @addToTree(newNode, remainingDirectories, fileName)
       else
         return if fileName is ""
-        [name, extension] = fileName.split "."
+        file = Models.File.createFromFileName(fileName)
 
-        currentDirectory.collection.add new Models.File
-          name: name
-          extension: extension
+        currentDirectory.collection.add file
 
     findView: (node) =>
       type = node.constantize()
@@ -75,11 +74,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           settings: @settings
 
       return view
-
-    appendNode: (node) =>
-      view = @findView node
-
-      @el.append view.render().el
 
     cacheFindByViewCid: (cid) ->
       viewCache = @settings.get 'viewCache'
@@ -105,13 +99,12 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         top: e.pageY
       ).show()
 
-    toAscii: (collection, node, indentation=0, output="\n") =>
+    toAscii: (collection, indentation=0, output="\n") =>
       rootCollection = collection || @root.collection
-      prevNode = node || @root
 
       spaces = ""
 
-      indentation.times ->
+      for n in [0..indentation]
         spaces += " "
 
       rootCollection.each (nodes) =>
@@ -119,7 +112,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
         output += (spaces + typeChar + nodes.nameWithExtension() + '\n')
 
-        output = @toAscii(nodes.collection, nodes, indentation + 1, output)
+        output = @toAscii(nodes.collection, indentation + 1, output)
 
       return output
 
@@ -146,8 +139,10 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @trigger 'openFile', view.model
 
     render: =>
-      @$('.directory, .file').remove()
+      @root.collection.each (node) =>
+        view = @findView(node)
 
-      @root.collection.each @appendNode
+        @el.append view.render().el
 
+      return @
 

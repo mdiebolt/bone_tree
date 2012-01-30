@@ -16,16 +16,15 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         @toggleSubfolders(open)
 
       @model.bind 'change:name', (model, name) =>
-        @render()
-
         @settings.get('treeView').trigger 'rename', model, name
+        @settings.get('treeView').render()
 
-      @model.collection.bind 'add', @render
+      @model.collection.bind 'add', =>
+        @settings.get('treeView').render()
 
       @model.collection.bind 'remove', (model, collection) =>
         @settings.get('treeView').trigger 'remove', model
-
-        @render()
+        @settings.get('treeView').render()
 
     appendView: (node) =>
       view = @settings.get('treeView').findView(node)
