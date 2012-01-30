@@ -22,12 +22,11 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       if newName = prompt "New Name", @model.nameWithExtension()
         [fileName, extension] = newName.split "."
 
-        data =
+        extension ?= ""
+
+        @model.set
           name: fileName
-
-        data.extension = extension if extension
-
-        @model.set(data)
+          extension: extension
 
       @el.hide()
 
