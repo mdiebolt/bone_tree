@@ -1,7 +1,15 @@
+@import compass
+@import compass/css3
+
+html
+  height: 100%
+
 body
   background-image: url('/images/crushed_bone.png')
   font-family: 'EB Garamond', serif
   font-variant: small-caps
+  height: 100%
+  margin: 0
 
 img.background
   position: absolute
@@ -10,26 +18,48 @@ img.background
   opacity: 0.2
 
 .tree
+  background-color: rgba(255, 255, 255, 0.5)
   border-right: 1px solid rgba(0, 0, 0, 0.2)
-  float: left
-  margin-right: 1em
+  height: 100%
   min-height: 660px
   padding: 1em
-  width: 200px
 
 h1
+  font-size: 2.5em
   margin: 0
-  text-align: center
+  padding-top: 0.25em
 
 h3
   margin: 0
 
 ul.features
   list-style: circle
-  margin-left: 13em
+  margin-left: 0.5em
   margin-top: 0.25em
 
 pre.code
   font-family: monaco, monospace
   font-variant: normal
   font-size: 12px
+
+.left
+  height: 100%
+  position: fixed
+  left: 0
+  width: 18%
+
+.right
+  padding-left: 19%
+  width: 60%
+
+.background
+  +opacity(0.2)
+
+  background: url('/images/bonetree.png') no-repeat
+  display: inline-block
+  width: 843px
+  height: 650px
+  position: absolute
+  right: 0
+  top: 20px
+
