@@ -7,4 +7,10 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       sortPriority: "1"
       type: "file"
 
+  Models.File.createFromFileName = (fileName) ->
+    [name, extension] = fileName.split "."
+
+    return new Models.File
+      name: name
+      extension: extension
 
