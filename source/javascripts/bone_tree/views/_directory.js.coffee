@@ -17,14 +17,16 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @model.bind 'change:name', (model, name) =>
         @settings.get('treeView').trigger 'rename', model, name
-        @settings.get('treeView').render()
+
+        @render()
+        @settings.get('treeView').trigger 'sortOrderRender'
 
       @model.collection.bind 'add', =>
-        @settings.get('treeView').render()
+        @render()
 
       @model.collection.bind 'remove', (model, collection) =>
         @settings.get('treeView').trigger 'remove', model
-        @settings.get('treeView').render()
+        @render()
 
     appendView: (node) =>
       view = @settings.get('treeView').findView(node)
@@ -34,8 +36,10 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @el.append view.render().el
 
     render: =>
+      @$('.file, .directory').remove()
       @el.text @model.get('name')
 
+      @model.collection.sort()
       @model.collection.each @appendView
 
       return @

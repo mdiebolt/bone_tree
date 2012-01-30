@@ -19,8 +19,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     initialize: ->
       super
 
-      $(document).click (e) =>
-        @closeMenu(e)
+      $(document).click @closeMenu
 
       @settings = new Models.Settings
         treeView: @
@@ -31,8 +30,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @root = new Models.Node
 
-      @root.collection.bind 'add', (model, collection) =>
-        @render()
+      @bind 'sortOrderRender', @render
+      @root.collection.bind 'add', @render
 
       @root.collection.bind 'remove', (model, collection) =>
         @render()
@@ -139,6 +138,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @trigger 'openFile', view.model
 
     render: =>
+      @$('.file, .directory').remove()
+
+      @root.collection.sort()
       @root.collection.each (node) =>
         view = @findView(node)
 

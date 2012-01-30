@@ -33,6 +33,7 @@ describe 'rendering', ->
   it 'should update the node text when the filename has changed', ->
     @model.set
       name: 'new name'
+      extension: 'exe'
 
     expect($('#test li.file').text()).toEqual('new name.exe')
 
