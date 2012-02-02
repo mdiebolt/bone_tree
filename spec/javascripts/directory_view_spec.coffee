@@ -19,6 +19,8 @@ beforeEach ->
     open: false
 
   @model.collection = new Backbone.Collection
+  @model.collection.comparator = (item) =>
+    return item.get('name')
 
   @view = new BoneTree.Views.Directory
     model: @model
