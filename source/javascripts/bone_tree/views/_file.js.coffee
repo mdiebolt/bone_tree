@@ -8,7 +8,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     initialize: ->
       super
 
-      @el.attr('data-cid', @cid).addClass(@model.get('extension'))
+      @$el.attr('data-cid', @cid).addClass(@model.get('extension'))
 
       @model.bind 'change:name', (model, name) =>
         @settings.get('treeView').trigger 'rename', model, model.nameWithExtension()
@@ -17,14 +17,14 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         @settings.get('treeView').trigger 'sortOrderRender'
 
       @model.bind 'change:extension', (model, extension) =>
-        @el.attr('class', "file #{extension}")
+        @$el.attr('class', "file #{extension}")
         @settings.get('treeView').trigger 'rename', model, model.nameWithExtension()
 
         @render()
         @settings.get('treeView').trigger 'sortOrderRender'
 
     render: =>
-      @el.text @model.nameWithExtension()
+      @$el.text @model.nameWithExtension()
 
       return @
 

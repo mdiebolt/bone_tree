@@ -16,7 +16,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       else
         @model.destroy()
 
-      @el.hide()
+      @$el.hide()
 
     rename: (e) =>
       if newName = prompt "New Name", @model.nameWithExtension()
@@ -28,10 +28,10 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           name: fileName
           extension: extension
 
-      @el.hide()
+      @$el.hide()
 
     render: =>
-      @el.html @htmlTemplate()
+      @$el.html @htmlTemplate()
 
       return @
 

@@ -26,7 +26,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @menuView = new Views.Menu
         settings: @settings
-      @menuView.render().el.appendTo @el
+      @menuView.render().$el.appendTo @$el
 
       @root = new Models.Node
 
@@ -81,7 +81,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         return value if cid == value.cid
 
     closeMenu: (e) =>
-      @menuView.el.hide() unless $(e.currentTarget).is('.menu')
+      @menuView.$el.hide() unless $(e.currentTarget).is('.menu')
 
     contextMenu: (e) =>
       e.preventDefault()
@@ -93,7 +93,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @menuView.model = view.model
 
-      @menuView.el.css(
+      @menuView.$el.css(
         left: e.pageX
         top: e.pageY
       ).show()
@@ -117,7 +117,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
     openDirectory: (e) =>
       e.stopPropagation()
-      @menuView.el.hide()
+      @menuView.$el.hide()
 
       cid = $(e.currentTarget).data('cid')
 
@@ -127,7 +127,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
     openFile: (e) =>
       e.stopPropagation()
-      @menuView.el.hide()
+      @menuView.$el.hide()
 
       cid = $(e.currentTarget).data('cid')
 
@@ -138,13 +138,12 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @trigger 'openFile', view.model
 
     render: =>
-      @$('.file, .directory').remove()
-
       @root.collection.sort()
       @root.collection.each (node) =>
+        node.collection.sort()
         view = @findView(node)
 
-        @el.append view.render().el
+        @$el.append view.render().$el
 
       return @
 
