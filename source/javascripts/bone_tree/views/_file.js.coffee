@@ -12,16 +12,13 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @model.bind 'change:name', (model, name) =>
         @settings.get('treeView').trigger 'rename', model, model.nameWithExtension()
-
-        @render()
-        @settings.get('treeView').trigger 'sortOrderRender'
+        @settings.get('treeView').render()
 
       @model.bind 'change:extension', (model, extension) =>
         @$el.attr('class', "file #{extension}")
         @settings.get('treeView').trigger 'rename', model, model.nameWithExtension()
 
-        @render()
-        @settings.get('treeView').trigger 'sortOrderRender'
+        @settings.get('treeView').render()
 
     render: =>
       @$el.text @model.nameWithExtension()

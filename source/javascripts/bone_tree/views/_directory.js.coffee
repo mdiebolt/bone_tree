@@ -17,12 +17,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @model.bind 'change:name', (model, name) =>
         @settings.get('treeView').trigger 'rename', model, name
+        @settings.get('treeView').render()
 
-        @render()
-        @settings.get('treeView').trigger 'sortOrderRender'
-
-      @model.collection.bind 'add', =>
-        @render()
+      @model.collection.bind 'add', @render
 
       @model.collection.bind 'remove', (model, collection) =>
         @settings.get('treeView').trigger 'remove', model
@@ -50,6 +47,4 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @$el.toggleClass('open', open)
       fileDirChildren.toggle(open)
-
-
 

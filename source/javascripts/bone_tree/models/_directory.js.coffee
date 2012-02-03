@@ -4,6 +4,7 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
   class Models.Directory extends Models.Node
     defaults:
       name: "New Directory"
+      open: false
       sortPriority: "0"
       type: "directory"
 

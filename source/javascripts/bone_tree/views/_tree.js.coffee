@@ -30,7 +30,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @root = new Models.Node
 
-      @bind 'sortOrderRender', @render
       @root.collection.bind 'add', @render
 
       @root.collection.bind 'remove', (model, collection) =>
