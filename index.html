@@ -8,8 +8,8 @@
     <link type="text/css" rel="stylesheet" media="screen" href="/stylesheets/bone_tree.css" />
     <title>Bone Tree</title>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.2.2/underscore-min.js"></script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.5.3/backbone-min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.1/underscore-min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.0/backbone-min.js"></script>
     <script type="text/javascript" src="/javascripts/bone_tree.js"></script>
   </head>
   <body>
@@ -34,7 +34,7 @@
     </div>
     <script type='text/javascript'>
       //<![CDATA[
-((function(){var a,b,c,d,e,f;window.tree=new BoneTree.Views.Tree,$(".bone_tree").append(tree.render().el),tree.addFile("README"),tree.addFile("Tutorial"),tree.addFile("manifest.json"),tree.addFile("pixie.json"),d={images:["background.png","ship.png","enemy.png","wall.png"],lib:["gamelib.js","browserlib.js","corelib.js","extralib.js"],sounds:["explode.mp3","pew.mp3","thrust.mp3"],src:["asteroid.coffee","base.coffee","bullet.coffee","main.coffee","particle.coffee","ship.coffee","wrappable.coffee"]};for(a in d){c=d[a];for(e=0,f=c.length;e<f;e++)b=c[e],tree.addFile(""+a+"/"+b)}})).call(this)
+((function(){var a,b,c,d,e,f;window.tree=new BoneTree.Views.Tree,$(".bone_tree").append(tree.render().$el),tree.addFile("README"),tree.addFile("Tutorial"),tree.addFile("manifest.json"),tree.addFile("pixie.json"),d={images:["background.png","ship.png","enemy.png","wall.png"],lib:["gamelib.js","browserlib.js","corelib.js","extralib.js"],sounds:["explode.mp3","pew.mp3","thrust.mp3"],src:["asteroid.coffee","base.coffee","bullet.coffee","main.coffee","particle.coffee","ship.coffee","wrappable.coffee"]};for(a in d){c=d[a];for(e=0,f=c.length;e<f;e++)b=c[e],tree.addFile(""+a+"/"+b)}})).call(this)
 //]]>
     </script>
   </body>
