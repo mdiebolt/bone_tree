@@ -13,7 +13,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @$el.attr('data-cid', @cid)
 
       @model.bind 'change:open', (model, open) =>
-        @toggleSubfolders(open)
+        @displayChildren(open)
 
       @model.bind 'change:name', (model, name) =>
         @settings.get('treeView').trigger 'rename', model, name
@@ -28,10 +28,10 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         @settings.get('treeView').trigger 'remove', model
         @render()
 
+      @displayChildren(@model.get('open'))
+
     appendView: (node) =>
       view = @settings.get('treeView').findView(node)
-
-      @model.set {open: true}
 
       @$el.append view.render().$el
 
@@ -45,7 +45,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     toggleOpen: (e) =>
       @model.toggleOpen()
 
-    toggleSubfolders: (open) =>
+    displayChildren: (open) =>
       fileDirChildren = @$el.children('.directory, .file')
 
       @$el.toggleClass('open', open)

@@ -3,11 +3,16 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     className: 'menu'
 
     events:
+      'contextmenu': 'contextMenu'
       'click .rename': 'rename'
       'click .delete': 'delete'
 
     initialize: ->
       super
+
+    contextMenu: (e) =>
+      e.preventDefault()
+      e.stopPropagation()
 
     delete: (e) =>
       if @settings.get('confirmDeletes')
