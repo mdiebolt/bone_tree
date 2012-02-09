@@ -8,5 +8,9 @@ gem "sprockets"
 
 group :development do
   gem "coffee-filter"
+end
+
+group :test do
   gem "evergreen", "1.0.0"
+  gem "rake"
 end
