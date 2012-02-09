@@ -30,20 +30,6 @@ describe 'rendering', ->
   it 'should have the filename as the text of the node', ->
     expect($('#test li.file').text()).toEqual('Testing.exe')
 
-  it 'should update the node text when the filename has changed', ->
-    @model.set
-      name: 'new name'
-      extension: 'exe'
-
-    expect($('#test li.file').text()).toEqual('new name.exe')
-
-  it 'should update the class name and the node text when the extension has changed', ->
-    @model.set
-      extension: 'coffee'
-
-    expect($('#test li.file').text()).toEqual('Testing.coffee')
-    expect($('#test li.file')).toHaveClass('coffee')
-
 describe 'events', ->
   it 'should trigger a change event on the file tree when the name has changed', ->
     spy = sinon.spy()

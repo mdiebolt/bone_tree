@@ -21,7 +21,10 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         @settings.get('treeView').render()
 
     render: =>
-      @$el.text @model.nameWithExtension()
+      if @settings.get('showExtensions')
+        @$el.text @model.nameWithExtension()
+      else
+        @$el.text @model.get('name')
 
       return @
 

@@ -12,5 +12,4 @@ end
 
 group :test do
   gem "evergreen", "1.0.0"
-  gem "rake"
 end

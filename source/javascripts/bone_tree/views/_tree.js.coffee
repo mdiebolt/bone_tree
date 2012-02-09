@@ -21,8 +21,12 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       $(document).click @closeMenu
 
+      @currentFileData = null
+
       @settings = new Models.Settings
         treeView: @
+        confirmDeletes: @options.confirmDeletes
+        showExtensions: @options.showExtensions
 
       @menuView = new Views.Menu
         settings: @settings
@@ -45,6 +49,24 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @addToTree(@root, dirs, fileName)
 
+    addFromJSON: (data, currentPath="") =>
+      if data.name?
+        name = data.name + '/'
+        delete data.name
+
+      if data.extension?
+        name = name.replace('/', '.' + data.extension)
+        delete data.extension
+
+      currentPath += name
+
+      if data.files?
+        for file in data.files
+          @addFromJSON(file, currentPath)
+      else
+        @currentFileData = data
+        @addFile(currentPath)
+
     addToTree: (currentDirectory, remainingDirectories, fileName) =>
       if remainingDirectories.length
         nextDirectoryName = remainingDirectories.shift()
@@ -61,7 +83,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           @addToTree(newNode, remainingDirectories, fileName)
       else
         return if fileName is ""
-        file = Models.File.createFromFileName(fileName)
+        file = Models.File.createFromFileName(fileName, @currentFileData)
+        @currentFileData = null
 
         currentDirectory.collection.add file
 

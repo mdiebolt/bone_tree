@@ -26,7 +26,7 @@ beforeEach ->
     model: @model
     settings: @settings
 
-  $('#test').append @view.render().el
+  $('#test').append @view.render().$el
 
 describe 'rendering', ->
   it 'should render the correct element', ->
@@ -37,10 +37,15 @@ describe 'rendering', ->
     expect($('#test ul.directory').text()).toEqual(@model.get('name'))
 
   it 'should change the directory name in the DOM when the model name is updated', ->
+    renameSpy = sinon.spy()
+
+    @settings.get('treeView').bind 'rename', renameSpy
+
     @model.set
       name: "NewDir"
 
-    expect($('#test ul.directory').text()).toEqual(@model.get('name'))
+    expect(renameSpy).toHaveBeenCalledOnce()
+    expect(renameSpy).toHaveBeenCalledWith(@model, @model.get('name'))
 
   it 'should toggle the open class based on the model state', ->
     #TODO this should be the case. Change it so that appendView doesn't automatically open the dir

@@ -6,7 +6,7 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       name: "New Directory"
       open: false
       sortPriority: "0"
-      type: "directory"
+      nodeType: "directory"
 
     toggleOpen: =>
       currentState = @get 'open'

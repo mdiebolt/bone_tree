@@ -5,9 +5,9 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       @collection = new Models.Nodes
 
     constantize: =>
-      type = @get('type')
+      nodeType = @get('nodeType')
 
-      type[0].toUpperCase() + type[1..type.length]
+      nodeType[0].toUpperCase() + nodeType[1..nodeType.length]
 
     nameWithExtension: =>
       extension = if @get('extension') then "." + @get('extension') else ""

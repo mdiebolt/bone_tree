@@ -50,20 +50,382 @@
 
 :coffeescript
   window.tree = new BoneTree.Views.Tree
+    showExtensions: true
+    confirmDeletes: true
+
+  tree.bind 'openFile', (file) ->
+    console.log file
+
   $('.bone_tree').append tree.render().$el
 
-  # construct sample tree
-  tree.addFile('README')
-  tree.addFile('Tutorial')
-  tree.addFile('manifest.json')
-  tree.addFile('pixie.json')
+  treeData = JSON.parse('{
+    "name": "Pixteroids",
+    "files": [
+      {
+        "name": "data",
+        "files": [
+          {
+            "name": "asteroid",
+            "contents": "super long JSON string",
+            "extension": "animation",
+            "lang": null,
+            "type": "animation",
+            "size": 645,
+            "mtime": 1310024315,
+            "path": "data/asteroid.animation"
+          }, {
+            "name": "asteroid_large",
+            "contents": "super long JSON string",
+            "extension": "animation",
+            "lang": null,
+            "type": "animation",
+            "size": 1510,
+            "mtime": 1307259412,
+            "path": "data/asteroid_large.animation"
+          }, {
+            "name": "asteroid_small",
+            "contents": "super long JSON string",
+            "extension": "animation",
+            "lang": null,
+            "type": "animation",
+            "size": 794,
+            "mtime": 1307259338,
+            "path": "data/asteroid_small.animation"
+          }, {
+            "name": "bullet",
+            "contents": "super long JSON string",
+            "extension": "animation",
+            "lang": null,
+            "type": "animation",
+            "size": 467,
+            "mtime": 1307427332,
+            "path": "data/bullet.animation"
+          }, {
+            "name": "ship",
+            "contents": "super long JSON string",
+            "extension": "animation",
+            "lang": null,
+            "type": "animation",
+            "size": 2200,
+            "mtime": 1307584720,
+            "path": "data/ship.animation"
+          }
+        ]
+      }, {
+        "name": "images",
+        "files": [
+          {
+            "name": "background",
+            "contents": null,
+            "extension": "png",
+            "lang": null,
+            "type": "image",
+            "size": 246772,
+            "mtime": 1306478156,
+            "path": "images/background.png"
+          }, {
+            "name": "black",
+            "contents": null,
+            "extension": "png",
+            "lang": null,
+            "type": "image",
+            "size": 110,
+            "mtime": 1316842913,
+            "path": "images/black.png"
+          }, {
+            "name": "jh",
+            "contents": null,
+            "extension": "png",
+            "lang": null,
+            "type": "image",
+            "size": 200,
+            "mtime": 1313777010,
+            "path": "images/jh.png"
+          }
+        ]
+      }, {
+        "name": "lib",
+        "files": [
+          {
+            "name": "gamelib",
+            "contents": "super long JSON string",
+            "extension": "js",
+            "lang": "javascript",
+            "type": "text",
+            "size": 715930,
+            "mtime": 1307870400,
+            "path": "lib/gamelib.js"
+          }, {
+            "name": "playtomic",
+            "contents": "super long JSON string",
+            "extension": "js",
+            "lang": "javascript",
+            "type": "text",
+            "size": 75333,
+            "mtime": 1318021411,
+            "path": "lib/playtomic.js"
+          }, {
+            "name": "playtomic.v1.8.min",
+            "contents": "super long JSON string",
+            "extension": "js",
+            "lang": "javascript",
+            "type": "text",
+            "size": 27346,
+            "mtime": 1318021409,
+            "path": "lib/playtomic.v1.8.min.js"
+          }
+        ]
+      }, {
+        "name": "sounds",
+        "files": [
+          {
+            "name": "explode",
+            "contents": "super long JSON string",
+            "extension": "sfs",
+            "lang": null,
+            "type": "sound",
+            "size": 105,
+            "mtime": 1310024363,
+            "path": "sounds/explode.sfs"
+          }, {
+            "name": "explode",
+            "contents": null,
+            "extension": "wav",
+            "lang": null,
+            "type": "binary",
+            "size": 158270,
+            "mtime": 1310024364,
+            "path": "sounds/explode.wav"
+          }, {
+            "name": "kjkj",
+            "contents": null,
+            "extension": "wav",
+            "lang": null,
+            "type": "binary",
+            "size": 189826,
+            "mtime": 1313777037,
+            "path": "sounds/kjkj.wav"
+          }, {
+            "name": "kjkj",
+            "contents": "super long JSON string",
+            "extension": "sfs",
+            "lang": null,
+            "type": "sound",
+            "size": 105,
+            "mtime": 1313777036,
+            "path": "sounds/kjkj.sfs"
+          }, {
+            "name": "pew",
+            "contents": null,
+            "extension": "wav",
+            "lang": null,
+            "type": "binary",
+            "size": 7682,
+            "mtime": 1306994836,
+            "path": "sounds/pew.wav"
+          }, {
+            "name": "pew",
+            "contents": "super long JSON string",
+            "extension": "sfs",
+            "lang": null,
+            "type": "sound",
+            "size": 105,
+            "mtime": 1306994830,
+            "path": "sounds/pew.sfs"
+          }, {
+            "name": "thrust",
+            "contents": "super long JSON string",
+            "extension": "sfs",
+            "lang": null,
+            "type": "sound",
+            "size": 105,
+            "mtime": 1306995050,
+            "path": "sounds/thrust.sfs"
+          }, {
+            "name": "thrust",
+            "contents": null,
+            "extension": "wav",
+            "lang": null,
+            "type": "binary",
+            "size": 26582,
+            "mtime": 1306995056,
+            "path": "sounds/thrust.wav"
+          }
+        ]
+      }, {
+        "name": "src",
+        "files": [
+          {
+            "name": "asteroid",
+            "contents": "super long JSON string",
+            "extension": "coffee",
+            "lang": "coffeescript",
+            "type": "text",
+            "size": 2373,
+            "mtime": 1307762048,
+            "path": "src/asteroid.coffee"
+          }, {
+            "name": "base",
+            "contents": "super long JSON string",
+            "extension": "coffee",
+            "lang": "coffeescript",
+            "type": "text",
+            "size": 302,
+            "mtime": 1307711140,
+            "path": "src/base.coffee"
+          }, {
+            "name": "bullet",
+            "contents": "super long JSON string",
+            "extension": "coffee",
+            "lang": "coffeescript",
+            "type": "text",
+            "size": 106,
+            "mtime": 1307712094,
+            "path": "src/bullet.coffee"
+          }, {
+            "name": "main",
+            "contents": "super long JSON string",
+            "extension": "coffee",
+            "lang": "coffeescript",
+            "type": "text",
+            "size": 543,
+            "mtime": 1321258568,
+            "path": "src/main.coffee"
+          }, {
+            "name": "ship",
+            "contents": "super long JSON string",
+            "extension": "coffee",
+            "lang": "coffeescript",
+            "type": "text",
+            "size": 1602,
+            "mtime": 1307783232,
+            "path": "src/ship.coffee"
+          }, {
+            "name": "wrappable",
+            "contents": "super long JSON string",
+            "extension": "coffee",
+            "lang": "coffeescript",
+            "type": "text",
+            "size": 110,
+            "mtime": 1307601644,
+            "path": "src/wrappable.coffee"
+          }
+        ]
+      }, {
+        "name": "webstore",
+        "files": [
+          {
+            "name": "images",
+            "files": [
+              {
+                "name": "icon_128",
+                "contents": null,
+                "extension": "png",
+                "lang": null,
+                "type": "image",
+                "size": 7960,
+                "mtime": 1324715561,
+                "path": "webstore/images/icon_128.png"
+              }, {
+                "name": "icon_16",
+                "contents": null,
+                "extension": "png",
+                "lang": null,
+                "type": "image",
+                "size": 892,
+                "mtime": 1324715561,
+                "path": "webstore/images/icon_16.png"
+              }, {
+                "name": "icon_96",
+                "contents": null,
+                "extension": "png",
+                "lang": null,
+                "type": "image",
+                "size": 7164,
+                "mtime": 1324715561,
+                "path": "webstore/images/icon_96.png"
+              }
+            ]
+          }, {
+            "name": "jquery.min",
+            "contents": "super long JSON string",
+            "extension": "js",
+            "lang": "javascript",
+            "type": "text",
+            "size": 91341,
+            "mtime": 1324715561,
+            "path": "webstore/jquery.min.js"
+          }, {
+            "name": "main",
+            "contents": "super long JSON string",
+            "extension": "html",
+            "lang": "html",
+            "type": "text",
+            "size": 463,
+            "mtime": 1324715561,
+            "path": "webstore/main.html"
+          }, {
+            "name": "project",
+            "contents": "super long JSON string",
+            "extension": "css",
+            "lang": "css",
+            "type": "text",
+            "size": 3356,
+            "mtime": 1324715561,
+            "path": "webstore/project.css"
+          }
+        ]
+      }, {
+        "name": "Documentation",
+        "extension": "documentation",
+        "path": "docs"
+      }, {
+        "name": "Pixteroids",
+        "contents": null,
+        "extension": "js",
+        "lang": "javascript",
+        "type": "binary",
+        "size": 725960,
+        "mtime": 1313777080,
+        "path": "Pixteroids.js"
+      }, {
+        "name": "README",
+        "contents": "super long JSON string",
+        "extension": "",
+        "lang": null,
+        "type": "text",
+        "size": 83,
+        "mtime": 1305349550,
+        "path": "README"
+      }, {
+        "name": "Tutorial",
+        "contents": "http://blog.pixieengine.com/2011/06/asteroids/",
+        "extension": "tutorial",
+        "lang": null,
+        "type": "tutorial",
+        "size": 46,
+        "mtime": 1307864630,
+        "path": "Tutorial.tutorial"
+      }, {
+        "name": "manifest",
+        "contents": "super long JSON string",
+        "extension": "json",
+        "lang": "javascript",
+        "type": "json",
+        "size": 363,
+        "mtime": 1324715561,
+        "path": "manifest.json"
+      }, {
+        "name": "pixie",
+        "contents": "super long JSON string",
+        "extension": "json",
+        "lang": "javascript",
+        "type": "json",
+        "size": 254,
+        "mtime": 1307595452,
+        "path": "pixie.json"
+      }
+    ]
+  }')
 
-  nodes =
-    images: ['background.png', 'ship.png', 'enemy.png', 'wall.png']
-    lib: ['gamelib.js', 'browserlib.js', 'corelib.js', 'extralib.js']
-    sounds: ['explode.mp3', 'pew.mp3', 'thrust.mp3']
-    src: ['asteroid.coffee', 'base.coffee', 'bullet.coffee', 'main.coffee', 'particle.coffee', 'ship.coffee', 'wrappable.coffee']
-
-  for dir, files of nodes
-    for file in files
-      tree.addFile "\#{dir}/\#{file}"
+  tree.addFromJSON(treeData)

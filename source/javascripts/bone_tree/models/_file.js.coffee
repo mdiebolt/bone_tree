@@ -5,12 +5,13 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
     defaults:
       name: "New File"
       sortPriority: "1"
-      type: "file"
+      nodeType: "file"
 
-  Models.File.createFromFileName = (fileName) ->
-    [name, extension] = fileName.split "."
+  Models.File.createFromFileName = (fileName, fileData) ->
+    [names..., extension] = fileName.split "."
+    name = names.join('.')
 
-    return new Models.File
-      name: name
-      extension: extension
+    data = _.extend({}, fileData, {name: name, extension: extension})
+
+    return new Models.File(data)
 
