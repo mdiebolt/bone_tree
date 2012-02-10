@@ -112,15 +112,17 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       e.preventDefault()
       e.stopPropagation()
 
-      cid = $(e.currentTarget).data('cid')
+      target = $(e.currentTarget)
+
+      cid = target.data('cid')
 
       view = @cacheFindByViewCid(cid)
 
       @menuView.model = view.model
 
       @menuView.$el.css(
-        left: e.pageX
-        top: e.pageY
+        left: e.pageX + @$el.parent().scrollLeft()
+        top: e.pageY + @$el.parent().scrollTop()
       ).show()
 
     toAscii: (collection, indentation=0, output="\n") =>
