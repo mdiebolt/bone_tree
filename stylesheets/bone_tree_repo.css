@@ -42,7 +42,6 @@ ul.features {
   border-right: 1px dashed rgba(0, 0, 0, 0.4);
   height: 100%;
   position: fixed;
-  overflow-y: scroll;
   left: 0;
   width: 22%; }
 
