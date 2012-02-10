@@ -8,6 +8,7 @@ gem "sprockets"
 
 group :development do
   gem "coffee-filter"
+  gem "rake"
 end
 
 group :test do

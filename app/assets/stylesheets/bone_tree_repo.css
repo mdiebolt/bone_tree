@@ -14,10 +14,11 @@ img.background {
   right: 20px;
   opacity: 0.2; }
 
+.bone_tree {
+  background-color: rgba(255, 255, 255, 0.5); }
+
 .tree {
-  background-color: rgba(255, 255, 255, 0.5);
   height: 100%;
-  min-height: 660px;
   padding: 1em; }
 
 h1 {
@@ -41,11 +42,12 @@ ul.features {
   border-right: 1px dashed rgba(0, 0, 0, 0.4);
   height: 100%;
   position: fixed;
+  overflow-y: scroll;
   left: 0;
-  width: 18%; }
+  width: 22%; }
 
 .right {
-  padding-left: 19%;
+  padding-left: 23%;
   width: 60%; }
 
 .background {
