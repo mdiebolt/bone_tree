@@ -5,6 +5,7 @@ require 'bone_tree/views/_file.js'
 beforeEach ->
   @settings = new Backbone.Model
     treeView: new Backbone.View
+    showExtensions: true
 
   @model = new Backbone.Model
     name: "Testing"
@@ -29,6 +30,14 @@ describe 'rendering', ->
 
   it 'should have the filename as the text of the node', ->
     expect($('#test li.file').text()).toEqual('Testing.exe')
+
+  it 'should exclude the extension if that option is set', ->
+    @settings.set
+      showExtensions: false
+
+    @view.render()
+
+    expect($('#test li.file').text()).toEqual('Testing')
 
 describe 'events', ->
   it 'should trigger a change event on the file tree when the name has changed', ->

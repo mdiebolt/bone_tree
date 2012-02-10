@@ -5,12 +5,12 @@ beforeEach ->
   {Models} = BoneTree
 
   @file = new Models.Node
-    type: 'file'
+    nodeType: 'file'
     name: 'config'
     extension: 'json'
 
   @directory = new Models.Node
-    type: 'directory'
+    nodeType: 'directory'
     name: 'src'
 
 describe 'helper functions', ->
