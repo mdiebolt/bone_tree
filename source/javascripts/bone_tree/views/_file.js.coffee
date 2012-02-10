@@ -16,8 +16,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @model.bind 'change:extension', (model, extension) =>
         @$el.attr('class', "file #{extension}")
-        @settings.get('treeView').trigger 'rename', model, model.nameWithExtension()
 
+        @settings.get('treeView').trigger 'rename', model, model.nameWithExtension()
         @settings.get('treeView').render()
 
     render: =>

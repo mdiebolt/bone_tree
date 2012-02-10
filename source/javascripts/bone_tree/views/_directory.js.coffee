@@ -35,6 +35,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     render: =>
       @$el.text @model.get('name')
 
+      @model.collection.sort()
       @model.collection.each @appendView
 
       return @
