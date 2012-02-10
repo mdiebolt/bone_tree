@@ -15,6 +15,6 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
 
   Models.Directory.find = (currentDirectory, name) ->
     currentDirectory.collection.find (dir) ->
-      dir.get('name') == name
+      dir.get('name') is name
 
 

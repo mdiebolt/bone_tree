@@ -1,5 +1,4 @@
 #= require ../_namespace
-#= require ./_base
 
 #= require_tree ../models
 #= require_tree ../views
@@ -7,7 +6,7 @@
 BoneTree.namespace "BoneTree.Views", (Views) ->
   {Models} = BoneTree
 
-  class Views.Tree extends BoneTree.View
+  class Views.Tree extends Backbone.View
     className: 'tree'
 
     events:
@@ -17,8 +16,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       'click .file': 'openFile'
 
     initialize: ->
-      super
-
       $(document).click @closeMenu
 
       @currentFileData = null
@@ -88,7 +85,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
         currentDirectory.collection.add file
 
-    findView: (node) =>
+    findOrCreateView: (node) =>
       type = node.constantize()
       viewCache = @settings.get 'viewCache'
 
@@ -146,10 +143,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @menuView.$el.hide()
 
       cid = $(e.currentTarget).data('cid')
+      model = @getModelByCid(cid)
 
-      view = @settings.get('viewCache')[cid]
-
-      view.toggleOpen()
+      model.toggleOpen()
 
     openFile: (e) =>
       e.stopPropagation()
@@ -166,7 +162,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @root.collection.sort()
       @root.collection.each (node) =>
         node.collection.sort()
-        view = @findView(node)
+        view = @findOrCreateView(node)
 
         @$el.append view.render().$el
 

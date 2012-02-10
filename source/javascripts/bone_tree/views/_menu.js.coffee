@@ -1,5 +1,5 @@
 BoneTree.namespace "BoneTree.Views", (Views) ->
-  class Views.Menu extends BoneTree.View
+  class Views.Menu extends Backbone.View
     className: 'menu'
 
     events:
@@ -7,8 +7,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       'click .rename': 'rename'
       'click .delete': 'delete'
 
-    initialize: ->
-      super
+    initialize: (options) ->
+      @settings = options.settings
 
     contextMenu: (e) =>
       e.preventDefault()
@@ -36,11 +36,11 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @$el.hide()
 
     render: =>
-      @$el.html @htmlTemplate()
+      @$el.html @template()
 
       return @
 
-    htmlTemplate: ->
+    template: ->
       """
         <ul>
           <li class='rename'>Rename</li>

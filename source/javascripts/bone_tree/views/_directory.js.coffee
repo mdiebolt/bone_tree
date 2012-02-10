@@ -1,14 +1,10 @@
-#= require ../models/_nodes
-
 BoneTree.namespace "BoneTree.Views", (Views) ->
-  {Models} = BoneTree
-
-  class Views.Directory extends BoneTree.View
+  class Views.Directory extends Backbone.View
     className: 'directory'
     tagName: 'ul'
 
-    initialize: ->
-      super
+    initialize: (options) ->
+      @settings = options.settings
 
       @$el.attr('data-cid', @model.cid)
 
@@ -16,8 +12,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         @displayChildren(open)
 
       @model.bind 'change:name', (model, name) =>
-        @settings.get('treeView').trigger 'rename', model, name
-        @settings.get('treeView').render()
+        treeView = @settings.get 'treeView'
+        treeView.render().trigger 'rename', model, name
 
       @model.collection.bind 'add', @render
 
@@ -28,20 +24,16 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @displayChildren(@model.get('open'))
 
     appendView: (node) =>
-      view = @settings.get('treeView').findView(node)
+      view = @settings.get('treeView').findOrCreateView(node)
 
       @$el.append view.render().$el
 
     render: =>
       @$el.text @model.get('name')
 
-      @model.collection.sort()
-      @model.collection.each @appendView
+      @model.collection.sort().each @appendView
 
       return @
-
-    toggleOpen: (e) =>
-      @model.toggleOpen()
 
     displayChildren: (open) =>
       fileDirChildren = @$el.children('.directory, .file')
