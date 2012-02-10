@@ -99,11 +99,11 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       return view
 
-    cacheFindByViewCid: (cid) ->
+    getModelByCid: (cid) =>
       viewCache = @settings.get 'viewCache'
 
-      for key, value of viewCache
-        return value if cid == value.cid
+      for modelCid, view of viewCache
+        return view.model if modelCid is cid
 
     closeMenu: (e) =>
       @menuView.$el.hide() unless $(e.currentTarget).is('.menu')
@@ -115,10 +115,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       target = $(e.currentTarget)
 
       cid = target.data('cid')
+      model = @getModelByCid(cid)
 
-      view = @cacheFindByViewCid(cid)
-
-      @menuView.model = view.model
+      @menuView.model = model
 
       @menuView.$el.css(
         left: e.pageX + @$el.parent().scrollLeft()
@@ -148,7 +147,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       cid = $(e.currentTarget).data('cid')
 
-      view = @cacheFindByViewCid(cid)
+      view = @settings.get('viewCache')[cid]
 
       view.toggleOpen()
 
@@ -157,12 +156,11 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @menuView.$el.hide()
 
       cid = $(e.currentTarget).data('cid')
-
-      view = @cacheFindByViewCid(cid)
+      model = @getModelByCid(cid)
 
       # events are emitted by the filetree itself. This way API
       # consumers don't have to know anything about the internals.
-      @trigger 'openFile', view.model
+      @trigger 'openFile', model
 
     render: =>
       @root.collection.sort()

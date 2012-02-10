@@ -9,6 +9,7 @@ gem "sprockets"
 group :development do
   gem "coffee-filter"
   gem "rake"
+  gem "rb-fsevent"
 end
 
 group :test do

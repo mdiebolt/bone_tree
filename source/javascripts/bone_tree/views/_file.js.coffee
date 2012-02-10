@@ -8,7 +8,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     initialize: ->
       super
 
-      @$el.attr('data-cid', @cid).addClass(@model.get('extension'))
+      @$el.attr('data-cid', @model.cid).addClass(@model.get('extension'))
 
       @model.bind 'change:name', (model, name) =>
         @settings.get('treeView').trigger 'rename', model, model.nameWithExtension()

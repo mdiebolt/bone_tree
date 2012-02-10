@@ -10,7 +10,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     initialize: ->
       super
 
-      @$el.attr('data-cid', @cid)
+      @$el.attr('data-cid', @model.cid)
 
       @model.bind 'change:open', (model, open) =>
         @displayChildren(open)
