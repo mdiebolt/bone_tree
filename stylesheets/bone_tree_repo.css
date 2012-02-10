@@ -1,0 +1,62 @@
+html {
+  height: 100%; }
+
+body {
+  background-image: url("/images/crushed_bone.png");
+  font-family: "EB Garamond", serif;
+  font-variant: small-caps;
+  height: 100%;
+  margin: 0; }
+
+img.background {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  opacity: 0.2; }
+
+.bone_tree {
+  background-color: rgba(255, 255, 255, 0.5); }
+
+.tree {
+  height: 100%;
+  padding: 1em; }
+
+h1 {
+  font-size: 2.5em;
+  margin: 0;
+  padding-top: 0.25em; }
+
+h3 {
+  margin: 0; }
+
+ul.features {
+  list-style: circle;
+  margin-top: 0.25em; }
+
+.CodeRay {
+  font-family: monaco, monospace;
+  font-variant: normal;
+  font-size: 12px; }
+
+.left {
+  border-right: 1px dashed rgba(0, 0, 0, 0.4);
+  height: 100%;
+  position: fixed;
+  overflow-y: scroll;
+  left: 0;
+  width: 22%; }
+
+.right {
+  padding-left: 23%;
+  width: 60%; }
+
+.background {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=20);
+  opacity: 0.2;
+  background: url("/images/bonetree.png") no-repeat;
+  display: inline-block;
+  width: 843px;
+  height: 650px;
+  position: absolute;
+  right: 0;
+  top: 20px; }
