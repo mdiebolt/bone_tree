@@ -8,10 +8,10 @@ configure :build do
   set :build_dir, 'app/assets'
 
   # Minify Javascript on build
-  activate :minify_javascript
+  # activate :minify_javascript
 
   # Enable cache buster
-  # activate :cache_buster
+  activate :cache_buster
 
   # Use relative URLs
   # activate :relative_assets
