@@ -1,1 +1,587 @@
-((function(){var a=Array.prototype.slice;window.BoneTree={},BoneTree.namespace=function(b,c,d){var e,f,g,h,i,j;arguments.length<3&&(i=[typeof exports!="undefined"?exports:window].concat(a.call(arguments)),b=i[0],c=i[1],d=i[2]),f=b,j=c.split(".");for(g=0,h=j.length;g<h;g++)e=j[g],b=b[e]||(b[e]={});return d(b,f)}})).call(this),function(){var a=Object.prototype.hasOwnProperty,b=function(b,c){function e(){this.constructor=b}for(var d in c)a.call(c,d)&&(b[d]=c[d]);return e.prototype=c.prototype,b.prototype=new e,b.__super__=c.prototype,b};BoneTree.namespace("BoneTree",function(a){return a.View=function(a){function c(){c.__super__.constructor.apply(this,arguments)}return b(c,a),c.prototype.initialize=function(){return this.settings=this.options.settings},c}(Backbone.View)})}.call(this),function(){var a=function(a,b){return function(){return a.apply(b,arguments)}},b=Object.prototype.hasOwnProperty,c=function(a,c){function e(){this.constructor=a}for(var d in c)b.call(c,d)&&(a[d]=c[d]);return e.prototype=c.prototype,a.prototype=new e,a.__super__=c.prototype,a};BoneTree.namespace("BoneTree.Models",function(b){return b.Node=function(d){function e(){this.nameWithExtension=a(this.nameWithExtension,this),this.constantize=a(this.constantize,this),e.__super__.constructor.apply(this,arguments)}return c(e,d),e.prototype.initialize=function(){return this.collection=new b.Nodes},e.prototype.constantize=function(){var a;return a=this.get("nodeType"),a[0].toUpperCase()+a.slice(1,a.length+1||9e9)},e.prototype.nameWithExtension=function(){var a;return a=this.get("extension")?"."+this.get("extension"):"",this.get("name")+a},e}(Backbone.Model),b.Nodes=function(a){function d(){d.__super__.constructor.apply(this,arguments)}return c(d,a),d.prototype.comparator=function(a){var b,c;return b=a.get("name"),c=a.get("sortPriority"),c+b},d.prototype.model=b.Node,d}(Backbone.Collection)})}.call(this),function(){var a=function(a,b){return function(){return a.apply(b,arguments)}},b=Object.prototype.hasOwnProperty,c=function(a,c){function e(){this.constructor=a}for(var d in c)b.call(c,d)&&(a[d]=c[d]);return e.prototype=c.prototype,a.prototype=new e,a.__super__=c.prototype,a};BoneTree.namespace("BoneTree.Models",function(b){return b.Directory=function(b){function d(){this.toggleOpen=a(this.toggleOpen,this),d.__super__.constructor.apply(this,arguments)}return c(d,b),d.prototype.defaults={name:"New Directory",open:!1,sortPriority:"0",nodeType:"directory"},d.prototype.toggleOpen=function(){var a;return a=this.get("open"),this.set({open:!a})},d}(b.Node),b.Directory.find=function(a,b){return a.collection.find(function(a){return a.get("name")===b})}})}.call(this),function(){var a=Object.prototype.hasOwnProperty,b=function(b,c){function e(){this.constructor=b}for(var d in c)a.call(c,d)&&(b[d]=c[d]);return e.prototype=c.prototype,b.prototype=new e,b.__super__=c.prototype,b},c=Array.prototype.slice;BoneTree.namespace("BoneTree.Models",function(a){return a.File=function(a){function c(){c.__super__.constructor.apply(this,arguments)}return b(c,a),c.prototype.defaults={name:"New File",sortPriority:"1",nodeType:"file"},c}(a.Node),a.File.createFromFileName=function(b,d){var e,f,g,h,i,j;return j=b.split("."),h=2<=j.length?c.call(j,0,i=j.length-1):(i=0,[]),f=j[i++],g=h.join("."),e=_.extend({},d,{name:g,extension:f}),new a.File(e)}})}.call(this),function(){var a=Object.prototype.hasOwnProperty,b=function(b,c){function e(){this.constructor=b}for(var d in c)a.call(c,d)&&(b[d]=c[d]);return e.prototype=c.prototype,b.prototype=new e,b.__super__=c.prototype,b};BoneTree.namespace("BoneTree.Models",function(a){return a.Settings=function(a){function c(){c.__super__.constructor.apply(this,arguments)}return b(c,a),c.prototype.defaults={confirmDeletes:!1,showExtensions:!1,viewCache:{}},c}(Backbone.Model)})}.call(this),function(){var a=function(a,b){return function(){return a.apply(b,arguments)}},b=Object.prototype.hasOwnProperty,c=function(a,c){function e(){this.constructor=a}for(var d in c)b.call(c,d)&&(a[d]=c[d]);return e.prototype=c.prototype,a.prototype=new e,a.__super__=c.prototype,a};BoneTree.namespace("BoneTree.Views",function(b){var d;return d=BoneTree.Models,b.Directory=function(b){function d(){this.displayChildren=a(this.displayChildren,this),this.toggleOpen=a(this.toggleOpen,this),this.render=a(this.render,this),this.appendView=a(this.appendView,this),d.__super__.constructor.apply(this,arguments)}return c(d,b),d.prototype.className="directory",d.prototype.tagName="ul",d.prototype.initialize=function(){var a=this;return d.__super__.initialize.apply(this,arguments),this.$el.attr("data-cid",this.cid),this.model.bind("change:open",function(b,c){return a.displayChildren(c)}),this.model.bind("change:name",function(b,c){return a.settings.get("treeView").trigger("rename",b,c),a.settings.get("treeView").render()}),this.model.collection.bind("add",this.render),this.model.collection.bind("remove",function(b,c){return a.settings.get("treeView").trigger("remove",b),a.render()}),this.displayChildren(this.model.get("open"))},d.prototype.appendView=function(a){var b;return b=this.settings.get("treeView").findView(a),this.$el.append(b.render().$el)},d.prototype.render=function(){return this.$el.text(this.model.get("name")),this.model.collection.sort(),this.model.collection.each(this.appendView),this},d.prototype.toggleOpen=function(a){return this.model.toggleOpen()},d.prototype.displayChildren=function(a){var b;return b=this.$el.children(".directory, .file"),this.$el.toggleClass("open",a),b.toggle(a)},d}(BoneTree.View)})}.call(this),function(){var a=function(a,b){return function(){return a.apply(b,arguments)}},b=Object.prototype.hasOwnProperty,c=function(a,c){function e(){this.constructor=a}for(var d in c)b.call(c,d)&&(a[d]=c[d]);return e.prototype=c.prototype,a.prototype=new e,a.__super__=c.prototype,a};BoneTree.namespace("BoneTree.Views",function(b){return b.File=function(b){function d(){this.render=a(this.render,this),d.__super__.constructor.apply(this,arguments)}return c(d,b),d.prototype.className="file",d.prototype.tagName="li",d.prototype.initialize=function(){var a=this;return d.__super__.initialize.apply(this,arguments),this.$el.attr("data-cid",this.cid).addClass(this.model.get("extension")),this.model.bind("change:name",function(b,c){return a.settings.get("treeView").trigger("rename",b,b.nameWithExtension()),a.settings.get("treeView").render()}),this.model.bind("change:extension",function(b,c){return a.$el.attr("class","file "+c),a.settings.get("treeView").trigger("rename",b,b.nameWithExtension()),a.settings.get("treeView").render()})},d.prototype.render=function(){return this.settings.get("showExtensions")?this.$el.text(this.model.nameWithExtension()):this.$el.text(this.model.get("name")),this},d}(BoneTree.View)})}.call(this),function(){var a=function(a,b){return function(){return a.apply(b,arguments)}},b=Object.prototype.hasOwnProperty,c=function(a,c){function e(){this.constructor=a}for(var d in c)b.call(c,d)&&(a[d]=c[d]);return e.prototype=c.prototype,a.prototype=new e,a.__super__=c.prototype,a};BoneTree.namespace("BoneTree.Views",function(b){return b.Menu=function(b){function d(){this.render=a(this.render,this),this.rename=a(this.rename,this),this["delete"]=a(this["delete"],this),this.contextMenu=a(this.contextMenu,this),d.__super__.constructor.apply(this,arguments)}return c(d,b),d.prototype.className="menu",d.prototype.events={contextmenu:"contextMenu","click .rename":"rename","click .delete":"delete"},d.prototype.initialize=function(){return d.__super__.initialize.apply(this,arguments)},d.prototype.contextMenu=function(a){return a.preventDefault(),a.stopPropagation()},d.prototype["delete"]=function(a){return this.settings.get("confirmDeletes")?confirm("Are you sure you want to delete '"+this.model.nameWithExtension()+"'?")&&this.model.destroy():this.model.destroy(),this.$el.hide()},d.prototype.rename=function(a){var b,c,d,e;if(d=prompt("New Name",this.model.nameWithExtension()))e=d.split("."),c=e[0],b=e[1],b==null&&(b=""),this.model.set({name:c,extension:b});return this.$el.hide()},d.prototype.render=function(){return this.$el.html(this.htmlTemplate()),this},d.prototype.htmlTemplate=function(){return"<ul>\n  <li class='rename'>Rename</li>\n  <hr/>\n  <li class='delete'>Delete</li>\n</ul>"},d}(BoneTree.View)})}.call(this),function(){var a=function(a,b){return function(){return a.apply(b,arguments)}},b=Object.prototype.hasOwnProperty,c=function(a,c){function e(){this.constructor=a}for(var d in c)b.call(c,d)&&(a[d]=c[d]);return e.prototype=c.prototype,a.prototype=new e,a.__super__=c.prototype,a},d=Array.prototype.slice;BoneTree.namespace("BoneTree.Views",function(b){var e;return e=BoneTree.Models,b.Tree=function(f){function g(){this.render=a(this.render,this),this.openFile=a(this.openFile,this),this.openDirectory=a(this.openDirectory,this),this.toAscii=a(this.toAscii,this),this.contextMenu=a(this.contextMenu,this),this.closeMenu=a(this.closeMenu,this),this.findView=a(this.findView,this),this.addToTree=a(this.addToTree,this),this.addFromJSON=a(this.addFromJSON,this),this.addFile=a(this.addFile,this),g.__super__.constructor.apply(this,arguments)}return c(g,f),g.prototype.className="tree",g.prototype.events={"contextmenu .file":"contextMenu","contextmenu .directory":"contextMenu","click .directory":"openDirectory","click .file":"openFile"},g.prototype.initialize=function(){var a=this;return g.__super__.initialize.apply(this,arguments),$(document).click(this.closeMenu),this.currentFileData=null,this.settings=new e.Settings({treeView:this,confirmDeletes:this.options.confirmDeletes,showExtensions:this.options.showExtensions}),this.menuView=new b.Menu({settings:this.settings}),this.menuView.render().$el.appendTo(this.$el),this.root=new e.Node,this.root.collection.bind("add",this.render),this.root.collection.bind("remove",function(b,c){return a.render(),a.settings.get("treeView").trigger("remove",b)})},g.prototype.addFile=function(a){var b,c,e,f;return a[0]==="/"&&(a=a.replace("/","")),f=a.split("/"),b=2<=f.length?d.call(f,0,e=f.length-1):(e=0,[]),c=f[e++],this.addToTree(this.root,b,c)},g.prototype.addFromJSON=function(a,b){var c,d,e,f,g,h;b==null&&(b=""),a.name!=null&&(d=a.name+"/",delete a.name),a.extension!=null&&(d=d.replace("/","."+a.extension),delete a.extension),b+=d;if(a.files!=null){g=a.files,h=[];for(e=0,f=g.length;e<f;e++)c=g[e],h.push(this.addFromJSON(c,b));return h}return this.currentFileData=a,this.addFile(b)},g.prototype.addToTree=function(a,b,c){var d,f,g,h,i;if(b.length)return i=b.shift(),(f=e.Directory.find(a,i))?(f.set({open:!0}),this.addToTree(f,b,c)):(h=new e.Directory({name:i,open:!0}),g=a.collection.add(h),this.addToTree(h,b,c));if(c==="")return;return d=e.File.createFromFileName(c,this.currentFileData),this.currentFileData=null,a.collection.add(d)},g.prototype.findView=function(a){var c,d,e;return c=a.constantize(),e=this.settings.get("viewCache"),(d=e[a.cid])||(d=e[a.cid]=new b[c]({model:a,settings:this.settings})),d},g.prototype.cacheFindByViewCid=function(a){var b,c,d;d=this.settings.get("viewCache");for(b in d){c=d[b];if(a===c.cid)return c}},g.prototype.closeMenu=function(a){if(!$(a.currentTarget).is(".menu"))return this.menuView.$el.hide()},g.prototype.contextMenu=function(a){var b,c,d;return a.preventDefault(),a.stopPropagation(),c=$(a.currentTarget),b=c.data("cid"),d=this.cacheFindByViewCid(b),this.menuView.model=d.model,this.menuView.$el.css({left:a.pageX+this.$el.parent().scrollLeft(),top:a.pageY+this.$el.parent().scrollTop()}).show()},g.prototype.toAscii=function(a,b,c){var d,e,f,g=this;b==null&&(b=0),c==null&&(c="\n"),e=a||this.root.collection,f="";for(d=0;0<=b?d<=b:d>=b;0<=b?d++:d--)f+=" ";return e.each(function(a){var d;return d=a.get("type")==="directory"?"+":"-",c+=f+d+a.nameWithExtension()+"\n",c=g.toAscii(a.collection,b+1,c)}),c},g.prototype.openDirectory=function(a){var b,c;return a.stopPropagation(),this.menuView.$el.hide(),b=$(a.currentTarget).data("cid"),c=this.cacheFindByViewCid(b),c.toggleOpen()},g.prototype.openFile=function(a){var b,c;return a.stopPropagation(),this.menuView.$el.hide(),b=$(a.currentTarget).data("cid"),c=this.cacheFindByViewCid(b),this.trigger("openFile",c.model)},g.prototype.render=function(){var a=this;return this.root.collection.sort(),this.root.collection.each(function(b){var c;return b.collection.sort(),c=a.findView(b),a.$el.append(c.render().$el)}),this},g}(BoneTree.View)})}.call(this),function(){}.call(this)
+(function() {
+  var __slice = Array.prototype.slice;
+
+  window.BoneTree = {};
+
+  BoneTree.namespace = function(target, name, block) {
+    var item, top, _i, _len, _ref, _ref2;
+    if (arguments.length < 3) {
+      _ref = [(typeof exports !== 'undefined' ? exports : window)].concat(__slice.call(arguments)), target = _ref[0], name = _ref[1], block = _ref[2];
+    }
+    top = target;
+    _ref2 = name.split('.');
+    for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+      item = _ref2[_i];
+      target = target[item] || (target[item] = {});
+    }
+    return block(target, top);
+  };
+
+}).call(this);
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  BoneTree.namespace("BoneTree.Models", function(Models) {
+    Models.Node = (function(_super) {
+
+      __extends(Node, _super);
+
+      function Node() {
+        this.nameWithExtension = __bind(this.nameWithExtension, this);
+        this.constantize = __bind(this.constantize, this);
+        Node.__super__.constructor.apply(this, arguments);
+      }
+
+      Node.prototype.initialize = function() {
+        return this.collection = new Models.Nodes;
+      };
+
+      Node.prototype.constantize = function() {
+        var nodeType;
+        nodeType = this.get('nodeType');
+        return nodeType[0].toUpperCase() + nodeType.slice(1, nodeType.length + 1 || 9e9);
+      };
+
+      Node.prototype.nameWithExtension = function() {
+        var extension;
+        extension = this.get('extension') ? "." + this.get('extension') : "";
+        return this.get('name') + extension;
+      };
+
+      return Node;
+
+    })(Backbone.Model);
+    return Models.Nodes = (function(_super) {
+
+      __extends(Nodes, _super);
+
+      function Nodes() {
+        Nodes.__super__.constructor.apply(this, arguments);
+      }
+
+      Nodes.prototype.comparator = function(file) {
+        var name, sortIndex;
+        name = file.get('name');
+        sortIndex = file.get('sortPriority');
+        return sortIndex + name;
+      };
+
+      Nodes.prototype.model = Models.Node;
+
+      return Nodes;
+
+    })(Backbone.Collection);
+  });
+
+}).call(this);
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  BoneTree.namespace("BoneTree.Models", function(Models) {
+    Models.Directory = (function(_super) {
+
+      __extends(Directory, _super);
+
+      function Directory() {
+        this.toggleOpen = __bind(this.toggleOpen, this);
+        Directory.__super__.constructor.apply(this, arguments);
+      }
+
+      Directory.prototype.defaults = {
+        name: "New Directory",
+        open: false,
+        sortPriority: "0",
+        nodeType: "directory"
+      };
+
+      Directory.prototype.toggleOpen = function() {
+        var currentState;
+        currentState = this.get('open');
+        return this.set({
+          open: !currentState
+        });
+      };
+
+      return Directory;
+
+    })(Models.Node);
+    return Models.Directory.find = function(currentDirectory, name) {
+      return currentDirectory.collection.find(function(dir) {
+        return dir.get('name') === name;
+      });
+    };
+  });
+
+}).call(this);
+(function() {
+  var __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; },
+    __slice = Array.prototype.slice;
+
+  BoneTree.namespace("BoneTree.Models", function(Models) {
+    Models.File = (function(_super) {
+
+      __extends(File, _super);
+
+      function File() {
+        File.__super__.constructor.apply(this, arguments);
+      }
+
+      File.prototype.defaults = {
+        name: "New File",
+        sortPriority: "1",
+        nodeType: "file"
+      };
+
+      return File;
+
+    })(Models.Node);
+    return Models.File.createFromFileName = function(fileName, fileData) {
+      var data, extension, name, names, _i, _ref;
+      _ref = fileName.split("."), names = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), extension = _ref[_i++];
+      name = names.join('.');
+      data = _.extend({}, fileData, {
+        name: name,
+        extension: extension
+      });
+      return new Models.File(data);
+    };
+  });
+
+}).call(this);
+(function() {
+  var __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  BoneTree.namespace("BoneTree.Models", function(Models) {
+    return Models.Settings = (function(_super) {
+
+      __extends(Settings, _super);
+
+      function Settings() {
+        Settings.__super__.constructor.apply(this, arguments);
+      }
+
+      Settings.prototype.defaults = {
+        confirmDeletes: false,
+        showExtensions: false,
+        viewCache: {}
+      };
+
+      return Settings;
+
+    })(Backbone.Model);
+  });
+
+}).call(this);
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  BoneTree.namespace("BoneTree.Views", function(Views) {
+    return Views.Directory = (function(_super) {
+
+      __extends(Directory, _super);
+
+      function Directory() {
+        this.displayChildren = __bind(this.displayChildren, this);
+        this.render = __bind(this.render, this);
+        this.appendView = __bind(this.appendView, this);
+        Directory.__super__.constructor.apply(this, arguments);
+      }
+
+      Directory.prototype.className = 'directory';
+
+      Directory.prototype.tagName = 'ul';
+
+      Directory.prototype.initialize = function(options) {
+        var _this = this;
+        this.settings = options.settings;
+        this.$el.attr('data-cid', this.model.cid);
+        this.model.bind('change:open', function(model, open) {
+          return _this.displayChildren(open);
+        });
+        this.model.bind('change:name', function(model, name) {
+          var treeView;
+          treeView = _this.settings.get('treeView');
+          return treeView.render().trigger('rename', model, name);
+        });
+        this.model.collection.bind('add', this.render);
+        this.model.collection.bind('remove', function(model, collection) {
+          _this.settings.get('treeView').trigger('remove', model);
+          return _this.render();
+        });
+        return this.displayChildren(this.model.get('open'));
+      };
+
+      Directory.prototype.appendView = function(node) {
+        var view;
+        view = this.settings.get('treeView').findOrCreateView(node);
+        return this.$el.append(view.render().$el);
+      };
+
+      Directory.prototype.render = function() {
+        this.$el.text(this.model.get('name'));
+        this.model.collection.sort().each(this.appendView);
+        return this;
+      };
+
+      Directory.prototype.displayChildren = function(open) {
+        var fileDirChildren;
+        fileDirChildren = this.$el.children('.directory, .file');
+        this.$el.toggleClass('open', open);
+        return fileDirChildren.toggle(open);
+      };
+
+      return Directory;
+
+    })(Backbone.View);
+  });
+
+}).call(this);
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  BoneTree.namespace("BoneTree.Views", function(Views) {
+    return Views.File = (function(_super) {
+
+      __extends(File, _super);
+
+      function File() {
+        this.render = __bind(this.render, this);
+        File.__super__.constructor.apply(this, arguments);
+      }
+
+      File.prototype.className = 'file';
+
+      File.prototype.tagName = 'li';
+
+      File.prototype.initialize = function(options) {
+        var _this = this;
+        this.settings = options.settings;
+        this.$el.attr('data-cid', this.model.cid).addClass(this.model.get('extension'));
+        this.model.bind('change:name', function(model, name) {
+          var treeView;
+          treeView = _this.settings.get('treeView');
+          return treeView.render().trigger('rename', model, model.nameWithExtension());
+        });
+        return this.model.bind('change:extension', function(model, extension) {
+          var treeView;
+          _this.$el.attr('class', "file " + extension);
+          treeView = _this.settings.get('treeView');
+          return treeView.render().trigger('rename', model, model.nameWithExtension());
+        });
+      };
+
+      File.prototype.render = function() {
+        if (this.settings.get('showExtensions')) {
+          this.$el.text(this.model.nameWithExtension());
+        } else {
+          this.$el.text(this.model.get('name'));
+        }
+        return this;
+      };
+
+      return File;
+
+    })(Backbone.View);
+  });
+
+}).call(this);
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  BoneTree.namespace("BoneTree.Views", function(Views) {
+    return Views.Menu = (function(_super) {
+
+      __extends(Menu, _super);
+
+      function Menu() {
+        this.render = __bind(this.render, this);
+        this.rename = __bind(this.rename, this);
+        this["delete"] = __bind(this["delete"], this);
+        this.contextMenu = __bind(this.contextMenu, this);
+        Menu.__super__.constructor.apply(this, arguments);
+      }
+
+      Menu.prototype.className = 'menu';
+
+      Menu.prototype.events = {
+        'contextmenu': 'contextMenu',
+        'click .rename': 'rename',
+        'click .delete': 'delete'
+      };
+
+      Menu.prototype.initialize = function(options) {
+        return this.settings = options.settings;
+      };
+
+      Menu.prototype.contextMenu = function(e) {
+        e.preventDefault();
+        return e.stopPropagation();
+      };
+
+      Menu.prototype["delete"] = function(e) {
+        if (this.settings.get('confirmDeletes')) {
+          if (confirm("Are you sure you want to delete '" + (this.model.nameWithExtension()) + "'?")) {
+            this.model.destroy();
+          }
+        } else {
+          this.model.destroy();
+        }
+        return this.$el.hide();
+      };
+
+      Menu.prototype.rename = function(e) {
+        var extension, fileName, newName, _ref;
+        if (newName = prompt("New Name", this.model.nameWithExtension())) {
+          _ref = newName.split("."), fileName = _ref[0], extension = _ref[1];
+          if (extension == null) extension = "";
+          this.model.set({
+            name: fileName,
+            extension: extension
+          });
+        }
+        return this.$el.hide();
+      };
+
+      Menu.prototype.render = function() {
+        this.$el.html(this.template());
+        return this;
+      };
+
+      Menu.prototype.template = function() {
+        return "<ul>\n  <li class='rename'>Rename</li>\n  <hr/>\n  <li class='delete'>Delete</li>\n</ul>";
+      };
+
+      return Menu;
+
+    })(Backbone.View);
+  });
+
+}).call(this);
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; },
+    __slice = Array.prototype.slice;
+
+  BoneTree.namespace("BoneTree.Views", function(Views) {
+    var Models;
+    Models = BoneTree.Models;
+    return Views.Tree = (function(_super) {
+
+      __extends(Tree, _super);
+
+      function Tree() {
+        this.render = __bind(this.render, this);
+        this.openFile = __bind(this.openFile, this);
+        this.openDirectory = __bind(this.openDirectory, this);
+        this.toAscii = __bind(this.toAscii, this);
+        this.contextMenu = __bind(this.contextMenu, this);
+        this.closeMenu = __bind(this.closeMenu, this);
+        this.getModelByCid = __bind(this.getModelByCid, this);
+        this.findOrCreateView = __bind(this.findOrCreateView, this);
+        this.addToTree = __bind(this.addToTree, this);
+        this.addFromJSON = __bind(this.addFromJSON, this);
+        this.addFile = __bind(this.addFile, this);
+        Tree.__super__.constructor.apply(this, arguments);
+      }
+
+      Tree.prototype.className = 'tree';
+
+      Tree.prototype.events = {
+        'contextmenu .file': 'contextMenu',
+        'contextmenu .directory': 'contextMenu',
+        'click .directory': 'openDirectory',
+        'click .file': 'openFile'
+      };
+
+      Tree.prototype.initialize = function() {
+        var _this = this;
+        $(document).click(this.closeMenu);
+        this.currentFileData = null;
+        this.settings = new Models.Settings({
+          treeView: this,
+          confirmDeletes: this.options.confirmDeletes,
+          showExtensions: this.options.showExtensions
+        });
+        this.menuView = new Views.Menu({
+          settings: this.settings
+        });
+        this.menuView.render().$el.appendTo(this.$el);
+        this.root = new Models.Node;
+        this.root.collection.bind('add', this.render);
+        return this.root.collection.bind('remove', function(model, collection) {
+          _this.render();
+          return _this.settings.get('treeView').trigger('remove', model);
+        });
+      };
+
+      Tree.prototype.addFile = function(filePath) {
+        var dirs, fileName, _i, _ref;
+        if (filePath[0] === '/') filePath = filePath.replace('/', '');
+        _ref = filePath.split("/"), dirs = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), fileName = _ref[_i++];
+        return this.addToTree(this.root, dirs, fileName);
+      };
+
+      Tree.prototype.addFromJSON = function(data, currentPath) {
+        var file, name, _i, _len, _ref, _results;
+        if (currentPath == null) currentPath = "";
+        if (data.name != null) {
+          name = data.name + '/';
+          delete data.name;
+        }
+        if (data.extension != null) {
+          name = name.replace('/', '.' + data.extension);
+          delete data.extension;
+        }
+        currentPath += name;
+        if (data.files != null) {
+          _ref = data.files;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            file = _ref[_i];
+            _results.push(this.addFromJSON(file, currentPath));
+          }
+          return _results;
+        } else {
+          this.currentFileData = data;
+          return this.addFile(currentPath);
+        }
+      };
+
+      Tree.prototype.addToTree = function(currentDirectory, remainingDirectories, fileName) {
+        var file, matchingDirectory, newDirectory, newNode, nextDirectoryName;
+        if (remainingDirectories.length) {
+          nextDirectoryName = remainingDirectories.shift();
+          if (matchingDirectory = Models.Directory.find(currentDirectory, nextDirectoryName)) {
+            matchingDirectory.set({
+              open: true
+            });
+            return this.addToTree(matchingDirectory, remainingDirectories, fileName);
+          } else {
+            newNode = new Models.Directory({
+              name: nextDirectoryName,
+              open: true
+            });
+            newDirectory = currentDirectory.collection.add(newNode);
+            return this.addToTree(newNode, remainingDirectories, fileName);
+          }
+        } else {
+          if (fileName === "") return;
+          file = Models.File.createFromFileName(fileName, this.currentFileData);
+          this.currentFileData = null;
+          return currentDirectory.collection.add(file);
+        }
+      };
+
+      Tree.prototype.findOrCreateView = function(node) {
+        var type, view, viewCache;
+        type = node.constantize();
+        viewCache = this.settings.get('viewCache');
+        if (!(view = viewCache[node.cid])) {
+          view = viewCache[node.cid] = new Views[type]({
+            model: node,
+            settings: this.settings
+          });
+        }
+        return view;
+      };
+
+      Tree.prototype.getModelByCid = function(cid) {
+        var modelCid, view, viewCache;
+        viewCache = this.settings.get('viewCache');
+        for (modelCid in viewCache) {
+          view = viewCache[modelCid];
+          if (modelCid === cid) return view.model;
+        }
+      };
+
+      Tree.prototype.closeMenu = function(e) {
+        if (!$(e.currentTarget).is('.menu')) return this.menuView.$el.hide();
+      };
+
+      Tree.prototype.contextMenu = function(e) {
+        var cid, model, target;
+        e.preventDefault();
+        e.stopPropagation();
+        target = $(e.currentTarget);
+        cid = target.data('cid');
+        model = this.getModelByCid(cid);
+        this.menuView.model = model;
+        return this.menuView.$el.css({
+          left: e.pageX + this.$el.parent().scrollLeft(),
+          top: e.pageY + this.$el.parent().scrollTop()
+        }).show();
+      };
+
+      Tree.prototype.toAscii = function(collection, indentation, output) {
+        var n, rootCollection, spaces,
+          _this = this;
+        if (indentation == null) indentation = 0;
+        if (output == null) output = "\n";
+        rootCollection = collection || this.root.collection;
+        spaces = "";
+        for (n = 0; 0 <= indentation ? n <= indentation : n >= indentation; 0 <= indentation ? n++ : n--) {
+          spaces += " ";
+        }
+        rootCollection.each(function(nodes) {
+          var typeChar;
+          typeChar = nodes.get('type') === 'directory' ? '+' : '-';
+          output += spaces + typeChar + nodes.nameWithExtension() + '\n';
+          return output = _this.toAscii(nodes.collection, indentation + 1, output);
+        });
+        return output;
+      };
+
+      Tree.prototype.openDirectory = function(e) {
+        var cid, model;
+        e.stopPropagation();
+        this.menuView.$el.hide();
+        cid = $(e.currentTarget).data('cid');
+        model = this.getModelByCid(cid);
+        return model.toggleOpen();
+      };
+
+      Tree.prototype.openFile = function(e) {
+        var cid, model;
+        e.stopPropagation();
+        this.menuView.$el.hide();
+        cid = $(e.currentTarget).data('cid');
+        model = this.getModelByCid(cid);
+        return this.trigger('openFile', model);
+      };
+
+      Tree.prototype.render = function() {
+        var _this = this;
+        this.root.collection.sort();
+        this.root.collection.each(function(node) {
+          var view;
+          node.collection.sort();
+          view = _this.findOrCreateView(node);
+          return _this.$el.append(view.render().$el);
+        });
+        return this;
+      };
+
+      return Tree;
+
+    })(Backbone.View);
+  });
+
+}).call(this);
+(function() {
+
+
+
+}).call(this);
