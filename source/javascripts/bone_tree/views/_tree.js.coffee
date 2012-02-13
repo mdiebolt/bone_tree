@@ -47,6 +47,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @addToTree(@root, dirs, fileName)
 
     addFromJSON: (data, currentPath="") =>
+      name = ""
+
       if data.name?
         name = data.name + '/'
         delete data.name
