@@ -437,6 +437,7 @@
       Tree.prototype.addFromJSON = function(data, currentPath) {
         var file, name, _i, _len, _ref, _results;
         if (currentPath == null) currentPath = "";
+        name = "";
         if (data.name != null) {
           name = data.name + '/';
           delete data.name;
