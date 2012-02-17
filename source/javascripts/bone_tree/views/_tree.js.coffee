@@ -20,14 +20,13 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @currentFileData = null
 
-      @settings = new Models.Settings
-        treeView: @
-        confirmDeletes: @options.confirmDeletes
-        showExtensions: @options.showExtensions
+      settingsConfig = _.extend({}, @options, {treeView: @})
+
+      @settings = new Models.Settings(settingsConfig)
 
       @menuView = new Views.Menu
         settings: @settings
-      @menuView.render().$el.appendTo @$el
+      @menuView.render().$el.appendTo $('body')
 
       @root = new Models.Node
 
@@ -36,11 +35,11 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @root.collection.bind 'remove', (model, collection) =>
         @render()
 
-        @settings.get('treeView').trigger 'remove', model
+        @trigger 'remove', model
 
     addFile: (filePath) =>
       # remove first slash, if it exists, so we don't end up with a blank directory
-      filePath = filePath.replace('/', '') if filePath[0] == '/'
+      filePath = filePath.replace('/', '') if filePath[0] is '/'
 
       [dirs..., fileName] = filePath.split "/"
 
@@ -64,7 +63,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           @addFromJSON(file, currentPath)
       else
         @currentFileData = data
-        @addFile(currentPath)
+
+        @addFile(currentPath) unless @beforeAddFilter(data)
 
     addToTree: (currentDirectory, remainingDirectories, fileName) =>
       if remainingDirectories.length
@@ -86,6 +86,14 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         @currentFileData = null
 
         currentDirectory.collection.add file
+
+        if @settings.get('autoOpenFile')
+          @trigger 'openFile', file
+
+        return file
+
+    beforeAddFilter: (fileData) ->
+      true
 
     findOrCreateView: (node) =>
       type = node.constantize()
@@ -119,9 +127,15 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @menuView.model = model
 
       @menuView.$el.css(
-        left: e.pageX + @$el.parent().scrollLeft()
-        top: e.pageY + @$el.parent().scrollTop()
+        left: e.pageX
+        top: e.pageY
       ).show()
+
+    # TODO getFile by name getFiles by directoryName
+    getFiles: (directoryName) =>
+      @root.collection.each (node) ->
+        if node.get('name') is directoryName and node.get('nodeType') is 'directory'
+          ;
 
     toAscii: (collection, indentation=0, output="\n") =>
       rootCollection = collection || @root.collection
