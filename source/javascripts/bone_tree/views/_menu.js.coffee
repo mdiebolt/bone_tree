@@ -1,6 +1,6 @@
 BoneTree.namespace "BoneTree.Views", (Views) ->
   class Views.Menu extends Backbone.View
-    className: 'menu'
+    className: 'filetree_context_menu'
 
     events:
       'contextmenu': 'contextMenu'
