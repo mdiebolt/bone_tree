@@ -127,6 +127,10 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         top: e.pageY
       ).show()
 
+    filterNodes: (nodeType, nodeName) =>
+      _.filter @flatten(), (node) =>
+        node.get('nodeType') is nodeType and node.get('name') is nodeName
+
     flatten: (currentNode=@root, results=[]) =>
       currentNode.collection.each (node) =>
         results.push node
@@ -136,12 +140,10 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       return results
 
     getDirectory: (directoryName) =>
-      _.filter @flatten(), (node) =>
-        node.get('nodeType') is 'directory' and node.get('name') is directoryName
+      @filterNodes('directory', directoryName)
 
     getFile: (fileName) =>
-      _.filter @flatten(), (node) =>
-        node.get('nodeType') is 'file' and node.get('name') is fileName
+      @filterNodes('file', fileName)
 
     getFiles: (directoryName) =>
       [directory] = @getDirectory(directoryName)
