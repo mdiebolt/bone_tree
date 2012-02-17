@@ -21,10 +21,10 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
 
   # nodes collection
   class Models.Nodes extends Backbone.Collection
-    comparator: (file) ->
-      {name, sortIndex} = file.attributes
+    comparator: (node) ->
+      {name, sortPriority} = node.attributes
 
-      return sortIndex + name
+      return sortPriority + name
 
     model: Models.Node
 
