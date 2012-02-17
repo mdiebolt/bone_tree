@@ -7,18 +7,22 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
     constantize: =>
       nodeType = @get('nodeType')
 
-      nodeType[0].toUpperCase() + nodeType[1..nodeType.length]
+      nodeType[0].toUpperCase() + nodeType.substring(1)
 
     nameWithExtension: =>
-      extension = if @get('extension') then "." + @get('extension') else ""
+      {extension, name} = @attributes
 
-      return @get('name') + extension
+      extension ||= ""
+
+      if extension isnt ""
+        extension = "." + extension
+
+      return name + extension
 
   # nodes collection
   class Models.Nodes extends Backbone.Collection
     comparator: (file) ->
-      name = file.get 'name'
-      sortIndex = file.get 'sortPriority'
+      {name, sortIndex} = file.attributes
 
       return sortIndex + name
 
