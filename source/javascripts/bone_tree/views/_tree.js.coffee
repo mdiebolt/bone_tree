@@ -131,11 +131,30 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         top: e.pageY
       ).show()
 
-    # TODO getFile by name getFiles by directoryName
+    flatten: (currentNode=@root, results=[]) =>
+      currentNode.collection.each (node) =>
+        results.push node
+
+        @flatten(node, results) if node.collection.length
+
+      return results
+
+    getDirectory: (directoryName) =>
+      _.filter @flatten(), (node) =>
+        node.get('nodeType') is 'directory' and node.get('name') is directoryName
+
+    getFile: (fileName) =>
+      _.filter @flatten(), (node) =>
+        node.get('nodeType') is 'file' and node.get('name') is fileName
+
+    # TODO get files within a directory
     getFiles: (directoryName) =>
-      @root.collection.each (node) ->
-        if node.get('name') is directoryName and node.get('nodeType') is 'directory'
-          ;
+      [directory] = @getDirectory(directoryName)
+
+      nodesInDirectory = @flatten(directory)
+
+      return _.filter nodesInDirectory, (node) ->
+        node.get('nodeType') is 'file'
 
     toAscii: (collection, indentation=0, output="\n") =>
       rootCollection = collection || @root.collection
