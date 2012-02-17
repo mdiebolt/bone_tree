@@ -20,6 +20,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @_currentFileData = null
 
+      if @options.beforeAddFilter?
+        @beforeAddFilter = @options.beforeAddFilter
+
       settingsConfig = _.extend({}, @options, {treeView: @})
 
       @settings = new Models.Settings(settingsConfig)
@@ -113,6 +116,13 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       for modelCid, view of viewCache
         return view.model if modelCid is cid
+
+    closeDirectories: =>
+      directories = _.filter(@flatten(), (node) ->
+        node.get('nodeType') is 'directory'
+      )
+
+      _.invoke(directories, 'set', {open: false})
 
     closeMenu: (e) =>
       @menuView.$el.hide() unless $(e.currentTarget).is('.menu')
