@@ -18,7 +18,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     initialize: ->
       $(document).click @closeMenu
 
-      @currentFileData = null
+      @_currentFileData = null
 
       settingsConfig = _.extend({}, @options, {treeView: @})
 
@@ -37,7 +37,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
         @trigger 'remove', model
 
-    addFile: (filePath) =>
+    addFile: (filePath, fileData) =>
+      @_currentFileData = fileData
+
       # remove first slash, if it exists, so we don't end up with a blank directory
       filePath = filePath.replace('/', '') if filePath[0] is '/'
 
@@ -62,9 +64,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         for file in data.files
           @addFromJSON(file, currentPath)
       else
-        @currentFileData = data
-
-        @addFile(currentPath) unless @beforeAddFilter(data)
+        @addFile(currentPath, data) unless @beforeAddFilter(data)
 
     addToTree: (currentDirectory, remainingDirectories, fileName) =>
       if remainingDirectories.length
@@ -82,8 +82,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           @addToTree(newNode, remainingDirectories, fileName)
       else
         return if fileName is ""
-        file = Models.File.createFromFileName(fileName, @currentFileData)
-        @currentFileData = null
+        file = Models.File.createFromFileName(fileName, @_currentFileData)
+        @_currentFileData = null
 
         currentDirectory.collection.add file
 
