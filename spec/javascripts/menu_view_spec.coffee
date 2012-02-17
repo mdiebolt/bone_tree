@@ -16,12 +16,12 @@ beforeEach ->
 
 describe "rendering", ->
   it "should render the correct DOM elements", ->
-    expect($('#test .menu')).toExist()
-    expect($('#test .menu').length).toEqual(1)
+    expect($('#test .filetree_context_menu')).toExist()
+    expect($('#test .filetree_context_menu').length).toEqual(1)
 
-    expect($('#test .menu li').length).toEqual(2)
-    expect($('#test .menu li.rename')).toExist()
-    expect($('#test .menu li.delete')).toExist()
+    expect($('#test .filetree_context_menu li').length).toEqual(2)
+    expect($('#test .filetree_context_menu li.rename')).toExist()
+    expect($('#test .filetree_context_menu li.delete')).toExist()
 
 describe "interactions", ->
   it "should delete", ->
@@ -32,5 +32,5 @@ describe "interactions", ->
     $('#test .delete').click()
 
     expect(spy).toHaveBeenCalled()
-    expect($('#test .menu')).toBeHidden()
+    expect($('#test .filetree_context_menu')).toBeHidden()
 
