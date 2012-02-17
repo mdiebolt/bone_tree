@@ -428,4 +428,7 @@
     ]
   }')
 
+  tree.beforeAddFilter = (fileData) ->
+    fileData.type isnt 'binary'
+
   tree.addFromJSON(treeData)
