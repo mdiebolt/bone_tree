@@ -64,7 +64,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         for file in data.files
           @addFromJSON(file, currentPath)
       else
-        @addFile(currentPath, data) unless @beforeAddFilter(data)
+        @addFile(currentPath, data)
 
     addToTree: (currentDirectory, remainingDirectories, fileName) =>
       if remainingDirectories.length
@@ -81,16 +81,18 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           newDirectory = currentDirectory.collection.add newNode
           @addToTree(newNode, remainingDirectories, fileName)
       else
-        return if fileName is ""
-        file = Models.File.createFromFileName(fileName, @_currentFileData)
-        @_currentFileData = null
+        return null if fileName is ""
 
-        currentDirectory.collection.add file
+        if @beforeAddFilter(@_currentFileData)
+          file = Models.File.createFromFileName(fileName, @_currentFileData)
+          @_currentFileData = null
 
-        if @settings.get('autoOpenFile')
-          @trigger 'openFile', file
+          currentDirectory.collection.add file
 
-        return file
+          if @settings.get('autoOpenFile')
+            @trigger 'openFile', file
+
+          return file
 
     beforeAddFilter: (fileData) ->
       true
