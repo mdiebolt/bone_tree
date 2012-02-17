@@ -117,12 +117,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
     contextMenu: (e) =>
       e.preventDefault()
-      e.stopPropagation()
 
-      target = $(e.currentTarget)
-
-      cid = target.data('cid')
-      model = @getModelByCid(cid)
+      model = @getModelFromClick(e)
 
       @menuView.model = model
 
@@ -147,7 +143,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       _.filter @flatten(), (node) =>
         node.get('nodeType') is 'file' and node.get('name') is fileName
 
-    # TODO get files within a directory
     getFiles: (directoryName) =>
       [directory] = @getDirectory(directoryName)
 
@@ -173,29 +168,28 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       return output
 
-    openDirectory: (e) =>
+    getModelFromClick: (e) =>
       e.stopPropagation()
       @menuView.$el.hide()
 
       cid = $(e.currentTarget).data('cid')
-      model = @getModelByCid(cid)
+
+      return @getModelByCid(cid)
+
+    openDirectory: (e) =>
+      model = @getModelFromClick(e)
 
       model.toggleOpen()
 
     openFile: (e) =>
-      e.stopPropagation()
-      @menuView.$el.hide()
-
-      cid = $(e.currentTarget).data('cid')
-      model = @getModelByCid(cid)
+      model = @getModelFromClick(e)
 
       # events are emitted by the filetree itself. This way API
       # consumers don't have to know anything about the internals.
       @trigger 'openFile', model
 
     render: =>
-      @root.collection.sort()
-      @root.collection.each (node) =>
+      @root.collection.sort().each (node) =>
         node.collection.sort()
         view = @findOrCreateView(node)
 
