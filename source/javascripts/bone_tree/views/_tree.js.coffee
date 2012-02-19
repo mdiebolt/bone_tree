@@ -92,7 +92,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
           currentDirectory.collection.add file
 
-          if @settings.get('autoOpenFile')
+          if @settings.get('autoOpenFiles')
             @trigger 'openFile', file
 
           return file
@@ -140,8 +140,10 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       ).show()
 
     filterNodes: (nodeType, nodeName) =>
-      _.filter @flatten(), (node) =>
+      results = _.filter @flatten(), (node) =>
         node.get('nodeType') is nodeType and node.get('name') is nodeName
+
+      return results
 
     flatten: (currentNode=@root, results=[]) =>
       currentNode.collection.each (node) =>
@@ -158,7 +160,12 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @filterNodes('file', fileName)
 
     getFiles: (directoryName) =>
-      [directory] = @getDirectory(directoryName)
+      directory = @getDirectory(directoryName).first()
+
+      # short circuit if your directory list is empty.
+      # Otherwise flatten will return all the files in
+      # the filetree
+      return [] unless directory
 
       nodesInDirectory = @flatten(directory)
 
