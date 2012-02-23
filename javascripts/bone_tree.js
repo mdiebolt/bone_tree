@@ -41,13 +41,15 @@
       Node.prototype.constantize = function() {
         var nodeType;
         nodeType = this.get('nodeType');
-        return nodeType[0].toUpperCase() + nodeType.slice(1, nodeType.length + 1 || 9e9);
+        return nodeType[0].toUpperCase() + nodeType.substring(1);
       };
 
       Node.prototype.nameWithExtension = function() {
-        var extension;
-        extension = this.get('extension') ? "." + this.get('extension') : "";
-        return this.get('name') + extension;
+        var extension, name, _ref;
+        _ref = this.attributes, extension = _ref.extension, name = _ref.name;
+        extension || (extension = "");
+        if (extension !== "") extension = "." + extension;
+        return name + extension;
       };
 
       return Node;
@@ -61,11 +63,10 @@
         Nodes.__super__.constructor.apply(this, arguments);
       }
 
-      Nodes.prototype.comparator = function(file) {
-        var name, sortIndex;
-        name = file.get('name');
-        sortIndex = file.get('sortPriority');
-        return sortIndex + name;
+      Nodes.prototype.comparator = function(node) {
+        var name, sortPriority, _ref;
+        _ref = node.attributes, name = _ref.name, sortPriority = _ref.sortPriority;
+        return sortPriority + name;
       };
 
       Nodes.prototype.model = Models.Node;
@@ -167,6 +168,7 @@
       }
 
       Settings.prototype.defaults = {
+        autoOpenFiles: true,
         confirmDeletes: false,
         showExtensions: false,
         viewCache: {}
@@ -313,7 +315,7 @@
         Menu.__super__.constructor.apply(this, arguments);
       }
 
-      Menu.prototype.className = 'menu';
+      Menu.prototype.className = 'filetree_context_menu';
 
       Menu.prototype.events = {
         'contextmenu': 'contextMenu',
@@ -386,9 +388,16 @@
         this.render = __bind(this.render, this);
         this.openFile = __bind(this.openFile, this);
         this.openDirectory = __bind(this.openDirectory, this);
+        this.getModelFromClick = __bind(this.getModelFromClick, this);
         this.toAscii = __bind(this.toAscii, this);
+        this.getFiles = __bind(this.getFiles, this);
+        this.getFile = __bind(this.getFile, this);
+        this.getDirectory = __bind(this.getDirectory, this);
+        this.flatten = __bind(this.flatten, this);
+        this.filterNodes = __bind(this.filterNodes, this);
         this.contextMenu = __bind(this.contextMenu, this);
         this.closeMenu = __bind(this.closeMenu, this);
+        this.closeDirectories = __bind(this.closeDirectories, this);
         this.getModelByCid = __bind(this.getModelByCid, this);
         this.findOrCreateView = __bind(this.findOrCreateView, this);
         this.addToTree = __bind(this.addToTree, this);
@@ -407,28 +416,32 @@
       };
 
       Tree.prototype.initialize = function() {
-        var _this = this;
+        var settingsConfig,
+          _this = this;
         $(document).click(this.closeMenu);
-        this.currentFileData = null;
-        this.settings = new Models.Settings({
-          treeView: this,
-          confirmDeletes: this.options.confirmDeletes,
-          showExtensions: this.options.showExtensions
+        this._currentFileData = null;
+        if (this.options.beforeAddFilter != null) {
+          this.beforeAddFilter = this.options.beforeAddFilter;
+        }
+        settingsConfig = _.extend({}, this.options, {
+          treeView: this
         });
+        this.settings = new Models.Settings(settingsConfig);
         this.menuView = new Views.Menu({
           settings: this.settings
         });
-        this.menuView.render().$el.appendTo(this.$el);
+        this.menuView.render().$el.appendTo($('body'));
         this.root = new Models.Node;
         this.root.collection.bind('add', this.render);
         return this.root.collection.bind('remove', function(model, collection) {
           _this.render();
-          return _this.settings.get('treeView').trigger('remove', model);
+          return _this.trigger('remove', model);
         });
       };
 
-      Tree.prototype.addFile = function(filePath) {
+      Tree.prototype.addFile = function(filePath, fileData) {
         var dirs, fileName, _i, _ref;
+        this._currentFileData = fileData;
         if (filePath[0] === '/') filePath = filePath.replace('/', '');
         _ref = filePath.split("/"), dirs = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), fileName = _ref[_i++];
         return this.addToTree(this.root, dirs, fileName);
@@ -456,8 +469,7 @@
           }
           return _results;
         } else {
-          this.currentFileData = data;
-          return this.addFile(currentPath);
+          return this.addFile(currentPath, data);
         }
       };
 
@@ -479,11 +491,19 @@
             return this.addToTree(newNode, remainingDirectories, fileName);
           }
         } else {
-          if (fileName === "") return;
-          file = Models.File.createFromFileName(fileName, this.currentFileData);
-          this.currentFileData = null;
-          return currentDirectory.collection.add(file);
+          if (fileName === "") return null;
+          if (this.beforeAddFilter(this._currentFileData)) {
+            file = Models.File.createFromFileName(fileName, this._currentFileData);
+            this._currentFileData = null;
+            currentDirectory.collection.add(file);
+            if (this.settings.get('autoOpenFiles')) this.trigger('openFile', file);
+            return file;
+          }
         }
+      };
+
+      Tree.prototype.beforeAddFilter = function(fileData) {
+        return true;
       };
 
       Tree.prototype.findOrCreateView = function(node) {
@@ -508,22 +528,67 @@
         }
       };
 
+      Tree.prototype.closeDirectories = function() {
+        var directories;
+        directories = _.filter(this.flatten(), function(node) {
+          return node.get('nodeType') === 'directory';
+        });
+        return _.invoke(directories, 'set', {
+          open: false
+        });
+      };
+
       Tree.prototype.closeMenu = function(e) {
         if (!$(e.currentTarget).is('.menu')) return this.menuView.$el.hide();
       };
 
       Tree.prototype.contextMenu = function(e) {
-        var cid, model, target;
+        var model;
         e.preventDefault();
-        e.stopPropagation();
-        target = $(e.currentTarget);
-        cid = target.data('cid');
-        model = this.getModelByCid(cid);
+        model = this.getModelFromClick(e);
         this.menuView.model = model;
         return this.menuView.$el.css({
-          left: e.pageX + this.$el.parent().scrollLeft(),
-          top: e.pageY + this.$el.parent().scrollTop()
+          left: e.pageX,
+          top: e.pageY
         }).show();
+      };
+
+      Tree.prototype.filterNodes = function(nodeType, nodeName) {
+        var results,
+          _this = this;
+        results = _.filter(this.flatten(), function(node) {
+          return node.get('nodeType') === nodeType && node.get('name') === nodeName;
+        });
+        return results;
+      };
+
+      Tree.prototype.flatten = function(currentNode, results) {
+        var _this = this;
+        if (currentNode == null) currentNode = this.root;
+        if (results == null) results = [];
+        currentNode.collection.each(function(node) {
+          results.push(node);
+          if (node.collection.length) return _this.flatten(node, results);
+        });
+        return results;
+      };
+
+      Tree.prototype.getDirectory = function(directoryName) {
+        return this.filterNodes('directory', directoryName);
+      };
+
+      Tree.prototype.getFile = function(fileName) {
+        return this.filterNodes('file', fileName);
+      };
+
+      Tree.prototype.getFiles = function(directoryName) {
+        var directory, nodesInDirectory;
+        directory = this.getDirectory(directoryName).first();
+        if (!directory) return [];
+        nodesInDirectory = this.flatten(directory);
+        return _.filter(nodesInDirectory, function(node) {
+          return node.get('nodeType') === 'file';
+        });
       };
 
       Tree.prototype.toAscii = function(collection, indentation, output) {
@@ -545,28 +610,29 @@
         return output;
       };
 
-      Tree.prototype.openDirectory = function(e) {
-        var cid, model;
+      Tree.prototype.getModelFromClick = function(e) {
+        var cid;
         e.stopPropagation();
         this.menuView.$el.hide();
         cid = $(e.currentTarget).data('cid');
-        model = this.getModelByCid(cid);
+        return this.getModelByCid(cid);
+      };
+
+      Tree.prototype.openDirectory = function(e) {
+        var model;
+        model = this.getModelFromClick(e);
         return model.toggleOpen();
       };
 
       Tree.prototype.openFile = function(e) {
-        var cid, model;
-        e.stopPropagation();
-        this.menuView.$el.hide();
-        cid = $(e.currentTarget).data('cid');
-        model = this.getModelByCid(cid);
+        var model;
+        model = this.getModelFromClick(e);
         return this.trigger('openFile', model);
       };
 
       Tree.prototype.render = function() {
         var _this = this;
-        this.root.collection.sort();
-        this.root.collection.each(function(node) {
+        this.root.collection.sort().each(function(node) {
           var view;
           node.collection.sort();
           view = _this.findOrCreateView(node);
