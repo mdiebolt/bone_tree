@@ -418,6 +418,10 @@
       ]\
     }');
     
+      tree.beforeAddFilter = function(fileData) {
+        return fileData.type !== 'binary';
+      };
+    
       tree.addFromJSON(treeData);
     
     }).call(this);

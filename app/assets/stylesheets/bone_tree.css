@@ -1,3 +1,80 @@
+.filetree_context_menu {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -o-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px;
+  -o-box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  display: none;
+  font-weight: 500;
+  position: absolute;
+  width: 100px; }
+  .filetree_context_menu html, .filetree_context_menu body, .filetree_context_menu div, .filetree_context_menu span, .filetree_context_menu applet, .filetree_context_menu object, .filetree_context_menu iframe,
+  .filetree_context_menu h1, .filetree_context_menu h2, .filetree_context_menu h3, .filetree_context_menu h4, .filetree_context_menu h5, .filetree_context_menu h6, .filetree_context_menu p, .filetree_context_menu blockquote, .filetree_context_menu pre,
+  .filetree_context_menu a, .filetree_context_menu abbr, .filetree_context_menu acronym, .filetree_context_menu address, .filetree_context_menu big, .filetree_context_menu cite, .filetree_context_menu code,
+  .filetree_context_menu del, .filetree_context_menu dfn, .filetree_context_menu em, .filetree_context_menu img, .filetree_context_menu ins, .filetree_context_menu kbd, .filetree_context_menu q, .filetree_context_menu s, .filetree_context_menu samp,
+  .filetree_context_menu small, .filetree_context_menu strike, .filetree_context_menu strong, .filetree_context_menu sub, .filetree_context_menu sup, .filetree_context_menu tt, .filetree_context_menu var,
+  .filetree_context_menu b, .filetree_context_menu u, .filetree_context_menu i, .filetree_context_menu center,
+  .filetree_context_menu dl, .filetree_context_menu dt, .filetree_context_menu dd, .filetree_context_menu ol, .filetree_context_menu ul, .filetree_context_menu li,
+  .filetree_context_menu fieldset, .filetree_context_menu form, .filetree_context_menu label, .filetree_context_menu legend,
+  .filetree_context_menu table, .filetree_context_menu caption, .filetree_context_menu tbody, .filetree_context_menu tfoot, .filetree_context_menu thead, .filetree_context_menu tr, .filetree_context_menu th, .filetree_context_menu td,
+  .filetree_context_menu article, .filetree_context_menu aside, .filetree_context_menu canvas, .filetree_context_menu details, .filetree_context_menu embed,
+  .filetree_context_menu figure, .filetree_context_menu figcaption, .filetree_context_menu footer, .filetree_context_menu header, .filetree_context_menu hgroup,
+  .filetree_context_menu menu, .filetree_context_menu nav, .filetree_context_menu output, .filetree_context_menu ruby, .filetree_context_menu section, .filetree_context_menu summary,
+  .filetree_context_menu time, .filetree_context_menu mark, .filetree_context_menu audio, .filetree_context_menu video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline; }
+  .filetree_context_menu body {
+    line-height: 1; }
+  .filetree_context_menu ol, .filetree_context_menu ul {
+    list-style: none; }
+  .filetree_context_menu table {
+    border-collapse: collapse;
+    border-spacing: 0; }
+  .filetree_context_menu caption, .filetree_context_menu th, .filetree_context_menu td {
+    text-align: left;
+    font-weight: normal;
+    vertical-align: middle; }
+  .filetree_context_menu q, .filetree_context_menu blockquote {
+    quotes: none; }
+    .filetree_context_menu q:before, .filetree_context_menu q:after, .filetree_context_menu blockquote:before, .filetree_context_menu blockquote:after {
+      content: "";
+      content: none; }
+  .filetree_context_menu a img {
+    border: none; }
+  .filetree_context_menu article, .filetree_context_menu aside, .filetree_context_menu details, .filetree_context_menu figcaption, .filetree_context_menu figure, .filetree_context_menu footer, .filetree_context_menu header, .filetree_context_menu hgroup, .filetree_context_menu menu, .filetree_context_menu nav, .filetree_context_menu section, .filetree_context_menu summary {
+    display: block; }
+  .filetree_context_menu hr {
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+    height: 1px;
+    margin: 0; }
+  .filetree_context_menu li {
+    margin: 0.25em 0;
+    padding: 0 0.5em; }
+    .filetree_context_menu li:hover {
+      background-color: #1084ce;
+      color: white; }
+  .filetree_context_menu .rename {
+    background: white url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACjSURBVDjL7ZNBCsIwEEVz1mwTo1YjiHdIqyWgFBGPonWTC8T2BjlE4JsUwU0ILe7ExUtgPvNmNkMAkG8gPyAwxiAHYwxKKUgpk/kg8N5n4Zwn6865j4CVLXj1AA//rArsW4hAzCil4wTFsUdx6rBuLLaXJ+aH+zTBqukDFpuzxe5qsagnCIbV32vHybF5Wd/GC3JkBfHJEZu11hBCJHPyvwXyAt6tONifnq6xAAAAAElFTkSuQmCC") no-repeat;
+    background-position: 4px 3px;
+    padding-left: 24px; }
+  .filetree_context_menu .delete {
+    background: white url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJdSURBVDjLpZP7S1NhGMf9W7YfogSJboSEUVCY8zJ31trcps6zTI9bLGJpjp1hmkGNxVz4Q6ildtXKXzJNbJRaRmrXoeWx8tJOTWptnrNryre5YCYuI3rh+8vL+/m8PA/PkwIg5X+y5mJWrxfOUBXm91QZM6UluUmthntHqplxUml2lciF6wrmdHriI0Wx3xw2hAediLwZRWRkCPzdDswaSvGqkGCfq8VEUsEyPF1O8Qu3O7A09RbRvjuIttsRbT6HHzebsDjcB4/JgFFlNv9MnkmsEszodIIY7Oaut2OJcSF68Qx8dgv8tmqEL1gQaaARtp5A+N4NzB0lMXxon/uxbI8gIYjB9HytGYuusfiPIQcN71kjgnW6VeFOkgh3XcHLvAwMSDPohOADdYQJdF1FtLMZPmslvhZJk2ahkgRvq4HHUoWHRDqTEDDl2mDkfheiDgt8pw340/EocuClCuFvboQzb0cwIZgki4KhzlaE6w0InipbVzBfqoK/qRH94i0rgokSFeO11iBkp8EdV8cfJo0yD75aE2ZNRvSJ0lZKcBXLaUYmQrCzDT6tDN5SyRqYlWeDLZAg0H4JQ+Jt6M3atNLE10VSwQsN4Z6r0CBwqzXesHmV+BeoyAUri8EyMfi2FowXS5dhd7doo2DVII0V5BAjigP89GEVAtda8b2ehodU4rNaAW+dGfzlFkyo89GTlcrHYCLpKD+V7yeeHNzLjkp24Uu1Ed6G8/F8qjqGRzlbl2H2dzjpMg1KdwsHxOlmJ7GTeZC/nesXbeZ6c9OYnuxUc3fmBuFft/Ff8xMd0s65SXIb/gAAAABJRU5ErkJggg==") no-repeat;
+    background-position: 4px 3px;
+    padding-left: 24px; }
+
 .tree {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -10,19 +87,7 @@
   user-select: none;
   color: black;
   overflow-y: scroll; }
-  .tree html, .tree body, .tree div, .tree span, .tree applet, .tree object, .tree iframe,
-  .tree h1, .tree h2, .tree h3, .tree h4, .tree h5, .tree h6, .tree p, .tree blockquote, .tree pre,
-  .tree a, .tree abbr, .tree acronym, .tree address, .tree big, .tree cite, .tree code,
-  .tree del, .tree dfn, .tree em, .tree img, .tree ins, .tree kbd, .tree q, .tree s, .tree samp,
-  .tree small, .tree strike, .tree strong, .tree sub, .tree sup, .tree tt, .tree var,
-  .tree b, .tree u, .tree i, .tree center,
-  .tree dl, .tree dt, .tree dd, .tree ol, .tree ul, .tree li,
-  .tree fieldset, .tree form, .tree label, .tree legend,
-  .tree table, .tree caption, .tree tbody, .tree tfoot, .tree thead, .tree tr, .tree th, .tree td,
-  .tree article, .tree aside, .tree canvas, .tree details, .tree embed,
-  .tree figure, .tree figcaption, .tree footer, .tree header, .tree hgroup,
-  .tree menu, .tree nav, .tree output, .tree ruby, .tree section, .tree summary,
-  .tree time, .tree mark, .tree audio, .tree video {
+  .tree html, .tree body, .tree div, .tree span, .tree applet, .tree object, .tree iframe, .tree h1, .tree h2, .tree h3, .tree h4, .tree h5, .tree h6, .tree p, .tree blockquote, .tree pre, .tree a, .tree abbr, .tree acronym, .tree address, .tree big, .tree cite, .tree code, .tree del, .tree dfn, .tree em, .tree img, .tree ins, .tree kbd, .tree q, .tree s, .tree samp, .tree small, .tree strike, .tree strong, .tree sub, .tree sup, .tree tt, .tree var, .tree b, .tree u, .tree i, .tree center, .tree dl, .tree dt, .tree dd, .tree ol, .tree ul, .tree li, .tree fieldset, .tree form, .tree label, .tree legend, .tree table, .tree caption, .tree tbody, .tree tfoot, .tree thead, .tree tr, .tree th, .tree td, .tree article, .tree aside, .tree canvas, .tree details, .tree embed, .tree figure, .tree figcaption, .tree footer, .tree header, .tree hgroup, .tree menu, .tree nav, .tree output, .tree ruby, .tree section, .tree summary, .tree time, .tree mark, .tree audio, .tree video {
     margin: 0;
     padding: 0;
     border: 0;
@@ -55,43 +120,6 @@
     cursor: pointer; }
   .tree .directory .directory {
     padding-left: 20px; }
-  .tree .menu {
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -o-border-radius: 3px;
-    -ms-border-radius: 3px;
-    -khtml-border-radius: 3px;
-    border-radius: 3px;
-    -moz-box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px;
-    -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px;
-    -o-box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px;
-    box-shadow: rgba(0, 0, 0, 0.4) 0 2px 10px;
-    background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    display: none;
-    font-weight: 500;
-    position: absolute;
-    width: 100px; }
-    .tree .menu hr {
-      border: 0;
-      border-top: 1px solid rgba(0, 0, 0, 0.15);
-      height: 1px;
-      margin: 0; }
-    .tree .menu li {
-      margin: 0.25em 0;
-      padding: 0 0.5em; }
-      .tree .menu li:hover {
-        background-color: #1084ce;
-        color: white; }
-    .tree .menu .rename {
-      background: white url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACjSURBVDjL7ZNBCsIwEEVz1mwTo1YjiHdIqyWgFBGPonWTC8T2BjlE4JsUwU0ILe7ExUtgPvNmNkMAkG8gPyAwxiAHYwxKKUgpk/kg8N5n4Zwn6865j4CVLXj1AA//rArsW4hAzCil4wTFsUdx6rBuLLaXJ+aH+zTBqukDFpuzxe5qsagnCIbV32vHybF5Wd/GC3JkBfHJEZu11hBCJHPyvwXyAt6tONifnq6xAAAAAElFTkSuQmCC") no-repeat;
-      background-position: 4px 3px;
-      padding-left: 24px; }
-    .tree .menu .delete {
-      background: white url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJdSURBVDjLpZP7S1NhGMf9W7YfogSJboSEUVCY8zJ31trcps6zTI9bLGJpjp1hmkGNxVz4Q6ildtXKXzJNbJRaRmrXoeWx8tJOTWptnrNryre5YCYuI3rh+8vL+/m8PA/PkwIg5X+y5mJWrxfOUBXm91QZM6UluUmthntHqplxUml2lciF6wrmdHriI0Wx3xw2hAediLwZRWRkCPzdDswaSvGqkGCfq8VEUsEyPF1O8Qu3O7A09RbRvjuIttsRbT6HHzebsDjcB4/JgFFlNv9MnkmsEszodIIY7Oaut2OJcSF68Qx8dgv8tmqEL1gQaaARtp5A+N4NzB0lMXxon/uxbI8gIYjB9HytGYuusfiPIQcN71kjgnW6VeFOkgh3XcHLvAwMSDPohOADdYQJdF1FtLMZPmslvhZJk2ahkgRvq4HHUoWHRDqTEDDl2mDkfheiDgt8pw340/EocuClCuFvboQzb0cwIZgki4KhzlaE6w0InipbVzBfqoK/qRH94i0rgokSFeO11iBkp8EdV8cfJo0yD75aE2ZNRvSJ0lZKcBXLaUYmQrCzDT6tDN5SyRqYlWeDLZAg0H4JQ+Jt6M3atNLE10VSwQsN4Z6r0CBwqzXesHmV+BeoyAUri8EyMfi2FowXS5dhd7doo2DVII0V5BAjigP89GEVAtda8b2ehodU4rNaAW+dGfzlFkyo89GTlcrHYCLpKD+V7yeeHNzLjkp24Uu1Ed6G8/F8qjqGRzlbl2H2dzjpMg1KdwsHxOlmJ7GTeZC/nesXbeZ6c9OYnuxUc3fmBuFft/Ff8xMd0s65SXIb/gAAAABJRU5ErkJggg==") no-repeat;
-      background-position: 4px 3px;
-      padding-left: 24px; }
   .tree .file {
     background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAL5JREFUeNpi/P//PwMIrOp1gjBwgLDifYxYJUAGgPDKHsf/uMCVvTX/ofIM6JiJgUigbWiN1ZVEG4DLEBYMVXmFqPxJ/QzaTs1w7tXzTgz4DQBqIAVgGNC7YxGc/fnoPoaG5gUM2bnJDFMnz2UgOxaQAXpswF1w7YMcahgAvdJQm8Dw+gMzmAtzAVwdMWEAcj7JYXB1Xy3Djl+qcP7aS5fB9LGybuIMAEWZNhK/2AO/C0hKSARdAAo0UgFAgAEAldGhef3Bv88AAAAASUVORK5CYII=") no-repeat;
     background-position: 1px 3px;
