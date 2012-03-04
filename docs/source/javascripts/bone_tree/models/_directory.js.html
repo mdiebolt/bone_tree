@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>_directory.js.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../resources/base.css" />
+  <link rel="stylesheet" media="all" href="../../../../resources/module.css" />
+</head>
+<body>
+  <header>
+    <h1>_directory.js.coffee</h1>
+  </header>
+  <div id="content">
+    <div id="sidebar">
+      
+      <h4>Classes</h4>
+      <ul class="classlist">
+        
+        <li><a href="#Models.Directory">Models.Directory</a></li>
+        
+      </ul>
+      
+      
+      <h4>Functions</h4>
+      <ul class="functionlist">
+        
+        <li><a href="#Models.Directory.find">Models.Directory.find</a></li>
+        
+      </ul>
+      
+    </div>
+    <div id="main">
+      
+      
+      <div id="classes">
+        <h2>Classes</h2>
+        
+        <div class="class">
+          <div class="header">
+            <a id="Models.Directory"><h3>Models.Directory</h3></a>
+            
+            
+            <a class="parent" href="#Models.Node"><h3>extends Models.Node</h3></a>
+            
+            
+          </div>
+          <div class="class_content">
+            <p>Public: Object representing a directory.</p>
+
+<ul>
+<li>defaults
+<ul><li>name         - A String naming the directory (default: "New Directory").</li>
+<li>sortPriority - A String representing the priority with which the
+           node is sorted. Directories have sortPriority "0"
+           allowing them to be sorted before Files which have
+           sortPriority "1".</li>
+<li>nodeType     - A String denoting what type of node this object is.
+           The two types are "file" and "directory".</li>
+<li>open         - The state of the directory. Controls whether or not
+           to display files and directories contained within this
+           Directory (default: false).</li></ul></li>
+</ul>
+            <div class="methods">
+              
+              
+              <div class="instancemethods">
+                <h3>Instance Methods</h3>
+                
+                <div class="method">
+                  <h4>toggleOpen()</h4>
+                  <p>Public: Toggle the open state of this Directory.</p>
+
+<p>Examples</p>
+
+<pre><code>dir = new BoneTree.Models.Directory
+
+dir.get('open')
+# =&gt; false
+
+dir.toggleOpen()
+dir.get('open')
+# =&gt; true
+</code></pre>
+
+<p>Returns this Directory.</p>
+                </div>
+                
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+      
+      <div id="functions">
+        <h2>Functions</h2>
+        
+        <div class="function">
+          <div class="header">
+            <a id="Models.Directory.find"><h3>Models.Directory.find(currentDirectory, name)</h3></a>
+          </div>
+          
+          <div>
+            <p>Internal: Check to see if there is a directory with the matching name
+          contained within currentDirectory.</p>
+
+<ul>
+<li><p>currentDirectory - A Directory object to search for the matching directory name.</p></li>
+<li><p>name             - A String name used to check for matching directory
+                 names in currentDirectory.</p></li>
+</ul>
+
+<p>Returns The Directory object with the matching name if it exists and undefined otherwise.</p>
+          </div>
+          
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+</body>
+</html>

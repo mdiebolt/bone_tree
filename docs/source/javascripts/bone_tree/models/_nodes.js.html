@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>_nodes.js.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../resources/base.css" />
+  <link rel="stylesheet" media="all" href="../../../../resources/module.css" />
+</head>
+<body>
+  <header>
+    <h1>_nodes.js.coffee</h1>
+  </header>
+  <div id="content">
+    <div id="sidebar">
+      
+      <h4>Classes</h4>
+      <ul class="classlist">
+        
+        <li><a href="#Models.Node">Models.Node</a></li>
+        
+        <li><a href="#Models.Nodes">Models.Nodes</a></li>
+        
+      </ul>
+      
+      
+    </div>
+    <div id="main">
+      
+      
+      <div id="classes">
+        <h2>Classes</h2>
+        
+        <div class="class">
+          <div class="header">
+            <a id="Models.Node"><h3>Models.Node</h3></a>
+            
+            
+            <a class="parent" href="#Backbone.Model"><h3>extends Backbone.Model</h3></a>
+            
+            
+          </div>
+          <div class="class_content">
+            <p>Internal: An abstract super class for File and Directory objects to inherit from.</p>
+            <div class="methods">
+              
+              
+              <div class="instancemethods">
+                <h3>Instance Methods</h3>
+                
+                <div class="method">
+                  <h4>initialize()</h4>
+                  <p>Internal: Initialize a new Node object. Set it up to contain a collection of
+          children nodes.</p>
+                </div>
+                
+                <div class="method">
+                  <h4>constantize()</h4>
+                  <p>Public: Returns a String with the nodeType capitalized so that it may be used
+        to instatiate the appropriate view type</p>
+
+<p>Examples</p>
+
+<pre><code>file = new BoneTree.Models.File
+directory = new BoneTree.Models.Directory
+
+file.constantize()
+# =&gt; 'File'
+
+directory.constantize()
+# =&gt; 'Directory'
+
+# use it to create a new view of the appropriate type
+view = new BoneTree.Views[file.constantize()]
+</code></pre>
+
+<p>Returns a String of the nodeType with the first letter capitalized.</p>
+                </div>
+                
+                <div class="method">
+                  <h4>nameWithExtension()</h4>
+                  <p>Public: Returns the node name with the extension if it has
+        one and just the node name if there is no extension.</p>
+
+<p>Examples</p>
+
+<pre><code>file = new BoneTree.Models.File
+  name: "file"
+  extension: "coffee"
+
+noExt = new BoneTree.Models.File
+  name: "file2"
+
+directory = new BoneTree.Model.Directory
+  name: "source"
+
+file.nameWithExtension()
+# =&gt; "file.coffee"
+
+noExt.nameWithExtension()
+# =&gt; "file2"
+
+directory.nameWithExtension()
+# =&gt; "source"
+</code></pre>
+
+<p>Returns a String. If the extension exists then the node name plus the extension
+are returned. If there is no extension, then just the node name is returned.</p>
+                </div>
+                
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="class">
+          <div class="header">
+            <a id="Models.Nodes"><h3>Models.Nodes</h3></a>
+            
+            
+            <a class="parent" href="#Backbone.Collection"><h3>extends Backbone.Collection</h3></a>
+            
+            
+          </div>
+          <div class="class_content">
+            <p>Internal: A collection of node models. Since Node is an abstract super
+          class, in practice this collection will hold File objects
+          and Directory objects.</p>
+            <div class="methods">
+              
+              
+              <div class="instancemethods">
+                <h3>Instance Methods</h3>
+                
+                <div class="method">
+                  <h4>comparator(node)</h4>
+                  <p>Internal: Function that determines how the file tree is sorted. Directories
+          are sorted before files. After node type sort
+          priority, nodes are sorted by name.</p>
+
+<p>Examples</p>
+
+<pre><code>tree.addFile('/source/file1.coffee')
+tree.addFile('/source/file2.coffee')
+tree.addFile('main.coffee')
+
+tree.render()
+
+# even though 'main' comes before 'source' alphabetically it is placed
+# after the 'source' directory due to the sortPriority of the Directory object.
+tree.toAscii()
+# =&gt; "
+  -source
+   -file1.coffee
+   -file2.coffee
+  -main.coffee
+"
+</code></pre>
+                </div>
+                
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+      
+    </div>
+  </div>
+</body>
+</html>

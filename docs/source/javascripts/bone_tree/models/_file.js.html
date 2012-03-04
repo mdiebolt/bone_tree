@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>_file.js.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../../../resources/base.css" />
+  <link rel="stylesheet" media="all" href="../../../../resources/module.css" />
+</head>
+<body>
+  <header>
+    <h1>_file.js.coffee</h1>
+  </header>
+  <div id="content">
+    <div id="sidebar">
+      
+      <h4>Classes</h4>
+      <ul class="classlist">
+        
+        <li><a href="#Models.File">Models.File</a></li>
+        
+      </ul>
+      
+      
+      <h4>Functions</h4>
+      <ul class="functionlist">
+        
+        <li><a href="#Models.File.createFromFileName">Models.File.createFromFileName</a></li>
+        
+      </ul>
+      
+    </div>
+    <div id="main">
+      
+      
+      <div id="classes">
+        <h2>Classes</h2>
+        
+        <div class="class">
+          <div class="header">
+            <a id="Models.File"><h3>Models.File</h3></a>
+            
+            
+            <a class="parent" href="#Models.Node"><h3>extends Models.Node</h3></a>
+            
+            
+          </div>
+          <div class="class_content">
+            <p>Public: Object representing file data in the tree.</p>
+
+<ul>
+<li>defaults
+<ul><li>name         - A String naming the file (default: "New File").</li>
+<li>sortPriority - A String representing the priority with which the
+           node is sorted. Directories have sortPriority "0"
+           allowing them to be sorted before Files which have
+           sortPriority "1".</li>
+<li>nodeType     - A String denoting what type of node this object is.
+           The two types are "file" and "directory".</li></ul></li>
+</ul>
+            <div class="methods">
+              
+              
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+      
+      <div id="functions">
+        <h2>Functions</h2>
+        
+        <div class="function">
+          <div class="header">
+            <a id="Models.File.createFromFileName"><h3>Models.File.createFromFileName(fileName, fileData)</h3></a>
+          </div>
+          
+          <div>
+            <p>Public: Class method to create a new File object based on the fileName
+        and fileData passed in.</p>
+
+<ul>
+<li><p>fileName - A String representing the name of the file to be created.
+         files with '.' in the name will be parsed out and only the
+         string after the final '.' will be considered the extension.</p></li>
+<li><p>fileData - An Object of attributes to associate with the file.</p></li>
+</ul>
+
+<p>Examples</p>
+
+<pre><code>data = {
+  contents: alert 'this is the code in the file'
+  createdAt: 1330846900589
+  language: 'CoffeeScript'
+}
+
+BoneTree.Models.File.createFromFileName('example.coffee', data)
+# =&gt; &lt;File&gt;
+</code></pre>
+
+<p>Returns the File object just created.</p>
+          </div>
+          
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+</body>
+</html>
