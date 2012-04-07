@@ -62,7 +62,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
         @trigger 'remove', model
 
-    addFile: (filePath, fileData) =>
+    addFile: (filePath, fileData={}, triggerAutoOpen=true) =>
       ###
       Public: Method to add files and associated file data to the tree.
 
@@ -90,7 +90,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       [dirs..., fileName] = filePath.split "/"
 
-      @addToTree(@root, dirs, fileName)
+      @addToTree(@root, dirs, fileName, triggerAutoOpen)
 
     addFromJSON: (data, currentPath="") =>
       ###
@@ -146,7 +146,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       return @
 
-    addToTree: (currentDirectory, remainingDirectories, fileName) =>
+    addToTree: (currentDirectory, remainingDirectories, fileName, triggerAutoOpen=true) =>
       ###
       Internal: Recursive method that traverses nodes, creating
                 Files and Directories.
@@ -172,12 +172,12 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           matchingDirectory.set
             open: true
 
-          @addToTree(matchingDirectory, remainingDirectories, fileName)
+          @addToTree(matchingDirectory, remainingDirectories, fileName, triggerAutoOpen)
         else
           newNode = new Models.Directory {name: nextDirectoryName, open: true}
 
           newDirectory = currentDirectory.collection.add newNode
-          @addToTree(newNode, remainingDirectories, fileName)
+          @addToTree(newNode, remainingDirectories, fileName, triggerAutoOpen)
       else
         return null if fileName is ""
 
@@ -187,7 +187,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
           currentDirectory.collection.add file
 
-          if @settings.get('autoOpenFiles')
+          if @settings.get('autoOpenFiles') and triggerAutoOpen
             @trigger 'openFile', file
 
           return file
