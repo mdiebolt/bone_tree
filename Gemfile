@@ -6,12 +6,10 @@ gem "rack"
 gem "rack-codehighlighter"
 gem "sprockets"
 
-group :development do
+group :development, :test do
   gem "coffee-filter"
+  gem "jasmine"
+  gem "jasmine-headless-webkit"
   gem "rake"
   gem "rb-fsevent"
-end
-
-group :test do
-  gem "evergreen", "1.0.0"
 end
