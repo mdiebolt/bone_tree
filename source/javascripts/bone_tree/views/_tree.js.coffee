@@ -58,6 +58,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @root.collection.bind 'add', @render
 
       @root.collection.bind 'remove', (model, collection) =>
+        @$("[data-cid='#{model.cid}']").remove()
+
         @render()
 
         @trigger 'remove', model
