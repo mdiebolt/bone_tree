@@ -1,8 +1,9 @@
-require 'bone_tree/_namespace.js'
-require 'bone_tree/views/_base.js'
-require 'bone_tree/views/_menu.js'
+#= require bone_tree/_namespace
+#= require bone_tree/views/_menu
 
 beforeEach ->
+  setFixtures("<div id='test'></div>")
+
   @model = new Backbone.Model
 
   @settings = new Backbone.Model
@@ -13,6 +14,9 @@ beforeEach ->
     settings: @settings
 
   $('#test').append @menu.render().el
+
+afterEach ->
+  $('#test').empty()
 
 describe "rendering", ->
   it "should render the correct DOM elements", ->

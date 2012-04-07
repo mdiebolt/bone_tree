@@ -1,5 +1,5 @@
-require 'bone_tree/_namespace.js'
-require 'bone_tree/views/_tree.js'
+#= require bone_tree/_namespace
+#= require bone_tree/views/_tree
 
 beforeEach ->
   @tree = new BoneTree.Views.Tree

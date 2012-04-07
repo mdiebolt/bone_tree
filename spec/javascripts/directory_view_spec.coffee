@@ -1,8 +1,9 @@
-require 'bone_tree/_namespace.js'
-require 'bone_tree/views/_base.js'
-require 'bone_tree/views/_directory.js'
+#= require bone_tree/_namespace
+#= require bone_tree/views/_directory
 
 beforeEach ->
+  setFixtures("<div id='test'></div>")
+
   treeView = new Backbone.View
   treeView.findView = (model) ->
     @view.model = model
@@ -27,6 +28,9 @@ beforeEach ->
     settings: @settings
 
   $('#test').append @view.render().$el
+
+afterEach ->
+  @view.remove()
 
 describe 'rendering', ->
   it 'should render the correct element', ->

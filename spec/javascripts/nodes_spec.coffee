@@ -1,5 +1,5 @@
-require 'bone_tree/_namespace.js'
-require 'bone_tree/models/_nodes.js'
+#= require bone_tree/_namespace
+#= require bone_tree/models/_nodes
 
 beforeEach ->
   {Models} = BoneTree

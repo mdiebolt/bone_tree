@@ -1,6 +1,5 @@
-require 'bone_tree/_namespace.js'
-require 'bone_tree/views/_base.js'
-require 'bone_tree/views/_file.js'
+#= require bone_tree/_namespace
+#= require bone_tree/views/_file
 
 beforeEach ->
   @settings = new Backbone.Model
