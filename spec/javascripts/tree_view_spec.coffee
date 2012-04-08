@@ -34,3 +34,11 @@ describe "BoneTree.Views.Tree", ->
         showExtensions: true
 
       expect(@tree.settings.get('showExtensions')).toBeTruthy()
+
+  describe 'API', ->
+    it 'should be able to find files by their path', ->
+      @tree = new BoneTree.Views.Tree
+
+      srcMain = @tree.addFile 'src/main.coffee', {}
+
+      expect(@tree.getFile('src/main.coffee')).toEqual(srcMain)

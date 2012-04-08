@@ -1,6 +1,8 @@
+/* line 4, bone_tree_repo.css.sass */
 html {
   height: 100%; }
 
+/* line 7, bone_tree_repo.css.sass */
 body {
   background-image: url("/images/crushed_bone.png");
   font-family: "EB Garamond", serif;
@@ -8,36 +10,44 @@ body {
   height: 100%;
   margin: 0; }
 
+/* line 14, bone_tree_repo.css.sass */
 img.background {
   position: absolute;
   top: 20px;
   right: 20px;
   opacity: 0.2; }
 
+/* line 20, bone_tree_repo.css.sass */
 .bone_tree {
   background-color: rgba(255, 255, 255, 0.5); }
 
+/* line 23, bone_tree_repo.css.sass */
 .tree {
   height: 100%;
   padding: 1em; }
 
+/* line 27, bone_tree_repo.css.sass */
 h1 {
   font-size: 2.5em;
   margin: 0;
   padding-top: 0.25em; }
 
+/* line 32, bone_tree_repo.css.sass */
 h3 {
   margin: 0; }
 
+/* line 35, bone_tree_repo.css.sass */
 ul.features {
   list-style: circle;
   margin-top: 0.25em; }
 
+/* line 39, bone_tree_repo.css.sass */
 .CodeRay {
   font-family: monaco, monospace;
   font-variant: normal;
   font-size: 12px; }
 
+/* line 44, bone_tree_repo.css.sass */
 .left {
   border-right: 1px dashed rgba(0, 0, 0, 0.4);
   height: 100%;
@@ -45,10 +55,12 @@ ul.features {
   left: 0;
   width: 22%; }
 
+/* line 51, bone_tree_repo.css.sass */
 .right {
   padding-left: 23%;
   width: 60%; }
 
+/* line 55, bone_tree_repo.css.sass */
 .background {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=20);
   opacity: 0.2;

@@ -3,7 +3,7 @@ include FileUtils
 
 task :default => [:build]
 
-task :build do
+task :build => [:spec] do
   # Remove all but .git from build directory
   rm_r Dir.glob("build/*")
 

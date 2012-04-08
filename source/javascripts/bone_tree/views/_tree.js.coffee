@@ -384,7 +384,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       ###
       @filterNodes('directory', directoryName)
 
-    # TODO Fix me
     getFile: (filePath) =>
       ###
       Public: Returns a file at the specified location.
@@ -404,7 +403,22 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       Returns a File at the given location.
       ###
-      @filterNodes('file', fileName)
+      pathList = filePath.split '/'
+
+      file = pathList[pathList.length - 1]
+      [names..., extension] = file.split "."
+      name = names.join('.')
+
+      directoryName = pathList[pathList.length - 2]
+
+      filesInDirectory = @getFiles(directoryName)
+
+      (_.filter filesInDirectory, (f) ->
+        if extension
+          return (f.get('name') is name and f.get('extension') is extension)
+        else
+          return f.get('name') is name
+      )[0]
 
     getFiles: (directoryName) =>
       ###
@@ -427,7 +441,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       Returns an Array of File nodes that are contained in the
       Directory matching directoryName.
       ###
-      directory = @getDirectory(directoryName).first()
+      directory = @getDirectory(directoryName)[0]
 
       # short circuit if your directory list is empty.
       # Otherwise flatten will return all the files in
