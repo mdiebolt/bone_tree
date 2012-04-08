@@ -1,62 +1,70 @@
 #= require bone_tree/_namespace
 #= require bone_tree/views/_file
 
-beforeEach ->
-  @settings = new Backbone.Model
-    treeView: new Backbone.View
-    showExtensions: true
+describe "BoneTree.Views.File", ->
+  beforeEach ->
+    setFixtures("<div id='test'></div>")
 
-  @model = new Backbone.Model
-    name: "Testing"
-    extension: "exe"
+    @settings = new Backbone.Model
+      treeView: new Backbone.View
+      showExtensions: true
 
-  @model.nameWithExtension = =>
-    @model.get('name') + "." + @model.get('extension')
+    @model = new Backbone.Model
+      name: "Testing"
+      extension: "exe"
 
-  @view = new BoneTree.Views.File
-    model: @model
-    settings: @settings
+    @model.nameWithExtension = =>
+      @model.get('name') + "." + @model.get('extension')
 
-  $('#test').append @view.render().el
+    @view = new BoneTree.Views.File
+      model: @model
+      settings: @settings
 
-describe 'rendering', ->
-  it 'should render the correct element', ->
-    expect($('#test li.file')).toExist()
-    expect($('#test li.file').length).toEqual(1)
+    $('#test').append @view.render().el
 
-  it 'should have the extension as a class name', ->
-    expect($('#test li.file')).toHaveClass('exe')
+  afterEach ->
+    $('#test').empty()
+    @view.remove()
 
-  it 'should have the filename as the text of the node', ->
-    expect($('#test li.file').text()).toEqual('Testing.exe')
+  describe 'rendering', ->
+    it 'should render the correct element', ->
+      expect($('#test li.file')).toExist()
+      expect($('#test li.file').length).toEqual(1)
 
-  it 'should exclude the extension if that option is set', ->
-    @settings.set
-      showExtensions: false
+    it 'should have the extension as a class name', ->
+      expect($('#test li.file')).toHaveClass('exe')
 
-    @view.render()
+    it 'should have the filename as the text of the node', ->
+      expect($('#test li.file').text()).toEqual('Testing.exe')
 
-    expect($('#test li.file').text()).toEqual('Testing')
+    it 'should exclude the extension if that option is set', ->
+      @settings.set
+        showExtensions: false
 
-describe 'events', ->
-  it 'should trigger a change event on the file tree when the name has changed', ->
-    spy = sinon.spy()
+      @view.render()
 
-    @settings.get('treeView').bind 'rename', spy
+      expect($('#test li.file').text()).toEqual('Testing')
 
-    @model.set
-      name: 'new name'
+  describe 'events', ->
+    it 'should trigger a change event on the file tree when the name has changed', ->
+      spy = sinon.spy()
 
-    expect(spy).toHaveBeenCalledOnce()
-    expect(spy).toHaveBeenCalledWith(@model, @model.nameWithExtension())
+      @settings.get('treeView').bind 'rename', spy
 
-  it 'should trigger a change event on the file tree when the extension has changed', ->
-    spy = sinon.spy()
+      @model.set
+        name: 'new name'
 
-    @settings.get('treeView').bind 'rename', spy
+      expect(spy).toHaveBeenCalledOnce()
+      expect(spy).toHaveBeenCalledWith(@model, @model.nameWithExtension())
 
-    @model.set
-      extension: 'js'
+    it 'should trigger a change event on the file tree when the extension has changed', ->
+      spy = sinon.spy()
 
-    expect(spy).toHaveBeenCalledOnce()
-    expect(spy).toHaveBeenCalledWith(@model, @model.nameWithExtension())
+      @settings.get('treeView').bind 'rename', spy
+
+      @model.set
+        extension: 'js'
+
+      expect(spy).toHaveBeenCalledOnce()
+      expect(spy).toHaveBeenCalledWith(@model, @model.nameWithExtension())
+

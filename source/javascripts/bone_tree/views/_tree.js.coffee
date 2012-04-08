@@ -384,11 +384,12 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       ###
       @filterNodes('directory', directoryName)
 
-    getFile: (fileName) =>
+    # TODO Fix me
+    getFile: (filePath) =>
       ###
-      Public: Returns an array of files match the given fileName.
+      Public: Returns a file at the specified location.
 
-      * fileName - A String naming the files to match.
+      * fileName - A String describing the file path.
 
       Examples
 
@@ -398,14 +399,10 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           tree.addFile('/directory2/main.coffee')
 
           # returns an array containing both the files named main.
-          tree.getFile('main')
-          # => [<File>, <File>]
+          tree.getFile('source/main.coffee')
+          # => <File>
 
-          # return an array containing the file named player.
-          tree.getFile('player')
-          # => [<File>]
-
-      Returns an Array of File nodes that match fileName.
+      Returns a File at the given location.
       ###
       @filterNodes('file', fileName)
 

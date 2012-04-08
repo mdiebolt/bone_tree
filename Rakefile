@@ -14,15 +14,8 @@ task :build do
   `gem build bone_tree.gemspec`
 end
 
-task :test do
-  puts `bundle exec evergreen run`
+desc "Run jasmine specs"
+task :spec do
+  sh %[bundle exec jasmine-headless-webkit -cq]
 end
 
-begin
-  require 'jasmine'
-  load 'jasmine/tasks/jasmine.rake'
-rescue LoadError
-  task :jasmine do
-    abort "Jasmine is not available. In order to run jasmine, you must: (sudo) gem install jasmine"
-  end
-end

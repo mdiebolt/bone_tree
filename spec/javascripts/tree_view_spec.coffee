@@ -1,29 +1,36 @@
 #= require bone_tree/_namespace
 #= require bone_tree/views/_tree
 
-beforeEach ->
-  @tree = new BoneTree.Views.Tree
-
-  $('#test').append @tree.el
-
-describe "rendering", ->
-  it "should render the correct DOM elements", ->
-    expect($('#test .tree')).toExist()
-    expect($('#test .tree').length).toEqual(1)
-
-describe "configuration", ->
-  it "should pass options through to the settings object", ->
-    @tree = new BoneTree.Views.Tree
-      autoOpenFiles: false
-
-    expect(@tree.settings.get('autoOpenFiles')).toBeFalsy()
+describe "BoneTree.Views.Tree", ->
+  beforeEach ->
+    setFixtures("<div id='test'></div>")
 
     @tree = new BoneTree.Views.Tree
-      confirmDeletes: true
 
-    expect(@tree.settings.get('confirmDeletes')).toBeTruthy()
+    $('#test').append @tree.render().el
 
-    @tree = new BoneTree.Views.Tree
-      showExtensions: true
+  afterEach ->
+    @tree.remove()
+    $('#test').empty()
 
-    expect(@tree.settings.get('showExtensions')).toBeTruthy()
+  describe "rendering", ->
+    it "should render the correct DOM elements", ->
+      expect($('#test .tree')).toExist()
+      expect($('#test .tree').length).toEqual(1)
+
+  describe "configuration", ->
+    it "should pass options through to the settings object", ->
+      @tree = new BoneTree.Views.Tree
+        autoOpenFiles: false
+
+      expect(@tree.settings.get('autoOpenFiles')).toBeFalsy()
+
+      @tree = new BoneTree.Views.Tree
+        confirmDeletes: true
+
+      expect(@tree.settings.get('confirmDeletes')).toBeTruthy()
+
+      @tree = new BoneTree.Views.Tree
+        showExtensions: true
+
+      expect(@tree.settings.get('showExtensions')).toBeTruthy()
