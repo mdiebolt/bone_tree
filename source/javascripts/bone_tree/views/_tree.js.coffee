@@ -85,10 +85,11 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       Returns the File object if it was created and null if no file was given.
       ###
-      @_currentFileData = _.extend(fileData, _path: filePath)
 
       # remove first slash, if it exists, so we don't end up with a blank directory
       filePath = filePath.replace('/', '') if filePath[0] is '/'
+
+      @_currentFileData = _.extend(fileData, _path: filePath)
 
       [dirs..., fileName] = filePath.split "/"
 
