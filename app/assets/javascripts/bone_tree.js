@@ -746,10 +746,10 @@
         
               Returns the File object if it was created and null if no file was given.
         */
+        if (filePath[0] === '/') filePath = filePath.replace('/', '');
         this._currentFileData = _.extend(fileData, {
           _path: filePath
         });
-        if (filePath[0] === '/') filePath = filePath.replace('/', '');
         _ref = filePath.split("/"), dirs = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), fileName = _ref[_i++];
         return this.addToTree(this.root, dirs, fileName, triggerAutoOpen);
       };
