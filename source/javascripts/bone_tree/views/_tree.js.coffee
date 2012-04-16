@@ -85,7 +85,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       Returns the File object if it was created and null if no file was given.
       ###
-      @_currentFileData = fileData
+      @_currentFileData = _.extend(fileData, _path: filePath)
 
       # remove first slash, if it exists, so we don't end up with a blank directory
       filePath = filePath.replace('/', '') if filePath[0] is '/'
@@ -403,22 +403,16 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       Returns a File at the given location.
       ###
-      pathList = filePath.split '/'
 
-      file = pathList[pathList.length - 1]
-      [names..., extension] = file.split "."
-      name = names.join('.')
+      filePath = filePath.replace('/', '') if filePath[0] is '/'
 
-      directoryName = pathList[pathList.length - 2]
+      nodes = @flatten()
 
-      filesInDirectory = @getFiles(directoryName)
+      filtered = _.filter(nodes, (node) ->
+        return node.get('nodeType') is 'file' and node.get('_path') is filePath
+      )
 
-      (_.filter filesInDirectory, (f) ->
-        if extension
-          return (f.get('name') is name and f.get('extension') is extension)
-        else
-          return f.get('name') is name
-      )[0]
+      return filtered[0]
 
     getFiles: (directoryName) =>
       ###
