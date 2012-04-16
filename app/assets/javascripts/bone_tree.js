@@ -746,7 +746,9 @@
         
               Returns the File object if it was created and null if no file was given.
         */
-        this._currentFileData = fileData;
+        this._currentFileData = _.extend(fileData, {
+          _path: filePath
+        });
         if (filePath[0] === '/') filePath = filePath.replace('/', '');
         _ref = filePath.split("/"), dirs = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), fileName = _ref[_i++];
         return this.addToTree(this.root, dirs, fileName, triggerAutoOpen);
@@ -1075,7 +1077,14 @@
                   # => <File>
         
               Returns a File at the given location.
-        */        return this.filterNodes('file', fileName);
+        */
+        var filtered, nodes;
+        if (filePath[0] === '/') filePath = filePath.replace('/', '');
+        nodes = this.flatten();
+        filtered = _.filter(nodes, function(node) {
+          return node.get('nodeType') === 'file' && node.get('_path') === filePath;
+        });
+        return filtered[0];
       };
 
       Tree.prototype.getFiles = function(directoryName) {
@@ -1100,7 +1109,7 @@
               Directory matching directoryName.
         */
         var directory, nodesInDirectory;
-        directory = this.getDirectory(directoryName).first();
+        directory = this.getDirectory(directoryName)[0];
         if (!directory) return [];
         nodesInDirectory = this.flatten(directory);
         return _.filter(nodesInDirectory, function(node) {
