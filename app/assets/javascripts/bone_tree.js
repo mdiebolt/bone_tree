@@ -688,10 +688,6 @@
               * options          - An Object of global configuration options for the file tree.
                 * autoOpenFiles  - A Boolean. If true, each file that is added to the tree
                                    immediately triggers an `openFile` event (default: true).
-                * beforeAdd      - A Function that is invoked before each file is added to the tree.
-                                   It is passed the raw file attributes and should return true if
-                                   that file should be added to the tree and false if not. The
-                                   default implementation is to return true.
                 * confirmDeletes - A Boolean. If true, the tree will prompt the user, making
                                    sure they want to delete the file (default: false).
                 * showExtensions - A Boolean. If true, files display their extensions. Internally,
@@ -702,9 +698,6 @@
           _this = this;
         $(document).click(this.closeMenu);
         this._currentFileData = null;
-        if (this.options.beforeAdd != null) {
-          this.beforeAdd = this.options.beforeAdd;
-        }
         settingsConfig = _.extend({}, this.options, {
           treeView: this
         });
@@ -722,7 +715,7 @@
         });
       };
 
-      Tree.prototype.addFile = function(filePath, fileData, triggerAutoOpen) {
+      Tree.prototype.addFile = function(filePath, fileData, triggerAutoOpen, filterFn) {
         var dirs, fileName, _i, _ref;
         if (fileData == null) fileData = {};
         if (triggerAutoOpen == null) triggerAutoOpen = true;
@@ -751,10 +744,10 @@
           _path: filePath
         });
         _ref = filePath.split("/"), dirs = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), fileName = _ref[_i++];
-        return this.addToTree(this.root, dirs, fileName, triggerAutoOpen);
+        return this.addToTree(this.root, dirs, fileName, triggerAutoOpen, filterFn);
       };
 
-      Tree.prototype.addFromJSON = function(data, currentPath) {
+      Tree.prototype.addFromJSON = function(data, currentPath, filterFn) {
         var file, name, _i, _len, _ref;
         if (currentPath == null) currentPath = "";
         /*
@@ -804,15 +797,15 @@
           _ref = data.files;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             file = _ref[_i];
-            this.addFromJSON(file, currentPath);
+            this.addFromJSON(file, currentPath, filterFn);
           }
         } else {
-          this.addFile(currentPath, data);
+          this.addFile(currentPath, data, true, filterFn);
         }
         return this;
       };
 
-      Tree.prototype.addToTree = function(currentDirectory, remainingDirectories, fileName, triggerAutoOpen) {
+      Tree.prototype.addToTree = function(currentDirectory, remainingDirectories, fileName, triggerAutoOpen, filterFn) {
         var file, matchingDirectory, newDirectory, newNode, nextDirectoryName;
         if (triggerAutoOpen == null) triggerAutoOpen = true;
         /*
@@ -839,18 +832,18 @@
             matchingDirectory.set({
               open: true
             });
-            return this.addToTree(matchingDirectory, remainingDirectories, fileName, triggerAutoOpen);
+            return this.addToTree(matchingDirectory, remainingDirectories, fileName, triggerAutoOpen, filterFn);
           } else {
             newNode = new Models.Directory({
               name: nextDirectoryName,
               open: true
             });
             newDirectory = currentDirectory.collection.add(newNode);
-            return this.addToTree(newNode, remainingDirectories, fileName, triggerAutoOpen);
+            return this.addToTree(newNode, remainingDirectories, fileName, triggerAutoOpen, filterFn);
           }
         } else {
           if (fileName === "") return null;
-          if (this.beforeAdd(this._currentFileData)) {
+          if (!(filterFn != null) || filterFn(fileName, this._currentFileData) === true) {
             file = Models.File.createFromFileName(fileName, this._currentFileData);
             this._currentFileData = null;
             currentDirectory.collection.add(file);
@@ -860,33 +853,6 @@
             return file;
           }
         }
-      };
-
-      Tree.prototype.beforeAdd = function(fileData) {
-        /*
-              Internal: This function provides a filter to exclude files from the
-                        file tree based on conditions from their raw data. This function
-                        shouldn't be modified directly, it should instead by passed in
-                        as an option when instantiating the file tree. The default
-                        implementation is to return true and allow all files to be
-                        added to the tree.
-        
-              * fileData - An Object containing the raw attributes of the file to be
-                           created. Use these to determine conditions to allow or
-                           exclude files from the tree.
-        
-              Examples
-        
-                  # set up a beforeAdd filter on the tree view
-                  tree = new BoneTree.Views.Tree
-                    beforeAdd: (fileData) ->
-                      if fileData.extension is 'wav'
-                        return false
-                      else
-                        return true
-        
-              Returns true if the file should be added to the tree and false otherwise.
-        */        return true;
       };
 
       Tree.prototype.findOrCreateView = function(node) {

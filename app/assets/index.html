@@ -420,11 +420,12 @@
       ]\
     }');
     
-      tree.beforeAddFilter = function(fileData) {
-        return fileData.type !== 'binary';
-      };
-    
-      tree.addFromJSON(treeData);
+      tree.addFromJSON(treeData, '', function(fileName, fileData) {
+        var allowFile;
+        allowFile = true;
+        if (fileData.type === 'binary') allowFile = false;
+        return allowFile;
+      });
     
     }).call(this);
     
