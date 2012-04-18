@@ -430,7 +430,9 @@
     ]
   }')
 
-  tree.beforeAddFilter = (fileData) ->
-    fileData.type isnt 'binary'
+  tree.addFromJSON treeData, '', (fileName, fileData) ->
+    allowFile = true
 
-  tree.addFromJSON(treeData)
+    allowFile = false if fileData.type is 'binary'
+
+    return allowFile

@@ -27,10 +27,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       * options          - An Object of global configuration options for the file tree.
         * autoOpenFiles  - A Boolean. If true, each file that is added to the tree
                            immediately triggers an `openFile` event (default: true).
-        * beforeAdd      - A Function that is invoked before each file is added to the tree.
-                           It is passed the raw file attributes and should return true if
-                           that file should be added to the tree and false if not. The
-                           default implementation is to return true.
         * confirmDeletes - A Boolean. If true, the tree will prompt the user, making
                            sure they want to delete the file (default: false).
         * showExtensions - A Boolean. If true, files display their extensions. Internally,
@@ -41,9 +37,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       $(document).click @closeMenu
 
       @_currentFileData = null
-
-      if @options.beforeAdd?
-        @beforeAdd = @options.beforeAdd
 
       settingsConfig = _.extend({}, @options, {treeView: @})
 
@@ -64,7 +57,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
         @trigger 'remove', model
 
-    addFile: (filePath, fileData={}, triggerAutoOpen=true) =>
+    addFile: (filePath, fileData={}, triggerAutoOpen=true, filterFn) =>
       ###
       Public: Method to add files and associated file data to the tree.
 
@@ -93,9 +86,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       [dirs..., fileName] = filePath.split "/"
 
-      @addToTree(@root, dirs, fileName, triggerAutoOpen)
+      @addToTree(@root, dirs, fileName, triggerAutoOpen, filterFn)
 
-    addFromJSON: (data, currentPath="") =>
+    addFromJSON: (data, currentPath="", filterFn) =>
       ###
       Public: Creates a file tree from a JSON representation. Expects the
               JSON object to have a `name` property at each level, specifying
@@ -143,13 +136,13 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       if data.files?
         for file in data.files
-          @addFromJSON(file, currentPath)
+          @addFromJSON(file, currentPath, filterFn)
       else
-        @addFile(currentPath, data)
+        @addFile(currentPath, data, true, filterFn)
 
       return @
 
-    addToTree: (currentDirectory, remainingDirectories, fileName, triggerAutoOpen=true) =>
+    addToTree: (currentDirectory, remainingDirectories, fileName, triggerAutoOpen=true, filterFn) =>
       ###
       Internal: Recursive method that traverses nodes, creating
                 Files and Directories.
@@ -175,16 +168,16 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           matchingDirectory.set
             open: true
 
-          @addToTree(matchingDirectory, remainingDirectories, fileName, triggerAutoOpen)
+          @addToTree(matchingDirectory, remainingDirectories, fileName, triggerAutoOpen, filterFn)
         else
           newNode = new Models.Directory {name: nextDirectoryName, open: true}
 
           newDirectory = currentDirectory.collection.add newNode
-          @addToTree(newNode, remainingDirectories, fileName, triggerAutoOpen)
+          @addToTree(newNode, remainingDirectories, fileName, triggerAutoOpen, filterFn)
       else
         return null if fileName is ""
 
-        if @beforeAdd(@_currentFileData)
+        if not filterFn? or filterFn(fileName, @_currentFileData) is true
           file = Models.File.createFromFileName(fileName, @_currentFileData)
           @_currentFileData = null
 
@@ -194,33 +187,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
             @trigger 'openFile', file
 
           return file
-
-    beforeAdd: (fileData) ->
-      ###
-      Internal: This function provides a filter to exclude files from the
-                file tree based on conditions from their raw data. This function
-                shouldn't be modified directly, it should instead by passed in
-                as an option when instantiating the file tree. The default
-                implementation is to return true and allow all files to be
-                added to the tree.
-
-      * fileData - An Object containing the raw attributes of the file to be
-                   created. Use these to determine conditions to allow or
-                   exclude files from the tree.
-
-      Examples
-
-          # set up a beforeAdd filter on the tree view
-          tree = new BoneTree.Views.Tree
-            beforeAdd: (fileData) ->
-              if fileData.extension is 'wav'
-                return false
-              else
-                return true
-
-      Returns true if the file should be added to the tree and false otherwise.
-      ###
-      true
 
     findOrCreateView: (node) =>
       ###
