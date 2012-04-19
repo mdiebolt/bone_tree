@@ -664,6 +664,7 @@
         this.addToTree = __bind(this.addToTree, this);
         this.addFromJSON = __bind(this.addFromJSON, this);
         this.addFile = __bind(this.addFile, this);
+        this.createOrUpdate = __bind(this.createOrUpdate, this);
         Tree.__super__.constructor.apply(this, arguments);
       }
 
@@ -713,6 +714,42 @@
           _this.render();
           return _this.trigger('remove', model);
         });
+      };
+
+      Tree.prototype.createOrUpdate = function(filePath, fileData, triggerAutoOpen, filterFn) {
+        var dirs, file, fileName, _i, _ref;
+        if (fileData == null) fileData = {};
+        if (triggerAutoOpen == null) triggerAutoOpen = true;
+        /*
+              Public: updates file data or creates a new file.
+        
+              * filePath - A String that represents the directory path to the file.
+                           Directories that don't yet exist will be created. If no
+                           file is specified, eg. '/dir1/dir2/' then only the directories
+                           will be created and this method will return null.
+              * fileData - An Object of attributes to store in the File object. This
+                           could represent information such as lastModified, fileContents,
+                           fileCreator, etc.
+        
+              Examples
+        
+                  tree.addFile '/source/main.coffee',
+                    contents: "alert('hello world.')"
+                    lastModified: 1330725130170
+                  # => <File>
+        
+              Returns the File object if it was created and null if no file was given.
+        */
+        if (filePath[0] === '/') filePath = filePath.replace('/', '');
+        this._currentFileData = _.extend(fileData, {
+          _path: filePath
+        });
+        _ref = filePath.split("/"), dirs = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), fileName = _ref[_i++];
+        if (file = this.getFile(filePath)) {
+          return file.set(this._currentFileData);
+        } else {
+          return this.addToTree(this.root, dirs, fileName, triggerAutoOpen, filterFn);
+        }
       };
 
       Tree.prototype.addFile = function(filePath, fileData, triggerAutoOpen, filterFn) {
