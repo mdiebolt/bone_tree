@@ -57,6 +57,40 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
         @trigger 'remove', model
 
+    createOrUpdate: (filePath, fileData={}, triggerAutoOpen=true, filterFn) =>
+      ###
+      Public: updates file data or creates a new file.
+
+      * filePath - A String that represents the directory path to the file.
+                   Directories that don't yet exist will be created. If no
+                   file is specified, eg. '/dir1/dir2/' then only the directories
+                   will be created and this method will return null.
+      * fileData - An Object of attributes to store in the File object. This
+                   could represent information such as lastModified, fileContents,
+                   fileCreator, etc.
+
+      Examples
+
+          tree.addFile '/source/main.coffee',
+            contents: "alert('hello world.')"
+            lastModified: 1330725130170
+          # => <File>
+
+      Returns the File object if it was created and null if no file was given.
+      ###
+
+      # remove first slash, if it exists, so we don't end up with a blank directory
+      filePath = filePath.replace('/', '') if filePath[0] is '/'
+
+      @_currentFileData = _.extend(fileData, _path: filePath)
+
+      [dirs..., fileName] = filePath.split "/"
+
+      if file = @getFile(filePath)
+        file.set(@_currentFileData)
+      else
+        @addToTree(@root, dirs, fileName, triggerAutoOpen, filterFn)
+
     addFile: (filePath, fileData={}, triggerAutoOpen=true, filterFn) =>
       ###
       Public: Method to add files and associated file data to the tree.
