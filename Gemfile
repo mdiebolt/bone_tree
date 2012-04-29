@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 
 gem "haml-coderay"
-gem 'middleman', :git => 'git://github.com/steel/middleman.git'
+gem 'middleman', :git => 'git://github.com/middleman/middleman.git'
 gem "rack"
 gem "rack-codehighlighter"
 
