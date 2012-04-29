@@ -25,8 +25,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       Public: Initialize a new filetree widget
 
       * options          - An Object of global configuration options for the file tree.
-        * autoOpenFiles  - A Boolean. If true, each file that is added to the tree
-                           immediately triggers an `openFile` event (default: true).
         * confirmDeletes - A Boolean. If true, the tree will prompt the user, making
                            sure they want to delete the file (default: false).
         * showExtensions - A Boolean. If true, files display their extensions. Internally,
@@ -57,72 +55,25 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
         @trigger 'remove', model
 
-    createOrUpdate: (filePath, fileData={}, triggerAutoOpen=true, filterFn) =>
-      ###
-      Public: updates file data or creates a new file.
-
-      * filePath - A String that represents the directory path to the file.
-                   Directories that don't yet exist will be created. If no
-                   file is specified, eg. '/dir1/dir2/' then only the directories
-                   will be created and this method will return null.
-      * fileData - An Object of attributes to store in the File object. This
-                   could represent information such as lastModified, fileContents,
-                   fileCreator, etc.
-
-      Examples
-
-          tree.addFile '/source/main.coffee',
-            contents: "alert('hello world.')"
-            lastModified: 1330725130170
-          # => <File>
-
-      Returns the File object if it was created and null if no file was given.
-      ###
-
-      # remove first slash, if it exists, so we don't end up with a blank directory
+    file: (filePath, fileData) =>
       filePath = filePath.replace('/', '') if filePath[0] is '/'
 
-      @_currentFileData = _.extend(fileData, _path: filePath)
+      if fileData?
+        @_currentFileData = _.extend(fileData, path: filePath)
 
-      [dirs..., fileName] = filePath.split "/"
+        @_currentFileData.autoOpen = true unless @_currentFileData.autoOpen?
+        @_currentFileData.hidden = false unless @_currentFileData.hidden?
+      else
+        return @getFile(filePath)
+
+      [dirs..., fileName] = filePath.split '/'
 
       if file = @getFile(filePath)
         file.set(@_currentFileData)
       else
-        @addToTree(@root, dirs, fileName, triggerAutoOpen, filterFn)
+        @addToTree(@root, dirs, fileName)
 
-    addFile: (filePath, fileData={}, triggerAutoOpen=true, filterFn) =>
-      ###
-      Public: Method to add files and associated file data to the tree.
-
-      * filePath - A String that represents the directory path to the file.
-                   Directories that don't yet exist will be created. If no
-                   file is specified, eg. '/dir1/dir2/' then only the directories
-                   will be created and this method will return null.
-      * fileData - An Object of attributes to store in the File object. This
-                   could represent information such as lastModified, fileContents,
-                   fileCreator, etc.
-
-      Examples
-
-          tree.addFile '/source/main.coffee',
-            contents: "alert('hello world.')"
-            lastModified: 1330725130170
-          # => <File>
-
-      Returns the File object if it was created and null if no file was given.
-      ###
-
-      # remove first slash, if it exists, so we don't end up with a blank directory
-      filePath = filePath.replace('/', '') if filePath[0] is '/'
-
-      @_currentFileData = _.extend(fileData, _path: filePath)
-
-      [dirs..., fileName] = filePath.split "/"
-
-      @addToTree(@root, dirs, fileName, triggerAutoOpen, filterFn)
-
-    addFromJSON: (data, currentPath="", filterFn) =>
+    addFromJSON: (data, currentPath="") =>
       ###
       Public: Creates a file tree from a JSON representation. Expects the
               JSON object to have a `name` property at each level, specifying
@@ -170,13 +121,13 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       if data.files?
         for file in data.files
-          @addFromJSON(file, currentPath, filterFn)
+          @addFromJSON(file, currentPath)
       else
-        @addFile(currentPath, data, true, filterFn)
+        @file(currentPath, data)
 
       return @
 
-    addToTree: (currentDirectory, remainingDirectories, fileName, triggerAutoOpen=true, filterFn) =>
+    addToTree: (currentDirectory, remainingDirectories, fileName) =>
       ###
       Internal: Recursive method that traverses nodes, creating
                 Files and Directories.
@@ -202,25 +153,24 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           matchingDirectory.set
             open: true
 
-          @addToTree(matchingDirectory, remainingDirectories, fileName, triggerAutoOpen, filterFn)
+          @addToTree(matchingDirectory, remainingDirectories, fileName)
         else
           newNode = new Models.Directory {name: nextDirectoryName, open: true}
 
           newDirectory = currentDirectory.collection.add newNode
-          @addToTree(newNode, remainingDirectories, fileName, triggerAutoOpen, filterFn)
+          @addToTree(newNode, remainingDirectories, fileName)
       else
         return null if fileName is ""
 
-        if not filterFn? or filterFn(fileName, @_currentFileData) is true
-          file = Models.File.createFromFileName(fileName, @_currentFileData)
-          @_currentFileData = null
+        file = Models.File.createFromFileName(fileName, @_currentFileData)
+        @_currentFileData = null
 
-          currentDirectory.collection.add file
+        currentDirectory.collection.add file
 
-          if @settings.get('autoOpenFiles') and triggerAutoOpen
-            @trigger 'openFile', file
+        if file.get('autoOpen')
+          @trigger 'openFile', file
 
-          return file
+        return file
 
     findOrCreateView: (node) =>
       ###
@@ -323,8 +273,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       Examples
 
           # Add some files to the tree
-          tree.addFile('/source/main.coffee')
-          tree.addFile('/source/player.coffee')
+          tree.file('/source/main.coffee')
+          tree.file('/source/player.coffee')
 
           # returns an array containing the File 'main.coffee'
           tree.filterNodes('file', 'main')
@@ -348,8 +298,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       Examples
 
           # Add some files to the tree
-          tree.addFile('/source/main.coffee')
-          tree.addFile('/source/player.coffee')
+          tree.file('/source/main.coffee', {aFile: true})
+          tree.file('/source/player.coffee', {playerData: {x: 50, y: 30}})
 
           # returns an array containing the File 'main.coffee'
           tree.filterNodes('file', 'main')
@@ -373,9 +323,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       Examples
 
           # Add some files to the tree
-          tree.addFile('/source/main.coffee')
-          tree.addFile('/source/player.coffee')
-          tree.addFile('/directory2/file.coffee')
+          tree.file('/source/main.coffee', {size: 4039})
+          tree.file('/source/player.coffee', {size: 399})
+          tree.file('/directory2/file.coffee', {size: 23})
 
           # returns an array containing the Directory 'source'
           tree.getDirectory('source')
@@ -394,9 +344,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       Examples
 
           # Add some files to the tree
-          tree.addFile('/source/main.coffee')
-          tree.addFile('/source/player.coffee')
-          tree.addFile('/directory2/main.coffee')
+          tree.file('/source/main.coffee', {size: 30459})
+          tree.file('/source/player.coffee', {size: 943})
+          tree.file('/directory2/main.coffee', {size: 4945})
 
           # returns an array containing both the files named main.
           tree.getFile('source/main.coffee')
@@ -425,9 +375,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       Examples
 
           # Add some files to the tree
-          tree.addFile('/source/main.coffee')
-          tree.addFile('/source/player.coffee')
-          tree.addFile('/directory2/main.coffee')
+          tree.file('/source/main.coffee', {main: true})
+          tree.file('/source/player.coffee', {active: true})
+          tree.file('/directory2/main.coffee', {active: true})
 
           # returns an array containing the files 'player.coffee' and 'main.coffee'
           tree.getFiles('source')
@@ -459,9 +409,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       Examples
 
           # Add some files to the tree
-          tree.addFile('/source/main.coffee')
-          tree.addFile('/source/player.coffee')
-          tree.addFile('/directory2/main.coffee')
+          tree.file('/source/main.coffee', {main: true})
+          tree.file('/source/player.coffee', {active: true})
+          tree.file('/directory2/main.coffee', {active: false})
 
           tree.toAscii()
           # => "
@@ -471,7 +421,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
              -main.coffee
              -player.coffee
           "
-
 
       Returns a String representation of the sorted nodes of the file tree.
       ###
@@ -536,7 +485,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         node.collection.sort()
         view = @findOrCreateView(node)
 
-        @$el.append view.render().$el
+        @$el.append view.render().$el unless view.model.get('hidden')
 
       return @
 

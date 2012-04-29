@@ -32,7 +32,7 @@
       tree = new BoneTree.Views.Tree
 
       # add a new file to the directory
-      tree.addFile('source/main.js')
+      tree.file('source/main.js', {file: true})
 
       # this creates the directory source if it doesn't already exist and puts the file main.js inside of it
 
@@ -56,7 +56,7 @@
   tree.bind 'openFile', (file) ->
     console.log file
 
-  tree.addFile('file.coffee', {}, false)
+  tree.file('file.coffee', {description: 'A CoffeeScript file'})
 
   $('.bone_tree').append tree.render().$el
 
