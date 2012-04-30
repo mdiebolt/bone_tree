@@ -5,7 +5,7 @@ require 'haml-coderay'
 configure :build do
   # For example, change the Compass output style for deployment
   # activate :minify_css
-  set :build_dir, 'app/assets'
+  #set :build_dir, 'app/assets'
 
   # Minify Javascript on build
   # activate :minify_javascript

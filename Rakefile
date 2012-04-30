@@ -4,13 +4,10 @@ include FileUtils
 task :default => [:build]
 
 task :build => [:spec] do
-  # Remove all but .git from build directory
-  rm_r Dir.glob("build/*")
-
   # Build static assets
   `middleman build`
 
-  `cp -r app/assets/* build/`
+  `cp build/javascripts/bone_tree.js lib/assets/bone_tree.js`
   `gem build bone_tree.gemspec`
 end
 
