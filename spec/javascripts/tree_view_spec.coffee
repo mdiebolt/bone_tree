@@ -21,11 +21,6 @@ describe "BoneTree.Views.Tree", ->
   describe "configuration", ->
     it "should pass options through to the settings object", ->
       @tree = new BoneTree.Views.Tree
-        autoOpenFiles: false
-
-      expect(@tree.settings.get('autoOpenFiles')).toBeFalsy()
-
-      @tree = new BoneTree.Views.Tree
         confirmDeletes: true
 
       expect(@tree.settings.get('confirmDeletes')).toBeTruthy()
@@ -39,6 +34,6 @@ describe "BoneTree.Views.Tree", ->
     it 'should be able to find files by their path', ->
       @tree = new BoneTree.Views.Tree
 
-      srcMain = @tree.addFile 'src/main.coffee', {}
+      srcMain = @tree.file('src/main.coffee', {added: true})
 
-      expect(@tree.getFile('src/main.coffee')).toEqual(srcMain)
+      expect(@tree.file('src/main.coffee')).toEqual(srcMain)

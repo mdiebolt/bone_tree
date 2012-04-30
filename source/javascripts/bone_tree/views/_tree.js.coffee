@@ -15,10 +15,10 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     className: 'tree'
 
     events:
-      'contextmenu .file': 'contextMenu'
-      'contextmenu .directory': 'contextMenu'
-      'click .directory': 'openDirectory'
-      'click .file': 'openFile'
+      'contextmenu .file': '_contextMenu'
+      'contextmenu .directory': '_contextMenu'
+      'click .directory': '_openDirectory'
+      'click .file': '_openFile'
 
     initialize: ->
       ###
@@ -32,7 +32,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
                            hidden (default: false).
 
       ###
-      $(document).click @closeMenu
+      $(document).click @_closeMenu
 
       @_currentFileData = null
 
@@ -64,11 +64,11 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         @_currentFileData.autoOpen = true unless @_currentFileData.autoOpen?
         @_currentFileData.hidden = false unless @_currentFileData.hidden?
       else
-        return @getFile(filePath)
+        return @_getFile(filePath)
 
       [dirs..., fileName] = filePath.split '/'
 
-      if file = @getFile(filePath)
+      if file = @_getFile(filePath)
         file.set(@_currentFileData)
       else
         @addToTree(@root, dirs, fileName)
@@ -228,7 +228,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       return @
 
-    closeMenu: (e) =>
+    _closeMenu: (e) =>
       ###
       Internal: Close the context menu. This is called every click on
                 the document and closes the menu unless you are clicking
@@ -241,7 +241,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       return @menuView
 
-    contextMenu: (e) =>
+    _contextMenu: (e) =>
       ###
       Internal: Open the context menu. This prevents the default browser
                 context menu event. This shouldn't be called directly, it is
@@ -335,9 +335,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       ###
       @filterNodes('directory', directoryName)
 
-    getFile: (filePath) =>
+    _getFile: (filePath) =>
       ###
-      Public: Returns a file at the specified location.
+      Internal: Returns a file at the specified location.
 
       * fileName - A String describing the file path.
 
@@ -349,7 +349,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           tree.file('/directory2/main.coffee', {size: 4945})
 
           # returns an array containing both the files named main.
-          tree.getFile('source/main.coffee')
+          tree._getFile('source/main.coffee')
           # => <File>
 
       Returns a File at the given location.
@@ -360,12 +360,12 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       nodes = @flatten()
 
       filtered = _.filter(nodes, (node) ->
-        return node.get('nodeType') is 'file' and node.get('_path') is filePath
+        return node.get('nodeType') is 'file' and node.get('path') is filePath
       )
 
       return filtered[0]
 
-    getFiles: (directoryName) =>
+    files: (directoryName) =>
       ###
       Public: Returns an array of files contained within the directory
               matching directoryName.
@@ -380,15 +380,22 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           tree.file('/directory2/main.coffee', {active: true})
 
           # returns an array containing the files 'player.coffee' and 'main.coffee'
-          tree.getFiles('source')
+          tree.files('source')
           # => [<File>, <File>]
 
       Returns an Array of File nodes that are contained in the
       Directory matching directoryName.
       ###
+
+      # return all files if no directory is provided
+      unless directoryName?
+        return _.filter(@flatten(), (node) ->
+          return node.get('nodeType') is 'file'
+        )
+
       directory = @getDirectory(directoryName)[0]
 
-      # short circuit if your directory list is empty.
+      # short circuit if directory name isn't in the tree
       # Otherwise flatten will return all the files in
       # the filetree
       return [] unless directory
@@ -453,7 +460,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       return @getModelByCid(cid)
 
-    openDirectory: (e) =>
+    _openDirectory: (e) =>
       ###
       Internal: Toggle the directory icon and display the contents of the clicked Directory.
 
@@ -462,7 +469,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       model.toggleOpen()
 
-    openFile: (e) =>
+    _openFile: (e) =>
       ###
       Internal: Trigger the 'openFile' event, passing in the file corresponding
                 to the view element that the user clicked.
