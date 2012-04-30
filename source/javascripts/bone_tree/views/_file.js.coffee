@@ -40,6 +40,8 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
                 name attribute.
 
       ###
+      return "" if @model.get('hidden')
+
       if @settings.get('showExtensions')
         @$el.text @model.nameWithExtension()
       else
