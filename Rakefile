@@ -7,7 +7,7 @@ task :build => [:spec] do
   # Build static assets
   `middleman build`
 
-  `cp build/javascripts/bone_tree.js lib/assets/bone_tree.js`
+  `cp build/javascripts/bone_tree.js lib/assets/src/bone_tree.js`
   `gem build bone_tree.gemspec`
 end
 
