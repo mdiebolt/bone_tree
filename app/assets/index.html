@@ -4,13 +4,13 @@
     <meta charset='utf-8' />
     <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
     <link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
-    <link type="text/css" rel="stylesheet" media="screen" href="/stylesheets/bone_tree_repo.css" />
-    <link type="text/css" rel="stylesheet" media="screen" href="/stylesheets/bone_tree.css" />
+    <link type="text/css" media="screen" rel="stylesheet" href="/stylesheets/bone_tree_repo.css" />
+    <link type="text/css" media="screen" rel="stylesheet" href="/stylesheets/bone_tree.css" />
     <title>Bone Tree</title>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.1/underscore-min.js"></script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.0/backbone-min.js"></script>
-    <script type="text/javascript" src="/javascripts/bone_tree.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.1/underscore-min.js" type="text/javascript"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.0/backbone-min.js" type="text/javascript"></script>
+    <script src="/javascripts/bone_tree.js" type="text/javascript"></script>
   </head>
   <body>
     <div class='bone_tree left'></div>
@@ -29,7 +29,7 @@
       </ul>
       <h3>Events API</h3>
       <div class="CodeRay">
-        <div class="code"><pre>  <span style="color:#777"># get a new filetree</span>&#x000A;  tree = new <span style="color:#036;font-weight:bold">BoneTree</span>.Views.Tree&#x000A;&#x000A;  <span style="color:#777"># add a new file to the directory</span>&#x000A;  tree.addFile(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">source/main.js</span><span style="color:#710">'</span></span>)&#x000A;&#x000A;  <span style="color:#777"># this creates the directory source if it doesn't already exist and puts the file main.js inside of it</span>&#x000A;&#x000A;  tree.bind <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">rename</span><span style="color:#710">'</span></span>, (model, newName) =&gt;&#x000A;    <span style="color:#777"># this callback is passed the model that changed and the new name of the node</span>&#x000A;    console.log model&#x000A;&#x000A;  tree.bind <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">remove</span><span style="color:#710">'</span></span>, (model, collection) =&gt;&#x000A;    <span style="color:#777"># this callback is passed the model that was removed and the collection it was removed from</span>&#x000A;    console.log model&#x000A;&#x000A;  tree.bind <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">openFile</span><span style="color:#710">'</span></span>, (file) =&gt;&#x000A;    <span style="color:#777"># this callback is passed the file that was just clicked on</span>&#x000A;    console.log file&#x000A;</pre></div>
+        <div class="code"><pre>  <span style="color:#777"># get a new filetree</span>&#x000A;  tree = new <span style="color:#036;font-weight:bold">BoneTree</span>.Views.Tree&#x000A;&#x000A;  <span style="color:#777"># add a new file to the directory</span>&#x000A;  tree.file(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">source/main.js</span><span style="color:#710">'</span></span>, {file: <span style="color:#069">true</span>})&#x000A;&#x000A;  <span style="color:#777"># this creates the directory source if it doesn't already exist and puts the file main.js inside of it</span>&#x000A;&#x000A;  tree.bind <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">rename</span><span style="color:#710">'</span></span>, (model, newName) =&gt;&#x000A;    <span style="color:#777"># this callback is passed the model that changed and the new name of the node</span>&#x000A;    console.log model&#x000A;&#x000A;  tree.bind <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">remove</span><span style="color:#710">'</span></span>, (model, collection) =&gt;&#x000A;    <span style="color:#777"># this callback is passed the model that was removed and the collection it was removed from</span>&#x000A;    console.log model&#x000A;&#x000A;  tree.bind <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">openFile</span><span style="color:#710">'</span></span>, (file) =&gt;&#x000A;    <span style="color:#777"># this callback is passed the file that was just clicked on</span>&#x000A;    console.log file&#x000A;</pre></div>
       </div>
     </div>
     <script type='text/javascript'>
@@ -46,7 +46,9 @@
         return console.log(file);
       });
     
-      tree.addFile('file.coffee', {}, false);
+      tree.file('file.coffee', {
+        description: 'A CoffeeScript file'
+      });
     
       $('.bone_tree').append(tree.render().$el);
     
@@ -423,7 +425,9 @@
       tree.addFromJSON(treeData, '', function(fileName, fileData) {
         var allowFile;
         allowFile = true;
-        if (fileData.type === 'binary') allowFile = false;
+        if (fileData.type === 'binary') {
+          allowFile = false;
+        }
         return allowFile;
       });
     

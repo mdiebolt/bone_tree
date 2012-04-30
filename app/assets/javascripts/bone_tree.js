@@ -1,17 +1,17 @@
 (function() {
-  var __slice = Array.prototype.slice;
+  var __slice = [].slice;
 
   window.BoneTree = {};
 
   BoneTree.namespace = function(target, name, block) {
-    var item, top, _i, _len, _ref, _ref2;
+    var item, top, _i, _len, _ref, _ref1;
     if (arguments.length < 3) {
       _ref = [(typeof exports !== 'undefined' ? exports : window)].concat(__slice.call(arguments)), target = _ref[0], name = _ref[1], block = _ref[2];
     }
     top = target;
-    _ref2 = name.split('.');
-    for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-      item = _ref2[_i];
+    _ref1 = name.split('.');
+    for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+      item = _ref1[_i];
       target = target[item] || (target[item] = {});
     }
     return block(target, top);
@@ -20,7 +20,7 @@
 }).call(this);
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = Object.prototype.hasOwnProperty,
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   BoneTree.namespace("BoneTree.Models", function(Models) {
@@ -28,21 +28,26 @@
 
       __extends(Node, _super);
 
+      Node.name = 'Node';
+
       function Node() {
         this.nameWithExtension = __bind(this.nameWithExtension, this);
+
         this.constantize = __bind(this.constantize, this);
-        Node.__super__.constructor.apply(this, arguments);
+        return Node.__super__.constructor.apply(this, arguments);
       }
 
       /*
           Internal: An abstract super class for File and Directory objects to inherit from.
       */
 
+
       Node.prototype.initialize = function() {
         /*
               Internal: Initialize a new Node object. Set it up to contain a collection of
                         children nodes.
-        */        return this.collection = new Models.Nodes;
+        */
+        return this.collection = new Models.Nodes;
       };
 
       Node.prototype.constantize = function() {
@@ -66,6 +71,7 @@
         
               Returns a String of the nodeType with the first letter capitalized.
         */
+
         var nodeType;
         nodeType = this.get('nodeType');
         return nodeType[0].toUpperCase() + nodeType.substring(1);
@@ -100,10 +106,13 @@
               Returns a String. If the extension exists then the node name plus the extension
               are returned. If there is no extension, then just the node name is returned.
         */
+
         var extension, name, _ref;
         _ref = this.attributes, extension = _ref.extension, name = _ref.name;
         extension || (extension = "");
-        if (extension !== "") extension = "." + extension;
+        if (extension !== "") {
+          extension = "." + extension;
+        }
         return name + extension;
       };
 
@@ -114,8 +123,10 @@
 
       __extends(Nodes, _super);
 
+      Nodes.name = 'Nodes';
+
       function Nodes() {
-        Nodes.__super__.constructor.apply(this, arguments);
+        return Nodes.__super__.constructor.apply(this, arguments);
       }
 
       /*
@@ -123,6 +134,7 @@
                     class, in practice this collection will hold File objects
                     and Directory objects.
       */
+
 
       Nodes.prototype.comparator = function(node) {
         /*
@@ -148,6 +160,7 @@
                     -main.coffee
                   "
         */
+
         var name, sortPriority, _ref;
         _ref = node.attributes, name = _ref.name, sortPriority = _ref.sortPriority;
         return sortPriority + name;
@@ -163,7 +176,7 @@
 }).call(this);
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = Object.prototype.hasOwnProperty,
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   BoneTree.namespace("BoneTree.Models", function(Models) {
@@ -171,9 +184,11 @@
 
       __extends(Directory, _super);
 
+      Directory.name = 'Directory';
+
       function Directory() {
         this.toggleOpen = __bind(this.toggleOpen, this);
-        Directory.__super__.constructor.apply(this, arguments);
+        return Directory.__super__.constructor.apply(this, arguments);
       }
 
       /*
@@ -191,6 +206,7 @@
                              to display files and directories contained within this
                              Directory (default: false).
       */
+
 
       Directory.prototype.defaults = {
         name: "New Directory",
@@ -216,6 +232,7 @@
         
               Returns this Directory.
         */
+
         var currentState;
         currentState = this.get('open');
         return this.set({
@@ -237,7 +254,8 @@
                                names in currentDirectory.
       
           Returns The Directory object with the matching name if it exists and undefined otherwise.
-      */      return currentDirectory.collection.find(function(dir) {
+      */
+      return currentDirectory.collection.find(function(dir) {
         return dir.get('name') === name;
       });
     };
@@ -245,17 +263,19 @@
 
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; },
-    __slice = Array.prototype.slice;
+    __slice = [].slice;
 
   BoneTree.namespace("BoneTree.Models", function(Models) {
     Models.File = (function(_super) {
 
       __extends(File, _super);
 
+      File.name = 'File';
+
       function File() {
-        File.__super__.constructor.apply(this, arguments);
+        return File.__super__.constructor.apply(this, arguments);
       }
 
       /*
@@ -270,6 +290,7 @@
             * nodeType     - A String denoting what type of node this object is.
                              The two types are "file" and "directory".
       */
+
 
       File.prototype.defaults = {
         name: "New File",
@@ -304,6 +325,7 @@
       
           Returns the File object just created.
       */
+
       var data, extension, name, names, _i, _ref;
       _ref = fileName.split("."), names = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), extension = _ref[_i++];
       name = names.join('.');
@@ -317,7 +339,7 @@
 
 }).call(this);
 (function() {
-  var __hasProp = Object.prototype.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   BoneTree.namespace("BoneTree.Models", function(Models) {
@@ -325,8 +347,10 @@
 
       __extends(Settings, _super);
 
+      Settings.name = 'Settings';
+
       function Settings() {
-        Settings.__super__.constructor.apply(this, arguments);
+        return Settings.__super__.constructor.apply(this, arguments);
       }
 
       /*
@@ -335,8 +359,6 @@
                     passed into the file tree.
       
           * defaults
-            * autoOpenFiles  - A Boolean. If true, each file that is added to the tree
-                               immediately triggers an `openFile` event (default: true).
             * beforeAdd      - A Function that is invoked before each file is added to the tree.
                                It is passed the raw file attributes and should return true if
                                that file should be added to the tree and false if not. The
@@ -350,8 +372,8 @@
                                to look them up to prevent extra views from being created.
       */
 
+
       Settings.prototype.defaults = {
-        autoOpenFiles: true,
         confirmDeletes: false,
         showExtensions: false,
         viewCache: {}
@@ -365,7 +387,7 @@
 }).call(this);
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = Object.prototype.hasOwnProperty,
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   BoneTree.namespace("BoneTree.Views", function(Views) {
@@ -373,16 +395,21 @@
 
       __extends(Directory, _super);
 
+      Directory.name = 'Directory';
+
       function Directory() {
         this.displayChildren = __bind(this.displayChildren, this);
+
         this.render = __bind(this.render, this);
+
         this.appendView = __bind(this.appendView, this);
-        Directory.__super__.constructor.apply(this, arguments);
+        return Directory.__super__.constructor.apply(this, arguments);
       }
 
       /*
           Internal: View that renders a Directory node and controls its behavior (class: 'directory', tag: 'ul').
       */
+
 
       Directory.prototype.className = 'directory';
 
@@ -398,6 +425,7 @@
               * options - Passes in settings object, which is used for access to the
                           tree view root in order to proxy events to it.
         */
+
         var _this = this;
         this.settings = options.settings;
         this.$el.attr('data-cid', this.model.cid);
@@ -424,6 +452,7 @@
               node - A Node model. Either a File or a Directory. This is the model the
                      created view will be associated with.
         */
+
         var view;
         view = this.settings.get('treeView').findOrCreateView(node);
         return this.$el.append(view.render().$el);
@@ -434,7 +463,8 @@
               Internal: Set the text of the view element based on the underlying model name.
         
               Returns `this` view.
-        */        this.$el.text(this.model.get('name'));
+        */
+        this.$el.text(this.model.get('name'));
         this.model.collection.sort().each(this.appendView);
         return this;
       };
@@ -443,6 +473,7 @@
         /*
               Internal: Toggles display of the children Files or Diretories of this view.
         */
+
         var fileDirChildren;
         fileDirChildren = this.$el.children('.directory, .file');
         this.$el.toggleClass('open', open);
@@ -457,7 +488,7 @@
 }).call(this);
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = Object.prototype.hasOwnProperty,
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   BoneTree.namespace("BoneTree.Views", function(Views) {
@@ -465,14 +496,17 @@
 
       __extends(File, _super);
 
+      File.name = 'File';
+
       function File() {
         this.render = __bind(this.render, this);
-        File.__super__.constructor.apply(this, arguments);
+        return File.__super__.constructor.apply(this, arguments);
       }
 
       /*
           Internal: View that renders a File node and controls its behavior (class: 'file', tag: 'li').
       */
+
 
       File.prototype.className = 'file';
 
@@ -488,6 +522,7 @@
               * options - Passes in settings object, which is used to control
                           whether or not file extensions are shown.
         */
+
         var _this = this;
         this.settings = options.settings;
         this.$el.attr('data-cid', this.model.cid).addClass(this.model.get('extension'));
@@ -510,7 +545,8 @@
                         name. If the 'showExtensions' setting is set, renders the
                         full file name with extension, otherwise renders just the file
                         name attribute.
-        */        if (this.settings.get('showExtensions')) {
+        */
+        if (this.settings.get('showExtensions')) {
           this.$el.text(this.model.nameWithExtension());
         } else {
           this.$el.text(this.model.get('name'));
@@ -526,7 +562,7 @@
 }).call(this);
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = Object.prototype.hasOwnProperty,
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   BoneTree.namespace("BoneTree.Views", function(Views) {
@@ -534,12 +570,17 @@
 
       __extends(Menu, _super);
 
+      Menu.name = 'Menu';
+
       function Menu() {
         this.render = __bind(this.render, this);
+
         this.rename = __bind(this.rename, this);
+
         this["delete"] = __bind(this["delete"], this);
+
         this.contextMenu = __bind(this.contextMenu, this);
-        Menu.__super__.constructor.apply(this, arguments);
+        return Menu.__super__.constructor.apply(this, arguments);
       }
 
       /*
@@ -554,6 +595,7 @@
       
           * click .delete - Deletes a node from the file tree.
       */
+
 
       Menu.prototype.className = 'filetree_context_menu';
 
@@ -570,13 +612,15 @@
               * options - An Object. Internally used to pass the settings configuration
                           into the menu. This controls whether or not the user is
                           prompted to confirm deleting a file.
-        */        return this.settings = options.settings;
+        */
+        return this.settings = options.settings;
       };
 
       Menu.prototype.contextMenu = function(e) {
         /*
               Internal: Kill the default browser behavior for the contextmenu event.
-        */        e.preventDefault();
+        */
+        e.preventDefault();
         return e.stopPropagation();
       };
 
@@ -584,7 +628,8 @@
         /*
               Internal: Deletes a node from the file tree. If the confirmDeletes setting
                         is set, prompts the user for delete confirmation.
-        */        if (this.settings.get('confirmDeletes')) {
+        */
+        if (this.settings.get('confirmDeletes')) {
           if (confirm("Are you sure you want to delete '" + (this.model.nameWithExtension()) + "'?")) {
             this.model.destroy();
           }
@@ -598,10 +643,13 @@
         /*
               Internal: Prompts the user to rename a File or Directory.
         */
+
         var extension, fileName, newName, _ref;
         if (newName = prompt("New Name", this.model.nameWithExtension())) {
           _ref = newName.split("."), fileName = _ref[0], extension = _ref[1];
-          if (extension == null) extension = "";
+          if (extension == null) {
+            extension = "";
+          }
           this.model.set({
             name: fileName,
             extension: extension
@@ -616,14 +664,16 @@
                         'Rename' and 'Delete'.
         
               Returns `this`, the menu view.
-        */        this.$el.html(this.template());
+        */
+        this.$el.html(this.template());
         return this;
       };
 
       Menu.prototype.template = function() {
         /*
               Internal: html template for the context menu.
-        */        return "<ul>\n  <li class='rename'>Rename</li>\n  <hr/>\n  <li class='delete'>Delete</li>\n</ul>";
+        */
+        return "<ul>\n  <li class='rename'>Rename</li>\n  <hr/>\n  <li class='delete'>Delete</li>\n</ul>";
       };
 
       return Menu;
@@ -634,9 +684,9 @@
 }).call(this);
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = Object.prototype.hasOwnProperty,
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; },
-    __slice = Array.prototype.slice;
+    __slice = [].slice;
 
   BoneTree.namespace("BoneTree.Views", function(Views) {
     var Models;
@@ -645,27 +695,45 @@
 
       __extends(Tree, _super);
 
+      Tree.name = 'Tree';
+
       function Tree() {
         this.render = __bind(this.render, this);
-        this.openFile = __bind(this.openFile, this);
-        this.openDirectory = __bind(this.openDirectory, this);
+
+        this._openFile = __bind(this._openFile, this);
+
+        this._openDirectory = __bind(this._openDirectory, this);
+
         this.getModelFromClick = __bind(this.getModelFromClick, this);
+
         this.toAscii = __bind(this.toAscii, this);
-        this.getFiles = __bind(this.getFiles, this);
-        this.getFile = __bind(this.getFile, this);
+
+        this.files = __bind(this.files, this);
+
+        this._getFile = __bind(this._getFile, this);
+
         this.getDirectory = __bind(this.getDirectory, this);
+
         this.flatten = __bind(this.flatten, this);
+
         this.filterNodes = __bind(this.filterNodes, this);
-        this.contextMenu = __bind(this.contextMenu, this);
-        this.closeMenu = __bind(this.closeMenu, this);
+
+        this._contextMenu = __bind(this._contextMenu, this);
+
+        this._closeMenu = __bind(this._closeMenu, this);
+
         this.closeDirectories = __bind(this.closeDirectories, this);
+
         this.getModelByCid = __bind(this.getModelByCid, this);
+
         this.findOrCreateView = __bind(this.findOrCreateView, this);
+
         this.addToTree = __bind(this.addToTree, this);
+
         this.addFromJSON = __bind(this.addFromJSON, this);
-        this.addFile = __bind(this.addFile, this);
-        this.createOrUpdate = __bind(this.createOrUpdate, this);
-        Tree.__super__.constructor.apply(this, arguments);
+
+        this.file = __bind(this.file, this);
+        return Tree.__super__.constructor.apply(this, arguments);
       }
 
       /*
@@ -673,13 +741,14 @@
                   so API consumers only need to know about this top level object.
       */
 
+
       Tree.prototype.className = 'tree';
 
       Tree.prototype.events = {
-        'contextmenu .file': 'contextMenu',
-        'contextmenu .directory': 'contextMenu',
-        'click .directory': 'openDirectory',
-        'click .file': 'openFile'
+        'contextmenu .file': '_contextMenu',
+        'contextmenu .directory': '_contextMenu',
+        'click .directory': '_openDirectory',
+        'click .file': '_openFile'
       };
 
       Tree.prototype.initialize = function() {
@@ -687,17 +756,16 @@
               Public: Initialize a new filetree widget
         
               * options          - An Object of global configuration options for the file tree.
-                * autoOpenFiles  - A Boolean. If true, each file that is added to the tree
-                                   immediately triggers an `openFile` event (default: true).
                 * confirmDeletes - A Boolean. If true, the tree will prompt the user, making
                                    sure they want to delete the file (default: false).
                 * showExtensions - A Boolean. If true, files display their extensions. Internally,
                                    extensions are always kept track of but by default they are
                                    hidden (default: false).
         */
+
         var settingsConfig,
           _this = this;
-        $(document).click(this.closeMenu);
+        $(document).click(this._closeMenu);
         this._currentFileData = null;
         settingsConfig = _.extend({}, this.options, {
           treeView: this
@@ -716,77 +784,37 @@
         });
       };
 
-      Tree.prototype.createOrUpdate = function(filePath, fileData, triggerAutoOpen, filterFn) {
+      Tree.prototype.file = function(filePath, fileData) {
         var dirs, file, fileName, _i, _ref;
-        if (fileData == null) fileData = {};
-        if (triggerAutoOpen == null) triggerAutoOpen = true;
-        /*
-              Public: updates file data or creates a new file.
-        
-              * filePath - A String that represents the directory path to the file.
-                           Directories that don't yet exist will be created. If no
-                           file is specified, eg. '/dir1/dir2/' then only the directories
-                           will be created and this method will return null.
-              * fileData - An Object of attributes to store in the File object. This
-                           could represent information such as lastModified, fileContents,
-                           fileCreator, etc.
-        
-              Examples
-        
-                  tree.addFile '/source/main.coffee',
-                    contents: "alert('hello world.')"
-                    lastModified: 1330725130170
-                  # => <File>
-        
-              Returns the File object if it was created and null if no file was given.
-        */
-        if (filePath[0] === '/') filePath = filePath.replace('/', '');
-        this._currentFileData = _.extend(fileData, {
-          _path: filePath
-        });
-        _ref = filePath.split("/"), dirs = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), fileName = _ref[_i++];
-        if (file = this.getFile(filePath)) {
+        if (filePath[0] === '/') {
+          filePath = filePath.replace('/', '');
+        }
+        if (fileData != null) {
+          this._currentFileData = _.extend(fileData, {
+            path: filePath
+          });
+          if (this._currentFileData.autoOpen == null) {
+            this._currentFileData.autoOpen = true;
+          }
+          if (this._currentFileData.hidden == null) {
+            this._currentFileData.hidden = false;
+          }
+        } else {
+          return this._getFile(filePath);
+        }
+        _ref = filePath.split('/'), dirs = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), fileName = _ref[_i++];
+        if (file = this._getFile(filePath)) {
           return file.set(this._currentFileData);
         } else {
-          return this.addToTree(this.root, dirs, fileName, triggerAutoOpen, filterFn);
+          return this.addToTree(this.root, dirs, fileName);
         }
       };
 
-      Tree.prototype.addFile = function(filePath, fileData, triggerAutoOpen, filterFn) {
-        var dirs, fileName, _i, _ref;
-        if (fileData == null) fileData = {};
-        if (triggerAutoOpen == null) triggerAutoOpen = true;
-        /*
-              Public: Method to add files and associated file data to the tree.
-        
-              * filePath - A String that represents the directory path to the file.
-                           Directories that don't yet exist will be created. If no
-                           file is specified, eg. '/dir1/dir2/' then only the directories
-                           will be created and this method will return null.
-              * fileData - An Object of attributes to store in the File object. This
-                           could represent information such as lastModified, fileContents,
-                           fileCreator, etc.
-        
-              Examples
-        
-                  tree.addFile '/source/main.coffee',
-                    contents: "alert('hello world.')"
-                    lastModified: 1330725130170
-                  # => <File>
-        
-              Returns the File object if it was created and null if no file was given.
-        */
-        if (filePath[0] === '/') filePath = filePath.replace('/', '');
-        this._currentFileData = _.extend(fileData, {
-          _path: filePath
-        });
-        _ref = filePath.split("/"), dirs = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), fileName = _ref[_i++];
-        return this.addToTree(this.root, dirs, fileName, triggerAutoOpen, filterFn);
-      };
-
-      Tree.prototype.addFromJSON = function(data, currentPath, filterFn) {
+      Tree.prototype.addFromJSON = function(data, currentPath) {
         var file, name, _i, _len, _ref;
-        if (currentPath == null) currentPath = "";
+        if (currentPath == null) {
+          currentPath = "";
+        }
         /*
               Public: Creates a file tree from a JSON representation. Expects the
                       JSON object to have a `name` property at each level, specifying
@@ -820,6 +848,7 @@
         
               Returns the Tree view object.
         */
+
         name = "";
         if (data.name != null) {
           name = data.name + '/';
@@ -834,17 +863,15 @@
           _ref = data.files;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             file = _ref[_i];
-            this.addFromJSON(file, currentPath, filterFn);
+            this.addFromJSON(file, currentPath);
           }
         } else {
-          this.addFile(currentPath, data, true, filterFn);
+          this.file(currentPath, data);
         }
         return this;
       };
 
-      Tree.prototype.addToTree = function(currentDirectory, remainingDirectories, fileName, triggerAutoOpen, filterFn) {
-        var file, matchingDirectory, newDirectory, newNode, nextDirectoryName;
-        if (triggerAutoOpen == null) triggerAutoOpen = true;
+      Tree.prototype.addToTree = function(currentDirectory, remainingDirectories, fileName) {
         /*
               Internal: Recursive method that traverses nodes, creating
                         Files and Directories.
@@ -863,32 +890,34 @@
         
               Returns the File object if it was created and null if no file was given.
         */
+
+        var file, matchingDirectory, newDirectory, newNode, nextDirectoryName;
         if (remainingDirectories.length) {
           nextDirectoryName = remainingDirectories.shift();
           if (matchingDirectory = Models.Directory.find(currentDirectory, nextDirectoryName)) {
             matchingDirectory.set({
               open: true
             });
-            return this.addToTree(matchingDirectory, remainingDirectories, fileName, triggerAutoOpen, filterFn);
+            return this.addToTree(matchingDirectory, remainingDirectories, fileName);
           } else {
             newNode = new Models.Directory({
               name: nextDirectoryName,
               open: true
             });
             newDirectory = currentDirectory.collection.add(newNode);
-            return this.addToTree(newNode, remainingDirectories, fileName, triggerAutoOpen, filterFn);
+            return this.addToTree(newNode, remainingDirectories, fileName);
           }
         } else {
-          if (fileName === "") return null;
-          if (!(filterFn != null) || filterFn(fileName, this._currentFileData) === true) {
-            file = Models.File.createFromFileName(fileName, this._currentFileData);
-            this._currentFileData = null;
-            currentDirectory.collection.add(file);
-            if (this.settings.get('autoOpenFiles') && triggerAutoOpen) {
-              this.trigger('openFile', file);
-            }
-            return file;
+          if (fileName === "") {
+            return null;
           }
+          file = Models.File.createFromFileName(fileName, this._currentFileData);
+          this._currentFileData = null;
+          currentDirectory.collection.add(file);
+          if (file.get('autoOpen')) {
+            this.trigger('openFile', file);
+          }
+          return file;
         }
       };
 
@@ -910,6 +939,7 @@
         
               Returns the view corresponding to the model passed in.
         */
+
         var type, view, viewCache;
         type = node.constantize();
         viewCache = this.settings.get('viewCache');
@@ -927,7 +957,9 @@
         viewCache = this.settings.get('viewCache');
         for (modelCid in viewCache) {
           view = viewCache[modelCid];
-          if (modelCid === cid) return view.model;
+          if (modelCid === cid) {
+            return view.model;
+          }
         }
       };
 
@@ -942,6 +974,7 @@
         
               Returns the Tree view object.
         */
+
         var directories;
         directories = _.filter(this.flatten(), function(node) {
           return node.get('nodeType') === 'directory';
@@ -952,7 +985,7 @@
         return this;
       };
 
-      Tree.prototype.closeMenu = function(e) {
+      Tree.prototype._closeMenu = function(e) {
         /*
               Internal: Close the context menu. This is called every click on
                         the document and closes the menu unless you are clicking
@@ -960,11 +993,14 @@
                         automatically by Backbone from user interactions.
         
               Returns the Menu view object.
-        */        if (!$(e.currentTarget).is('.menu')) this.menuView.$el.hide();
+        */
+        if (!$(e.currentTarget).is('.menu')) {
+          this.menuView.$el.hide();
+        }
         return this.menuView;
       };
 
-      Tree.prototype.contextMenu = function(e) {
+      Tree.prototype._contextMenu = function(e) {
         /*
               Internal: Open the context menu. This prevents the default browser
                         context menu event. This shouldn't be called directly, it is
@@ -972,6 +1008,7 @@
         
               Returns the Menu view object.
         */
+
         var model;
         e.preventDefault();
         model = this.getModelFromClick(e);
@@ -994,8 +1031,8 @@
               Examples
         
                   # Add some files to the tree
-                  tree.addFile('/source/main.coffee')
-                  tree.addFile('/source/player.coffee')
+                  tree.file('/source/main.coffee')
+                  tree.file('/source/player.coffee')
         
                   # returns an array containing the File 'main.coffee'
                   tree.filterNodes('file', 'main')
@@ -1003,6 +1040,7 @@
         
               Returns an Array of nodes that match the filter criteria.
         */
+
         var results,
           _this = this;
         results = _.filter(this.flatten(), function(node) {
@@ -1013,8 +1051,12 @@
 
       Tree.prototype.flatten = function(currentNode, results) {
         var _this = this;
-        if (currentNode == null) currentNode = this.root;
-        if (results == null) results = [];
+        if (currentNode == null) {
+          currentNode = this.root;
+        }
+        if (results == null) {
+          results = [];
+        }
         /*
               Internal: Returns a one dimensional ordered array representing the
                         Directory and File nodes in the tree.
@@ -1025,8 +1067,8 @@
               Examples
         
                   # Add some files to the tree
-                  tree.addFile('/source/main.coffee')
-                  tree.addFile('/source/player.coffee')
+                  tree.file('/source/main.coffee', {aFile: true})
+                  tree.file('/source/player.coffee', {playerData: {x: 50, y: 30}})
         
                   # returns an array containing the File 'main.coffee'
                   tree.filterNodes('file', 'main')
@@ -1034,9 +1076,12 @@
         
               Returns an Array of nodes that match the filter criteria.
         */
+
         currentNode.collection.each(function(node) {
           results.push(node);
-          if (node.collection.length) return _this.flatten(node, results);
+          if (node.collection.length) {
+            return _this.flatten(node, results);
+          }
         });
         return results;
       };
@@ -1050,47 +1095,51 @@
               Examples
         
                   # Add some files to the tree
-                  tree.addFile('/source/main.coffee')
-                  tree.addFile('/source/player.coffee')
-                  tree.addFile('/directory2/file.coffee')
+                  tree.file('/source/main.coffee', {size: 4039})
+                  tree.file('/source/player.coffee', {size: 399})
+                  tree.file('/directory2/file.coffee', {size: 23})
         
                   # returns an array containing the Directory 'source'
                   tree.getDirectory('source')
                   # => [<Directory>]
         
               Returns an Array of Directory nodes that match directoryName.
-        */        return this.filterNodes('directory', directoryName);
+        */
+        return this.filterNodes('directory', directoryName);
       };
 
-      Tree.prototype.getFile = function(filePath) {
+      Tree.prototype._getFile = function(filePath) {
         /*
-              Public: Returns a file at the specified location.
+              Internal: Returns a file at the specified location.
         
               * fileName - A String describing the file path.
         
               Examples
         
                   # Add some files to the tree
-                  tree.addFile('/source/main.coffee')
-                  tree.addFile('/source/player.coffee')
-                  tree.addFile('/directory2/main.coffee')
+                  tree.file('/source/main.coffee', {size: 30459})
+                  tree.file('/source/player.coffee', {size: 943})
+                  tree.file('/directory2/main.coffee', {size: 4945})
         
                   # returns an array containing both the files named main.
-                  tree.getFile('source/main.coffee')
+                  tree._getFile('source/main.coffee')
                   # => <File>
         
               Returns a File at the given location.
         */
+
         var filtered, nodes;
-        if (filePath[0] === '/') filePath = filePath.replace('/', '');
+        if (filePath[0] === '/') {
+          filePath = filePath.replace('/', '');
+        }
         nodes = this.flatten();
         filtered = _.filter(nodes, function(node) {
-          return node.get('nodeType') === 'file' && node.get('_path') === filePath;
+          return node.get('nodeType') === 'file' && node.get('path') === filePath;
         });
         return filtered[0];
       };
 
-      Tree.prototype.getFiles = function(directoryName) {
+      Tree.prototype.files = function(directoryName) {
         /*
               Public: Returns an array of files contained within the directory
                       matching directoryName.
@@ -1100,20 +1149,28 @@
               Examples
         
                   # Add some files to the tree
-                  tree.addFile('/source/main.coffee')
-                  tree.addFile('/source/player.coffee')
-                  tree.addFile('/directory2/main.coffee')
+                  tree.file('/source/main.coffee', {main: true})
+                  tree.file('/source/player.coffee', {active: true})
+                  tree.file('/directory2/main.coffee', {active: true})
         
                   # returns an array containing the files 'player.coffee' and 'main.coffee'
-                  tree.getFiles('source')
+                  tree.files('source')
                   # => [<File>, <File>]
         
               Returns an Array of File nodes that are contained in the
               Directory matching directoryName.
         */
+
         var directory, nodesInDirectory;
+        if (directoryName == null) {
+          return _.filter(this.flatten(), function(node) {
+            return node.get('nodeType') === 'file';
+          });
+        }
         directory = this.getDirectory(directoryName)[0];
-        if (!directory) return [];
+        if (!directory) {
+          return [];
+        }
         nodesInDirectory = this.flatten(directory);
         return _.filter(nodesInDirectory, function(node) {
           return node.get('nodeType') === 'file';
@@ -1121,10 +1178,14 @@
       };
 
       Tree.prototype.toAscii = function(collection, indentation, output) {
-        var n, rootCollection, spaces,
+        var n, rootCollection, spaces, _i,
           _this = this;
-        if (indentation == null) indentation = 0;
-        if (output == null) output = "\n";
+        if (indentation == null) {
+          indentation = 0;
+        }
+        if (output == null) {
+          output = "\n";
+        }
         /*
               Internal: A String representation of the filetree.
         
@@ -1135,9 +1196,9 @@
               Examples
         
                   # Add some files to the tree
-                  tree.addFile('/source/main.coffee')
-                  tree.addFile('/source/player.coffee')
-                  tree.addFile('/directory2/main.coffee')
+                  tree.file('/source/main.coffee', {main: true})
+                  tree.file('/source/player.coffee', {active: true})
+                  tree.file('/directory2/main.coffee', {active: false})
         
                   tree.toAscii()
                   # => "
@@ -1148,12 +1209,12 @@
                      -player.coffee
                   "
         
-        
               Returns a String representation of the sorted nodes of the file tree.
         */
+
         rootCollection = collection || this.root.collection;
         spaces = "";
-        for (n = 0; 0 <= indentation ? n <= indentation : n >= indentation; 0 <= indentation ? n++ : n--) {
+        for (n = _i = 0; 0 <= indentation ? _i <= indentation : _i >= indentation; n = 0 <= indentation ? ++_i : --_i) {
           spaces += " ";
         }
         rootCollection.each(function(nodes) {
@@ -1171,6 +1232,7 @@
         
               Returns the Node corresponding to the view element that the user clicked on.
         */
+
         var cid;
         e.stopPropagation();
         this.menuView.$el.hide();
@@ -1178,20 +1240,22 @@
         return this.getModelByCid(cid);
       };
 
-      Tree.prototype.openDirectory = function(e) {
+      Tree.prototype._openDirectory = function(e) {
         /*
               Internal: Toggle the directory icon and display the contents of the clicked Directory.
         */
+
         var model;
         model = this.getModelFromClick(e);
         return model.toggleOpen();
       };
 
-      Tree.prototype.openFile = function(e) {
+      Tree.prototype._openFile = function(e) {
         /*
               Internal: Trigger the 'openFile' event, passing in the file corresponding
                         to the view element that the user clicked.
         */
+
         var model;
         model = this.getModelFromClick(e);
         return this.trigger('openFile', model);
@@ -1202,12 +1266,15 @@
               Internal: Call render on each of the nodes underneath the root node.
                         Also calls sort on each of the subcollections.
         */
+
         var _this = this;
         this.root.collection.sort().each(function(node) {
           var view;
           node.collection.sort();
           view = _this.findOrCreateView(node);
-          return _this.$el.append(view.render().$el);
+          if (!view.model.get('hidden')) {
+            return _this.$el.append(view.render().$el);
+          }
         });
         return this;
       };
