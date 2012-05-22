@@ -21,9 +21,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @settings = options.settings
 
       @$el.attr 'data-cid', @model.cid
+      @$el.data 'view', @
 
-      @model.bind 'change:open', (model, open) =>
-        @displayChildren(open)
+      @open = false
 
       @model.bind 'change:name', (model, name) =>
         treeView = @settings.get 'treeView'
@@ -35,7 +35,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         @settings.get('treeView').trigger 'remove', model
         @render()
 
-      @displayChildren(@model.get('open'))
+      @displayChildren(@open)
 
     appendView: (node) =>
       ###
@@ -70,4 +70,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @$el.toggleClass('open', open)
       fileDirChildren.toggle(open)
+
+    toggleOpen: =>
+      @open = not @open
+
+      @displayChildren(@open)
 

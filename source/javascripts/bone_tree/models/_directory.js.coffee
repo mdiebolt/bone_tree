@@ -2,48 +2,28 @@
 
 BoneTree.namespace "BoneTree.Models", (Models) ->
   class Models.Directory extends Models.Node
-    ###
-    Public: Object representing a directory.
-
-    * defaults
-      * name         - A String naming the directory (default: "New Directory").
-      * sortPriority - A String representing the priority with which the
-                       node is sorted. Directories have sortPriority "0"
-                       allowing them to be sorted before Files which have
-                       sortPriority "1".
-      * nodeType     - A String denoting what type of node this object is.
-                       The two types are "file" and "directory".
-      * open         - The state of the directory. Controls whether or not
-                       to display files and directories contained within this
-                       Directory (default: false).
-
-    ###
     defaults:
       name: "New Directory"
-      open: false
-      sortPriority: "0"
-      nodeType: "directory"
 
-    toggleOpen: =>
-      ###
-      Public: Toggle the open state of this Directory.
+    files: =>
+      @collection.filter (node) ->
+        node.isFile()
 
-      Examples
+    toArray: =>
+      results = [@]
 
-          dir = new BoneTree.Models.Directory
+      @collection.each (node) =>
+        results.push node.toArray()
 
-          dir.get('open')
-          # => false
+      return _.flatten(results)
 
-          dir.toggleOpen()
-          dir.get('open')
-          # => true
+    toAscii: (indentation='') =>
+      nodeAscii = ["#{indentation}+#{@nameWithExtension()}"]
 
-      Returns this Directory.
-      ###
-      currentState = @get 'open'
+      @collection.each (node) ->
+        nodeAscii.push node.toAscii(indentation + ' ')
 
-      @set {open: not currentState}
+      nodeAscii.join('\n')
 
   Models.Directory.find = (currentDirectory, name) ->
     ###

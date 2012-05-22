@@ -150,12 +150,10 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         nextDirectoryName = remainingDirectories.shift()
 
         if matchingDirectory = Models.Directory.find(currentDirectory, nextDirectoryName)
-          matchingDirectory.set
-            open: true
 
           @addToTree(matchingDirectory, remainingDirectories, fileName)
         else
-          newNode = new Models.Directory {name: nextDirectoryName, open: true}
+          newNode = new Models.Directory {name: nextDirectoryName}
 
           newDirectory = currentDirectory.collection.add newNode
           @addToTree(newNode, remainingDirectories, fileName)
@@ -190,7 +188,11 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       Returns the view corresponding to the model passed in.
       ###
-      type = node.constantize()
+      if node.isDirectory()
+        type = 'Directory'
+      else
+        type = 'File'
+
       viewCache = @settings.get 'viewCache'
 
       unless view = viewCache[node.cid]
@@ -199,34 +201,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           settings: @settings
 
       return view
-
-    # TODO this seems unneeded and backward. I shouldn't need to look up
-    # a model from the view cache. I should be able to just find it in
-    # the collection.
-    getModelByCid: (cid) =>
-      viewCache = @settings.get 'viewCache'
-
-      for modelCid, view of viewCache
-        return view.model if modelCid is cid
-
-    closeDirectories: =>
-      ###
-      Public: Close all the directories in the file tree.
-
-      Examples
-
-          tree.closeDirectories()
-          # => <Tree>
-
-      Returns the Tree view object.
-      ###
-      directories = _.filter(@flatten(), (node) ->
-        node.get('nodeType') is 'directory'
-      )
-
-      _.invoke(directories, 'set', {open: false})
-
-      return @
 
     _closeMenu: (e) =>
       ###
@@ -400,52 +374,18 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       # the filetree
       return [] unless directory
 
-      nodesInDirectory = @flatten(directory)
+      return directory.files()
 
-      return _.filter nodesInDirectory, (node) ->
-        node.get('nodeType') is 'file'
+    toAscii: =>
+      '\n' + @root.toAscii()
 
-    toAscii: (collection, indentation=0, output="\n") =>
-      ###
-      Internal: A String representation of the filetree.
+    # TODO this seems unneeded and backward. I shouldn't need to look up
+    # a model from the view cache. I should be able to just find it in
+    # the collection.
+    getModelByCid: (cid) =>
+      viewCache = @settings.get 'viewCache'
 
-      * collection  - A NodeCollection object describing which folder to start at.
-      * indentation - A Number describing how many spaces to indent the next filetree element (default: 0).
-      * output      - A String representing the current filetree output (default: "\n").
-
-      Examples
-
-          # Add some files to the tree
-          tree.file('/source/main.coffee', {main: true})
-          tree.file('/source/player.coffee', {active: true})
-          tree.file('/directory2/main.coffee', {active: false})
-
-          tree.toAscii()
-          # => "
-            -directory2
-             -main.coffee
-            -source
-             -main.coffee
-             -player.coffee
-          "
-
-      Returns a String representation of the sorted nodes of the file tree.
-      ###
-      rootCollection = collection || @root.collection
-
-      spaces = ""
-
-      for n in [0..indentation]
-        spaces += " "
-
-      rootCollection.each (nodes) =>
-        typeChar = if nodes.get('type') is 'directory' then '+' else '-'
-
-        output += (spaces + typeChar + nodes.nameWithExtension() + '\n')
-
-        output = @toAscii(nodes.collection, indentation + 1, output)
-
-      return output
+      viewCache[cid]
 
     getModelFromClick: (e) =>
       ###
@@ -461,13 +401,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       return @getModelByCid(cid)
 
     _openDirectory: (e) =>
-      ###
-      Internal: Toggle the directory icon and display the contents of the clicked Directory.
+      e.stopPropagation()
 
-      ###
-      model = @getModelFromClick(e)
-
-      model.toggleOpen()
+      $(e.currentTarget).data('view').toggleOpen()
 
     _openFile: (e) =>
       ###
@@ -485,7 +421,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       ###
       Internal: Call render on each of the nodes underneath the root node.
                 Also calls sort on each of the subcollections.
-
 
       ###
       @root.collection.sort().each (node) =>

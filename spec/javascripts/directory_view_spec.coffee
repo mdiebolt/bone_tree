@@ -53,32 +53,6 @@ describe 'BoneTree.Views.Directory', ->
       expect(renameSpy).toHaveBeenCalledOnce()
       expect(renameSpy).toHaveBeenCalledWith(@model, @model.get('name'))
 
-    it 'should toggle the open class based on the model state', ->
-      #TODO this should be the case. Change it so that appendView doesn't automatically open the dir
-      # expect($('#test ul.directory')).not.toHaveClass('open')
-
-      @model.set
-        open: false
-
-      expect($('#test ul.directory')).not.toHaveClass('open')
-
-      @model.set
-        open: true
-
-      expect($('#test ul.directory')).toHaveClass('open')
-
-    #TODO mock findView properly so you can test this
-    #it 'should render new directories to the DOM', ->
-    #  newDir = new Backbone.Model
-    #    name: 'newDir'
-    #    open: false
-
-    #  @model.collection.add newDir
-
-    #  expect($('#test ul.directory ul.directory').length).toEqual(1)
-
-    #TODO tests around hiding children directories
-
     it 'should trigger a rename event on the tree when the directory name is changed', ->
       spy = sinon.spy()
 

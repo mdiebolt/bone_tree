@@ -12,30 +12,11 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       ###
       @collection = new Models.Nodes
 
-    constantize: =>
-      ###
-      Public: Returns a String with the nodeType capitalized so that it may be used
-              to instatiate the appropriate view type
+    isDirectory: =>
+      @ instanceof BoneTree.Models.Directory
 
-      Examples
-
-          file = new BoneTree.Models.File
-          directory = new BoneTree.Models.Directory
-
-          file.constantize()
-          # => 'File'
-
-          directory.constantize()
-          # => 'Directory'
-
-          # use it to create a new view of the appropriate type
-          view = new BoneTree.Views[file.constantize()]
-
-      Returns a String of the nodeType with the first letter capitalized.
-      ###
-      nodeType = @get('nodeType')
-
-      nodeType[0].toUpperCase() + nodeType.substring(1)
+    isFile: =>
+      @ instanceof BoneTree.Models.File
 
     nameWithExtension: =>
       ###
@@ -82,7 +63,7 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
               and Directory objects.
 
     ###
-    comparator: (node) ->
+    comparator: (node) =>
       ###
       Internal: Function that determines how the file tree is sorted. Directories
                 are sorted before files. After node type sort
@@ -107,7 +88,12 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
           "
 
       ###
-      {name, sortPriority} = node.attributes
+      {name} = node.attributes
+
+      if node.isDirectory()
+        sortPriority = 1
+      else
+        sortPriority = 2
 
       return sortPriority + name
 

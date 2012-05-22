@@ -14,10 +14,6 @@ describe 'BoneTree.Models.Node', ->
       nodeType: 'directory'
       name: 'src'
 
-  it 'should return the correct constantized type', ->
-    expect(@file.constantize()).toEqual('File')
-    expect(@directory.constantize()).toEqual('Directory')
-
   it 'should return the full name with extension when appropriate', ->
     expect(@file.nameWithExtension()).toEqual('config.json')
     expect(@directory.nameWithExtension()).toEqual('src')

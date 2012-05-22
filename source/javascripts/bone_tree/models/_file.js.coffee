@@ -17,8 +17,12 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
     ###
     defaults:
       name: "New File"
-      sortPriority: "1"
-      nodeType: "file"
+
+    toArray: =>
+      [@]
+
+    toAscii: (indentation='') =>
+      "#{indentation}-#{@nameWithExtension()}"
 
   Models.File.createFromFileName = (fileName, fileData) ->
     ###

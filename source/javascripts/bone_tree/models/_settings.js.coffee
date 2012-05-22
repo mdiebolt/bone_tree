@@ -22,4 +22,3 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       confirmDeletes: false
       showExtensions: false
       viewCache: {}
-
