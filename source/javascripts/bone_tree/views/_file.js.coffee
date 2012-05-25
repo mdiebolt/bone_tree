@@ -1,7 +1,4 @@
 BoneTree.namespace "BoneTree.Views", (Views) ->
-  String::extension = ->
-    @match(/\.([^\.]*)$/, '').last() || ''
-
   class Views.File extends Backbone.View
     ###
     Internal: View that renders a File node and controls its behavior (class: 'file', tag: 'li').
