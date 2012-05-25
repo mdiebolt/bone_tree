@@ -1,4 +1,4 @@
 module BoneTree
-  VERSION = "0.5.6"
+  VERSION = "0.9"
 end
 
