@@ -1,15 +1,6 @@
 BoneTree.namespace "BoneTree.Models", (Models) ->
   class Models.Node extends Backbone.Model
-    ###
-    Internal: An abstract super class for File and Directory objects to inherit from.
-
-    ###
     initialize: ->
-      ###
-      Internal: Initialize a new Node object. Set it up to contain a collection of
-                children nodes.
-
-      ###
       @collection = new Models.Nodes
 
     isDirectory: =>
@@ -18,35 +9,7 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
     isFile: =>
       @ instanceof BoneTree.Models.File
 
-    nameWithExtension: =>
-      ###
-      Public: Returns the node name with the extension if it has
-              one and just the node name if there is no extension.
-
-      Examples
-
-          file = new BoneTree.Models.File
-            name: "file"
-            extension: "coffee"
-
-          noExt = new BoneTree.Models.File
-            name: "file2"
-
-          directory = new BoneTree.Model.Directory
-            name: "source"
-
-          file.nameWithExtension()
-          # => "file.coffee"
-
-          noExt.nameWithExtension()
-          # => "file2"
-
-          directory.nameWithExtension()
-          # => "source"
-
-      Returns a String. If the extension exists then the node name plus the extension
-      are returned. If there is no extension, then just the node name is returned.
-      ###
+    name: =>
       {extension, name} = @attributes
 
       extension ||= ""
@@ -57,47 +20,14 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       return name + extension
 
   class Models.Nodes extends Backbone.Collection
-    ###
-    Internal: A collection of node models. Since Node is an abstract super
-              class, in practice this collection will hold File objects
-              and Directory objects.
-
-    ###
-    comparator: (node) =>
-      ###
-      Internal: Function that determines how the file tree is sorted. Directories
-                are sorted before files. After node type sort
-                priority, nodes are sorted by name.
-
-      Examples
-
-          tree.addFile('/source/file1.coffee')
-          tree.addFile('/source/file2.coffee')
-          tree.addFile('main.coffee')
-
-          tree.render()
-
-          # even though 'main' comes before 'source' alphabetically it is placed
-          # after the 'source' directory due to the sortPriority of the Directory object.
-          tree.toAscii()
-          # => "
-            -source
-             -file1.coffee
-             -file2.coffee
-            -main.coffee
-          "
-
-      ###
-      {name} = node.attributes
+    comparator: (node) ->
+      name = node.get 'name'
 
       if node.isDirectory()
-        sortPriority = 1
+        sortPriority = 0
       else
-        sortPriority = 2
+        sortPriority = 1
 
       return sortPriority + name
 
     model: Models.Node
-
-
-

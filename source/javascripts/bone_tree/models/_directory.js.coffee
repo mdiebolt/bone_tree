@@ -5,39 +5,83 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
     defaults:
       name: "New Directory"
 
+    add: (filePath, fileData) =>
+      {Directory, File} = Models
+
+      [dirs..., fileName] = filePath.split('/')
+
+      currentDirectory = @
+
+      dirs.each (directoryName) ->
+        return if directoryName is ''
+
+        directory = currentDirectory.directories().select (dir) ->
+          dir.get('name') is directoryName
+        .first()
+
+        unless directory
+          directory = new Directory
+            name: directoryName
+
+          currentDirectory.collection.add(directory)
+
+        currentDirectory = directory
+
+      if file = currentDirectory.getFile(fileName)
+        file.set(fileData)
+      else
+        currentDirectory.collection.add new File(_.extend({name: fileName}, fileData))
+
+    getFile: (filePath) =>
+      [first, rest...] = filePath.split '/'
+
+      match = @collection.find (node) ->
+        node.get('name') is first
+
+      if match?.isDirectory()
+        if rest.length
+          return match.getFile(rest.join('/'))
+        else
+          return undefined
+      else
+        return match
+
+    directories: =>
+      @collection.filter (node) ->
+        node.isDirectory()
+
     files: =>
       @collection.filter (node) ->
         node.isFile()
+
+    getDirectory: (directoryPath) =>
+      [first, rest...] = directoryPath.split('/')
+
+      match = @collection.find (node) ->
+        node.get('name') is first
+
+      if match?.isDirectory()
+        if rest.length
+          return match.getDirectory(rest.join('/'))
+        else
+          return match
+
+      return undefined
 
     toArray: =>
       results = [@]
 
       @collection.each (node) =>
-        results.push node.toArray()
+        results = results.concat node.toArray()
 
-      return _.flatten(results)
+      results
 
     toAscii: (indentation='') =>
-      nodeAscii = ["#{indentation}+#{@nameWithExtension()}"]
+      name = @get('name')
+
+      nodeAscii = ["#{indentation}+#{name}"]
 
       @collection.each (node) ->
         nodeAscii.push node.toAscii(indentation + ' ')
 
       nodeAscii.join('\n')
-
-  Models.Directory.find = (currentDirectory, name) ->
-    ###
-    Internal: Check to see if there is a directory with the matching name
-              contained within currentDirectory.
-
-    * currentDirectory - A Directory object to search for the matching directory name.
-
-    * name             - A String name used to check for matching directory
-                         names in currentDirectory.
-
-    Returns The Directory object with the matching name if it exists and undefined otherwise.
-    ###
-    currentDirectory.collection.find (dir) ->
-      dir.get('name') is name
-
-

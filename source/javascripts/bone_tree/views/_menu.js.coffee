@@ -46,7 +46,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       ###
       if @settings.get('confirmDeletes')
-        if confirm "Are you sure you want to delete '#{@model.nameWithExtension()}'?"
+        name = @model.get('name')
+
+        if confirm "Are you sure you want to delete '#{name}'?"
           @model.destroy()
       else
         @model.destroy()
@@ -58,7 +60,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       Internal: Prompts the user to rename a File or Directory.
 
       ###
-      if newName = prompt "New Name", @model.nameWithExtension()
+      if newName = prompt "New Name", @model.get('name')
         [fileName, extension] = newName.split "."
 
         extension ?= ""
