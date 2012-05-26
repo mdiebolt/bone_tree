@@ -33,27 +33,15 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       else
         currentDirectory.collection.add new File(_.extend(fileData, {name: fileName, path: filePath}))
 
-    getFile: (filePath) =>
-      [first, rest...] = filePath.split '/'
-
-      match = @collection.find (node) ->
-        node.get('name') is first
-
-      if match?.isDirectory()
-        if rest.length
-          return match.getFile(rest.join('/'))
-        else
-          return undefined
-      else
-        return match
+    remove: (path) =>
+      if file = @getFile(path)
+        file.destroy()
+      else if directory = @getDirectory(path)
+        directory.destroy()
 
     directories: =>
       @collection.filter (node) ->
         node.isDirectory()
-
-    files: =>
-      @collection.filter (node) ->
-        node.isFile()
 
     getDirectory: (directoryPath) =>
       [first, rest...] = directoryPath.split('/')
@@ -68,6 +56,24 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
           return match
 
       return undefined
+
+    files: =>
+      @collection.filter (node) ->
+        node.isFile()
+
+    getFile: (filePath) =>
+      [first, rest...] = filePath.split '/'
+
+      match = @collection.find (node) ->
+        node.get('name') is first
+
+      if match?.isDirectory()
+        if rest.length
+          return match.getFile(rest.join('/'))
+        else
+          return undefined
+      else
+        return match
 
     toArray: =>
       results = [@]
