@@ -4,7 +4,6 @@ include FileUtils
 task :default => [:build]
 
 task :build => [:spec] do
-  # Build static assets
   `middleman build`
 
   `cp build/javascripts/bone_tree.js lib/assets/javascripts/bone_tree.js`
