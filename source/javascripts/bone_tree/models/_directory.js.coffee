@@ -22,6 +22,7 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
         unless directory
           directory = new Directory
             name: directoryName
+            path: filePath.substring(0, filePath.indexOf(directoryName) + directoryName.length)
 
           currentDirectory.collection.add(directory)
 
@@ -30,7 +31,7 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       if file = currentDirectory.getFile(fileName)
         file.set(fileData)
       else
-        currentDirectory.collection.add new File(_.extend({name: fileName}, fileData))
+        currentDirectory.collection.add new File(_.extend(fileData, {name: fileName, path: filePath}))
 
     getFile: (filePath) =>
       [first, rest...] = filePath.split '/'
