@@ -5,7 +5,7 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
     defaults:
       name: "New Directory"
 
-    add: (filePath, fileData) =>
+    add: (filePath, fileData={}) =>
       {Directory, File} = Models
 
       [dirs..., fileName] = filePath.split('/')
