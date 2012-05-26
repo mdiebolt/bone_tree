@@ -4,26 +4,25 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     tagName: 'ul'
 
     initialize: (options) ->
-      @settings = options.settings
+      @tree = options.tree
 
       @$el.attr 'data-cid', @model.cid
 
       @open = false
 
       @model.bind 'change', (model, name) =>
-        treeView = @settings.get 'treeView'
-        treeView.render().trigger 'rename', model, name
+        @tree.render().trigger 'rename', model, name
 
       @model.collection.bind 'add', @render
 
       @model.collection.bind 'remove', (model, collection) =>
-        @settings.get('treeView').trigger 'remove', model
+        @tree.trigger 'remove', model
         @render()
 
       @displayChildren(@open)
 
     appendView: (node) =>
-      view = @settings.get('treeView').findOrCreateView(node)
+      view = @tree.findOrCreateView(node)
 
       @$el.append view.render().$el
 

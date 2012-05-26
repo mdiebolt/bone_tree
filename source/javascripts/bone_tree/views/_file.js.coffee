@@ -1,26 +1,18 @@
 BoneTree.namespace "BoneTree.Views", (Views) ->
   class Views.File extends Backbone.View
-    ###
-    Internal: View that renders a File node and controls its behavior (class: 'file', tag: 'li').
-
-    ###
     className: 'file'
     tagName: 'li'
 
     initialize: (options) ->
       @settings = options.settings
+      @tree = options.tree
 
-      @$el.attr('data-cid', @model.cid).addClass(@model.get('extension'))
+      @$el.attr('data-cid', @model.cid)
 
-      @model.bind 'change:name', (model, name) =>
-        treeView = @settings.get('treeView')
-        treeView.render().trigger 'rename', model, model.get('name')
+      @model.bind 'change', (model, name) =>
+        @$el.removeClass(model.previous('name').extension())
 
-      @model.bind 'change:extension', (model, extension) =>
-        @$el.attr('class', "file #{extension}")
-
-        treeView = @settings.get('treeView')
-        treeView.render().trigger 'rename', model, model.get('name')
+        @tree.render().trigger 'rename', model, model.get('name')
 
     render: =>
       name = @model.get('name')
@@ -35,4 +27,3 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         @$el.text name.withoutExtension()
 
       return @
-

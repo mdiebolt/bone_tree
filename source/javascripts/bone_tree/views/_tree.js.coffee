@@ -8,7 +8,6 @@
 #= require_tree ../models
 #= require_tree ../views
 
-
 BoneTree.namespace "BoneTree.Views", (Views) ->
   {Models} = BoneTree
 
@@ -18,15 +17,15 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     events:
       'contextmenu .file': '_contextMenu'
       'contextmenu .directory': '_contextMenu'
-      'click .directory': '_openDirectory'
-      'click .file': '_openFile'
+      'mousedown .directory': '_openDirectory'
+      'mousedown .file': '_openFile'
 
     initialize: ->
       $(document).click @_closeMenu
 
-      settingsConfig = _.extend({}, @options, {treeView: @})
+      @viewCache = {}
 
-      @settings = new Models.Settings(settingsConfig)
+      @settings = new Models.Settings(@options)
 
       @menuView = new Views.Menu
         settings: @settings
@@ -44,11 +43,13 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         @trigger 'remove', model
 
     add: (filePath, fileData) =>
-      @root.add(filePath, fileData)
+      if Object.isArray(filePath)
+        @add(file.path, file) for file in filePath
+      else
+        @root.add(filePath, fileData)
 
-    addFromArray: (data) =>
-      for file in data
-        @add(file.path, file)
+    remove: (path) =>
+      @root.remove(path)
 
     findOrCreateView: (node) =>
       if node.isDirectory()
@@ -56,12 +57,11 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       else
         type = 'File'
 
-      viewCache = @settings.get 'viewCache'
-
-      unless view = viewCache[node.cid]
-        view = viewCache[node.cid] = new Views[type]
+      unless view = @viewCache[node.cid]
+        view = @viewCache[node.cid] = new Views[type]
           model: node
           settings: @settings
+          tree: @
 
       return view
 
@@ -74,7 +74,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     _contextMenu: (e) =>
       e.preventDefault()
 
-      model = @getViewFromClick(e)
+      model = @getViewFromClick(e).model
 
       @menuView.model = model
 
@@ -97,31 +97,24 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     toAscii: =>
       '\n' + @root.toAscii()
 
-    getViewByCid: (cid) =>
-      viewCache = @settings.get 'viewCache'
-
-      viewCache[cid]
-
     getViewFromClick: (e) =>
       e.stopPropagation()
       @menuView.$el.hide()
 
       cid = $(e.currentTarget).data('cid')
 
-      return @getViewByCid(cid)
+      return @viewCache[cid]
 
     _openDirectory: (e) =>
       e.stopPropagation()
 
-      view = @getViewByCid($(e.currentTarget).data('cid'))
+      view = @getViewFromClick(e)
 
       view.toggleOpen()
 
     _openFile: (e) =>
       view = @getViewFromClick(e)
 
-      # events are emitted by the filetree itself. This way API
-      # consumers don't have to know anything about the internals.
       @trigger 'openFile', view.model
 
     render: =>

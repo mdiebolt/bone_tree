@@ -9,16 +9,6 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
     isFile: =>
       @ instanceof BoneTree.Models.File
 
-    name: =>
-      {extension, name} = @attributes
-
-      extension ||= ""
-
-      if extension isnt ""
-        extension = "." + extension
-
-      return name + extension
-
   class Models.Nodes extends Backbone.Collection
     comparator: (node) ->
       name = node.get 'name'

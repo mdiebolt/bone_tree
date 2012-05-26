@@ -3,4 +3,3 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
     defaults:
       confirmDeletes: false
       showExtensions: false
-      viewCache: {}
