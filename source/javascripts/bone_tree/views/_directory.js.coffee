@@ -10,7 +10,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @open = false
 
-      @model.bind 'change', (model, name) =>
+      @model.bind 'change:name', (model, name) =>
         @tree.render().trigger 'rename', model, name
 
       @model.collection.bind 'add', @render
