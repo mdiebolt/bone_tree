@@ -31,7 +31,11 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       if file = currentDirectory.getFile(fileName)
         file.set(fileData)
       else
-        currentDirectory.collection.add new File(_.extend(fileData, {name: fileName, path: filePath}))
+        file = new File(_.extend(fileData, {name: fileName, path: filePath}))
+
+        currentDirectory.collection.add file
+
+        return file
 
     remove: (path) =>
       if file = @getFile(path)
