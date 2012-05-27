@@ -10,7 +10,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @open = false
 
-      @model.bind 'change', (model) =>
+      @model.bind 'change:path', (model) =>
         @tree.render().trigger 'rename', model, name
 
         previousPath = model.previous('path')
