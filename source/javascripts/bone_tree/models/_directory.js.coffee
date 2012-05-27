@@ -2,9 +2,6 @@
 
 BoneTree.namespace "BoneTree.Models", (Models) ->
   class Models.Directory extends Models.Node
-    defaults:
-      name: "New Directory"
-
     add: (filePath, fileData={}) =>
       {Directory, File} = Models
 
@@ -16,12 +13,11 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
         return if directoryName is ''
 
         directory = currentDirectory.directories().select (dir) ->
-          dir.get('name') is directoryName
+          dir.name() is directoryName
         .first()
 
         unless directory
           directory = new Directory
-            name: directoryName
             path: filePath.substring(0, filePath.indexOf(directoryName) + directoryName.length)
 
           currentDirectory.collection.add(directory)
@@ -31,7 +27,7 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       if file = currentDirectory.getFile(fileName)
         file.set(fileData)
       else
-        file = new File(_.extend(fileData, {name: fileName, path: filePath}))
+        file = new File(_.extend(fileData, {path: filePath}))
 
         currentDirectory.collection.add file
 
@@ -51,7 +47,7 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       [first, rest...] = directoryPath.split('/')
 
       match = @collection.find (node) ->
-        node.get('name') is first
+        node.name() is first
 
       if match?.isDirectory()
         if rest.length
@@ -69,7 +65,7 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       [first, rest...] = filePath.split '/'
 
       match = @collection.find (node) ->
-        node.get('name') is first
+        node.name() is first
 
       if match?.isDirectory()
         if rest.length
@@ -88,11 +84,26 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       results
 
     toAscii: (indentation='') =>
-      name = @get('name')
-
-      nodeAscii = ["#{indentation}+#{name}"]
+      nodeAscii = ["#{indentation}+#{@name()}"]
 
       @collection.each (node) ->
         nodeAscii.push node.toAscii(indentation + ' ')
 
       nodeAscii.join('\n')
+
+    updateChildren: (previousPath, newPath) =>
+      @directories().each (directory) =>
+        directory.updateChildren(previousPath, newPath)
+
+      directoryPath = @get('path')
+
+      if directoryPath.indexOf(newPath) is -1
+        @set
+          path: @get('path').replace(previousPath, newPath)
+
+      @files().each (file) =>
+        filePath = file.get('path')
+
+        if filePath.indexOf(newPath) is -1
+          file.set
+            path: file.get('path').replace(previousPath, newPath)

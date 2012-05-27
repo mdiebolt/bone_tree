@@ -31,7 +31,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
         settings: @settings
       @menuView.render().$el.appendTo $('body')
 
-      @root = new Models.Directory {name: '/'}
+      @root = new Models.Directory {path: '/'}
 
       @root.collection.bind 'add', @render
 

@@ -10,8 +10,17 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @open = false
 
-      @model.bind 'change:name', (model, name) =>
+      @model.bind 'change', (model) =>
         @tree.render().trigger 'rename', model, name
+
+        previousPath = model.previous('path')
+
+        if (path = model.get('path')).indexOf('/') is 0
+          newPath = path.replace('/', '')
+        else
+          newPath = path
+
+        model.updateChildren(previousPath, newPath)
 
       @model.collection.bind 'add', @render
 
@@ -27,7 +36,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @$el.append view.render().$el
 
     render: =>
-      @$el.text @model.get('name')
+      @$el.text @model.name()
 
       @model.collection.each @appendView
 

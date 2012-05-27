@@ -11,7 +11,7 @@ describe 'BoneTree.Models.Directory', ->
 
     expect(tree.toAscii()).toEqual """
 
-    +/
+    +
      +src
       -enemy.coffee
       -main.coffee

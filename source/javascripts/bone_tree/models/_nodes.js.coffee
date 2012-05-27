@@ -4,20 +4,21 @@ BoneTree.namespace "BoneTree.Models", (Models) ->
       @collection = new Models.Nodes
 
     isDirectory: =>
-      @ instanceof BoneTree.Models.Directory
+      @ instanceof Models.Directory
 
     isFile: =>
-      @ instanceof BoneTree.Models.File
+      @ instanceof Models.File
+
+    name: =>
+      @get('path').split('/').last()
 
   class Models.Nodes extends Backbone.Collection
     comparator: (node) ->
-      name = node.get 'name'
-
       if node.isDirectory()
         sortPriority = 0
       else
         sortPriority = 1
 
-      return sortPriority + name
+      return sortPriority + node.name()
 
     model: Models.Node

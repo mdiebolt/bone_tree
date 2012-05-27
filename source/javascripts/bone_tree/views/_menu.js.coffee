@@ -16,9 +16,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
     delete: (e) =>
       if @settings.get('confirmDeletes')
-        name = @model.get('name')
-
-        if confirm "Are you sure you want to delete '#{name}'?"
+        if confirm "Are you sure you want to delete '#{@model.name()}'?"
           @model.destroy()
       else
         @model.destroy()
@@ -26,9 +24,11 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       @$el.hide()
 
     rename: (e) =>
-      if newName = prompt("New Name", @model.get('name'))
+      if newName = prompt("New Name", @model.name())
+        [dirs..., fileName] = @model.get('path').split('/')
+
         @model.set
-          name: newName
+          path: "#{dirs.join('/')}/#{newName}"
 
       @$el.hide()
 
@@ -45,5 +45,3 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
           <li class='delete'>Delete</li>
         </ul>
       """
-
-

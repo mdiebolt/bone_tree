@@ -7,7 +7,9 @@ describe "sorting behavior", ->
 
     nodes = new Models.Nodes
 
-    nodes.add(new Models.Node {name: 'zzz'})
-    nodes.add(new Models.Node {name: 'aaa'})
+    nodes.add(new Models.Node {path: 'aaa'})
+    nodes.add(new Models.Node {path: 'zzz'})
 
-    expect(nodes.sort().pluck('name')).toEqual(['aaa', 'zzz'])
+    expect(nodes.sort().map (node) ->
+      node.name()
+    ).toEqual(['aaa', 'zzz'])
