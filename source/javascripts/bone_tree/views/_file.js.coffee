@@ -9,7 +9,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       @$el.attr('data-cid', @model.cid)
 
-      @model.bind 'change', (model) =>
+      @model.bind 'change:path', (model) =>
         @$el.removeClass(model.previous('path').split('/').last().extension())
 
         @tree.render().trigger 'rename', model, model.name()
