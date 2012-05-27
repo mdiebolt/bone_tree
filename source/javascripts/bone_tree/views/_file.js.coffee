@@ -1,25 +1,21 @@
 BoneTree.namespace "BoneTree.Views", (Views) ->
   class Views.File extends Backbone.View
-    className: 'file'
     tagName: 'li'
 
     initialize: (options) ->
       @settings = options.settings
       @tree = options.tree
 
-      @$el.attr('data-cid', @model.cid)
-
-      @model.bind 'change', (model) =>
-        @$el.removeClass(model.previous('path').split('/').last().extension())
-
-        @tree.render().trigger 'rename', model, model.name()
+      @model.bind 'change:path', (model) =>
+        @render()
 
     render: =>
       name = @model.name()
 
       extension = name.extension()
 
-      @$el.addClass(extension)
+      @$el.attr('data-cid', @model.cid)
+      @$el.attr('class', "file #{extension}")
 
       if @settings.get('showExtensions')
         @$el.text name
