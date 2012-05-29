@@ -5,6 +5,12 @@ gem 'middleman', :git => 'git://github.com/middleman/middleman.git'
 gem "rack"
 gem "rack-codehighlighter"
 
+# Linux gems
+gem "rb-inotify"
+gem "therubyracer"
+
+gem "cornerstone", :git => 'git://github.com/PixieEngine/Cornerstone.git', :branch => "pixie"
+
 group :development, :test do
   gem "coffee-filter"
   gem 'growl'

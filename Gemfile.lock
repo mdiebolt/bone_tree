@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/PixieEngine/Cornerstone.git
+  revision: e258a8a7197109d714bdc87e22891fe731c86e21
+  branch: pixie
+  specs:
+    cornerstone (0.1.0)
+      middleman (~> 3.0.0.beta.3)
+
+GIT
   remote: git://github.com/johnbintz/guard-jasmine-headless-webkit.git
   revision: 644f24cc4cba590c99572f6ea87335e24fb93264
   specs:
@@ -98,6 +106,7 @@ GEM
       selenium-webdriver (>= 0.1.3)
     jasmine-core (1.1.0)
     jasmine-spec-extras (0.0.2)
+    libv8 (3.3.10.4)
     libwebsocket (0.1.3)
       addressable
     listen (0.4.1)
@@ -160,6 +169,8 @@ GEM
       sprockets (~> 2.0)
       tilt (~> 1.1)
     sprockets-vendor_gems (0.1.1)
+    therubyracer (0.10.1)
+      libv8 (~> 3.3.10)
     thin (1.3.1)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -177,6 +188,7 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-filter
+  cornerstone!
   growl
   guard-jasmine-headless-webkit!
   haml-coderay
@@ -188,3 +200,5 @@ DEPENDENCIES
   rack-codehighlighter
   rake
   rb-fsevent
+  rb-inotify
+  therubyracer

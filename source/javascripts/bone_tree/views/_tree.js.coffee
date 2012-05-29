@@ -1,4 +1,3 @@
-#= require ../_corelib
 #= require ../_base64
 
 #= require ../_namespace
