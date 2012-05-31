@@ -1,4 +1,4 @@
-#= require _backbone
+#= require backbone
 #= require sinon
 #= require jasmine-jquery
 #= require jasmine-sinon
