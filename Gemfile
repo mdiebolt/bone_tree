@@ -2,11 +2,12 @@ source "http://rubygems.org"
 
 gem "haml-coderay"
 gem 'middleman', :git => 'git://github.com/middleman/middleman.git'
+gem "middleman-sprockets", :git => 'git://github.com/middleman/middleman-sprockets.git'
 gem "rack"
 gem "rack-codehighlighter"
 
-gem "cornerstone", :git => 'git://github.com/PixieEngine/Cornerstone.git', :branch => "pixie"
-# gem "cornerstone", :path => "../Cornerstone"
+gem "cornerstone-source", :git => 'git://github.com/PixieEngine/Cornerstone.git', :branch => "pixie"
+# gem "cornerstone-source", :path => "../Cornerstone"
 
 group :development, :test do
   gem "coffee-filter"
