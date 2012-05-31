@@ -1,6 +1,8 @@
 src_dir: source/javascripts
 src_files:
   - "**/*"
+asset_paths:
+  - vendor/javascripts
 spec_dir: spec/javascripts
 spec_files:
   - "**/*_spec.*"
