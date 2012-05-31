@@ -1,4 +1,4 @@
-#= require ./nodes
+#= require ./_nodes
 
 BoneTree.namespace "BoneTree.Models", (Models) ->
   class Models.File extends Models.Node
