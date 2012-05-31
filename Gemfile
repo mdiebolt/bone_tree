@@ -21,4 +21,5 @@ group :development, :test do
   gem 'jasmine-spec-extras'
   gem "rake"
   gem "rb-fsevent"
+  gem "therubyracer"
 end

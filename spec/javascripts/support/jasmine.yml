@@ -1,8 +1,8 @@
+src_dir: source/javascripts
 src_files:
   - "**/*"
-helpers:
-  - helpers/**/*
+spec_dir: spec/javascripts
 spec_files:
   - "**/*_spec.*"
-src_dir: source/javascripts
-spec_dir: spec/javascripts
+helpers:
+  - helpers/**/*
