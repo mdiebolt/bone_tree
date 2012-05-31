@@ -1,8 +1,4 @@
-#= require ../_base64
-
 #= require ../_namespace
-
-#= require ../_github
 
 #= require_tree ../models
 #= require_tree ../views
