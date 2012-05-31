@@ -1,8 +1,3 @@
-#= require ../_namespace
-
-#= require_tree ../models
-#= require_tree ../views
-
 BoneTree.namespace "BoneTree.Views", (Views) ->
   {Models} = BoneTree
 

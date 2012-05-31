@@ -1,1 +1,2 @@
-#= require ./bone_tree/views/_tree
+#= require ./bone_tree/namespace
+#= require_tree ./bone_tree
