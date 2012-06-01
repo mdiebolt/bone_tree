@@ -6,9 +6,8 @@ gem "middleman-sprockets", :git => 'git://github.com/middleman/middleman-sprocke
 gem "rack"
 gem "rack-codehighlighter"
 
-gem "jquery-rails", :git => "git://github.com/STRd6/jquery-rails.git"
+gem "jquery-source"
 gem "cornerstone-source", :git => 'git://github.com/PixieEngine/Cornerstone.git', :branch => "pixie"
-# gem "cornerstone-source", :path => "../Cornerstone"
 
 group :development, :test do
   gem "coffee-filter"
@@ -22,3 +21,5 @@ group :development, :test do
   gem "rb-fsevent"
   gem "therubyracer"
 end
+
+gem 'underscore-source'
