@@ -1,4 +1,4 @@
-window.BoneTree = {}
+window.BoneTree ||= {}
 
 BoneTree.namespace = (target, name, block) ->
   [target, name, block] = [(if typeof exports isnt 'undefined' then exports else window), arguments...] if arguments.length < 3

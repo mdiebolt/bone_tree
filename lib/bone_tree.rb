@@ -1,7 +1,12 @@
+require "bone_tree/version"
+
+# Sneaky require for Rails engine environment
+if defined? ::Rails::Engine
+  require "bone_tree/rails"
+elsif defined? ::Sprockets
+  require "bone_tree/sprockets"
+end
+
 module BoneTree
-  module Rails
-    class Engine < ::Rails::Engine
-      # Get rails to add app, lib, vendor to load path
-    end
-  end
+
 end

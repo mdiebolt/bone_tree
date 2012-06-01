@@ -1,6 +1,3 @@
-#= require bone_tree/_namespace
-#= require bone_tree/models/_nodes
-
 describe "sorting behavior", ->
   it 'should sort collections correctly according to the comparator', ->
     {Models} = BoneTree
