@@ -1,6 +1,3 @@
-#= require bone_tree/_namespace
-#= require bone_tree/models/_directory
-
 describe 'BoneTree.Models.Directory', ->
   it 'should be able to visualize the tree structure with Ascii characters', ->
     tree = new BoneTree.Views.Tree
