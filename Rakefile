@@ -1,16 +1,13 @@
-require 'fileutils'
-include FileUtils
+#!/usr/bin/env rake
+require "bundler/gem_tasks"
 
-task :default => [:build]
+task :build => [:compile]
 
-task :build => [:spec] do
+task :compile do
   `middleman build`
-
-  `cp build/javascripts/bone_tree.js lib/assets/javascripts/bone_tree.js`
-  `gem build bone_tree.gemspec`
-  `git commit -am 'building static assets and gem'`
-  `git push origin master`
 end
+
+task :default => [:spec, :build]
 
 desc "Run jasmine specs"
 task :spec do
