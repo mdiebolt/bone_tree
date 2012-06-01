@@ -14,6 +14,11 @@ build/
 coverage
 doc/
 docs/
+lib/assets/images/
+lib/assets/index.html
+lib/assets/javascripts/backbone.js
+lib/assets/javascripts/bone_tree/
+lib/assets/stylesheets/bone_tree_repo.css
 lib/bundler/man
 pkg
 rdoc
