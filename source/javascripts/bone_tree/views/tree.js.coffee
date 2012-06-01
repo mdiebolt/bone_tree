@@ -5,21 +5,13 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     className: 'tree'
 
     events:
-      'contextmenu .file': '_contextMenu'
-      'contextmenu .directory': '_contextMenu'
       'mousedown .directory': '_openDirectory'
       'mousedown .file': '_openFile'
 
     initialize: ->
-      $(document).click @_closeMenu
-
       @viewCache = {}
 
       @settings = new Models.Settings(@options)
-
-      @menuView = new Views.Menu
-        settings: @settings
-      @menuView.render().$el.appendTo $('body')
 
       @root = new Models.Directory {path: '/'}
 
@@ -55,26 +47,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
       return view
 
-    _closeMenu: (e) =>
-      @menuView.$el.hide() unless $(e.currentTarget).is('.menu')
-
-      return @menuView
-
-    # TODO new project for context menu
-    _contextMenu: (e) =>
-      e.preventDefault()
-
-      model = @getViewFromClick(e).model
-
-      @menuView.model = model
-
-      @menuView.$el.css(
-        left: e.pageX
-        top: e.pageY
-      ).show()
-
-      return @menuView
-
     toArray: =>
       @root.toArray()
 
@@ -89,7 +61,6 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
 
     getViewFromClick: (e) =>
       e.stopPropagation()
-      @menuView.$el.hide()
 
       cid = $(e.currentTarget).data('cid')
 
