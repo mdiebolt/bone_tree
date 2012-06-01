@@ -1,13 +1,13 @@
 #!/usr/bin/env rake
 require "bundler/gem_tasks"
 
-task :build => [:compile]
+task :build => [:spec, :compile]
 
 task :compile do
-  `middleman build`
+  `bundle exec middleman build`
 end
 
-task :default => [:spec, :build]
+task :default => [:build]
 
 desc "Run jasmine specs"
 task :spec do
