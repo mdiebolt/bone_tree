@@ -74,6 +74,9 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
       view.toggleOpen()
 
     _openFile: (e) =>
+      e.preventDefault()
+      e.stopPropagation()
+
       view = @getViewFromClick(e)
 
       @trigger 'openFile', e, view.model
