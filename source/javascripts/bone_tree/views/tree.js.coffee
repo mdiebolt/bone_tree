@@ -76,7 +76,7 @@ BoneTree.namespace "BoneTree.Views", (Views) ->
     _openFile: (e) =>
       view = @getViewFromClick(e)
 
-      @trigger 'openFile', view.model
+      @trigger 'openFile', e, view.model
 
     render: =>
       @root.collection.each (node) =>
